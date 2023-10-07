@@ -1,20 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Minion : MonoBehaviour
+public class Unit : MonoBehaviour
 {
     public Clicker clicker;
     private Enemy enemy;
     public EnemyManager enemyManager;
-    public MinionManager minionManager;
+    public UnitManager unitManager;
     public ObjectMovement objectMovement;
 
     private Sprite idleSprite;
     private Sprite attackSprite;
     public SpriteRenderer thisSprite;
 
-    private Image imageMinion1;
-    private Image imageMinion2;
+    private Image imageUnit1;
+    private Image imageUnit2;
 
     public Text text1;
     public Text text2;
@@ -32,54 +32,45 @@ public class Minion : MonoBehaviour
     {
         id = PlayerPrefs.GetInt(name + "ID");
 
-        UpdateMinionData();
-
-        switch (name)
-        {
-            case "Minion1":
-                Invoke(nameof(MoveToEnemy), 2.5f);
-                break;
-            case "Minion2":
-                Invoke(nameof(MoveToEnemy), 5f);
-                break;
-        }
+        UpdateUnitData();
+        Invoke(nameof(MoveToEnemy), 2f);
     }
 
-    public void UpdateMinionData()
+    public void UpdateUnitData()
     {
-        minionManager = GameObject.Find("ClickerManager").GetComponent<MinionManager>();
-        text1 = GameObject.Find("MinionDescription1").GetComponent<Text>();
-        text2 = GameObject.Find("MinionDescription2").GetComponent<Text>();
-        imageMinion1 = GameObject.Find("MinionImage1").GetComponent<Image>();
-        imageMinion2 = GameObject.Find("MinionImage2").GetComponent<Image>();
+        unitManager = GameObject.Find("ClickerManager").GetComponent<UnitManager>();
+        text1 = GameObject.Find("Unit1(txt)").GetComponent<Text>();
+        text2 = GameObject.Find("Unit2(txt)").GetComponent<Text>();
+        imageUnit1 = GameObject.Find("Unit1(img)").GetComponent<Image>();
+        imageUnit2 = GameObject.Find("Unit2(img)").GetComponent<Image>();
         CurrentLevel = PlayerPrefs.GetInt(name + "CL");
 
         if (id != -1)
         {
             PlayerPrefs.SetInt($"has_{id}", id);
             PlayerPrefs.SetInt(name + "ID", id);
-            idleSprite = minionManager.minionsDataBase[id].Idle;
-            attackSprite = minionManager.minionsDataBase[id].Attack;
+            idleSprite = unitManager.unitsDataBase[id].Idle;
+            attackSprite = unitManager.unitsDataBase[id].Attack;
             thisSprite.sprite = idleSprite;
-            double d = CurrentLevel > 0 ? (minionManager.minionsDataBase[id].DamageCoef * (0.2 * CurrentLevel)) : 0;
-            DamageCoef = minionManager.minionsDataBase[id].DamageCoef + d;
-            nameobj = minionManager.minionsDataBase[id].name;
+            double d = CurrentLevel > 0 ? (unitManager.unitsDataBase[id].DamageCoef * (0.2 * CurrentLevel)) : 0;
+            DamageCoef = unitManager.unitsDataBase[id].DamageCoef + d;
+            nameobj = unitManager.unitsDataBase[id].name;
             switch (name)
             {
-                case "Minion1":
-                    imageMinion1.sprite = minionManager.minionsDataBase[id].Preview;
-                    string s = CurrentLevel > 0 ? $"+ {minionManager.minionsDataBase[id].DamageCoef * (0.2 * CurrentLevel) * 100}% " : "";
-                    text1.text = $"{nameobj}\nLevel {CurrentLevel}\n{minionManager.minionsDataBase[id].DamageCoef * 100}% {s}of your damage";
+                case "Unit1(obj)":
+                    imageUnit1.sprite = unitManager.unitsDataBase[id].Preview;
+                    string s = CurrentLevel > 0 ? $"+ {unitManager.unitsDataBase[id].DamageCoef * (0.2 * CurrentLevel) * 100}% " : "";
+                    text1.text = $"{nameobj}\nLevel {CurrentLevel}\n{unitManager.unitsDataBase[id].DamageCoef * 100}% {s}of your damage";
                     break;
-                case "Minion2":
-                    imageMinion2.sprite = minionManager.minionsDataBase[id].Preview;
-                    string s1 = CurrentLevel > 0 ? $"+ {minionManager.minionsDataBase[id].DamageCoef * (0.2 * CurrentLevel) * 100}% " : "";
-                    text2.text = $"{nameobj}\nLevel {CurrentLevel}\n{minionManager.minionsDataBase[id].DamageCoef * 100}% {s1}of your damage";
+                case "Unit2(obj)":
+                    imageUnit2.sprite = unitManager.unitsDataBase[id].Preview;
+                    string s1 = CurrentLevel > 0 ? $"+ {unitManager.unitsDataBase[id].DamageCoef * (0.2 * CurrentLevel) * 100}% " : "";
+                    text2.text = $"{nameobj}\nLevel {CurrentLevel}\n{unitManager.unitsDataBase[id].DamageCoef * 100}% {s1}of your damage";
                     break;
             }
             if (loaded)
             {
-                minionManager.CheckUnfair();
+                unitManager.CheckUnfair();
             }
             loaded = true;
         }
@@ -87,12 +78,12 @@ public class Minion : MonoBehaviour
         {
             switch (name)
             {
-                case "Minion1":
-                    imageMinion1.sprite = minionManager.None;
+                case "Unit1(obj)":
+                    imageUnit1.sprite = unitManager.None;
                     text1.text = "";
                     break;
-                case "Minion2":
-                    imageMinion2.sprite = minionManager.None;
+                case "Unit2(obj)":
+                    imageUnit2.sprite = unitManager.None;
                     text2.text = "";
                     break;
             }
@@ -110,7 +101,7 @@ public class Minion : MonoBehaviour
     {
         CurrentLevel++;
         PlayerPrefs.SetInt(name + "CL", CurrentLevel);
-        UpdateMinionData();
+        UpdateUnitData();
     }
 
     public void GetEnemyComponent(Enemy enemyObj)
@@ -132,7 +123,7 @@ public class Minion : MonoBehaviour
         if (able == true && id >= 0 && enemyManager.clickable == true)
         {
             float x = enemy.transform.localPosition.x - 20;
-            if (name == "Minion2")
+            if (name == "Unit2(obj)")
             {
                 x += 40;
             }
@@ -156,11 +147,11 @@ public class Minion : MonoBehaviour
             thisSprite.sprite = attackSprite;
             if (unfairLvl > 0 && Random.Range(0, 100f / (unfairLvl * 5)) < 1f)
             {
-                enemy.MinionSabotage();
+                enemy.UnitSabotage();
             }
             else
             {
-                enemy.MinionKick(clicker.Damage * DamageCoef);
+                enemy.UnitKick(clicker.Damage * DamageCoef);
             }
         }
     }

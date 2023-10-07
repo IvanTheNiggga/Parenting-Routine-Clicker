@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Globalization;
 using UnityEngine;
+using UnityEngine.Diagnostics;
 
 public class Clicker : MonoBehaviour
 {
     private EnemyManager enemyManager;
     private Inventory inventory;
-    private MinionManager minionManager;
-    private OptionsMenu optionsMenu;
+    private UnitManager unitManager;
+    private Settings optionsMenu;
     private StagesManager stagesManager;
     private TextManager tm;
-    private Upgrades upgrades;
+    private UpgradesManager upgrades;
 
     public GameObject timerObject;
     private GameObject upgradesGrid;
 
     public int Births;
     public float Experience;
-    public int WashingmashineLvl;
+    public int MinerLvl;
     public int CritMultiplier;
 
     private double currDealedDamage; public double CurrDealedDamage
@@ -94,11 +95,11 @@ public class Clicker : MonoBehaviour
     {
         enemyManager = GetComponent<EnemyManager>();
         inventory = GetComponent<Inventory>();
-        minionManager = GetComponent<MinionManager>();
-        optionsMenu = GameObject.Find("Settings Window").GetComponent<OptionsMenu>();
+        unitManager = GetComponent<UnitManager>();
+        optionsMenu = GameObject.Find("Settings").GetComponent<Settings>();
         stagesManager = GetComponent<StagesManager>();
         tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
-        upgrades = GetComponent<Upgrades>();
+        upgrades = GetComponent<UpgradesManager>();
 
         upgradesGrid = GameObject.Find("UpgradesGrid");
 
@@ -128,7 +129,7 @@ public class Clicker : MonoBehaviour
         Experience = PlayerPrefs.GetFloat("Experience");
         Births = PlayerPrefs.GetInt("Births");
 
-        WashingmashineLvl = PlayerPrefs.GetInt("WashingmashineLvl");
+        MinerLvl = PlayerPrefs.GetInt("MinerLvl");
 
         upgrades.DamageLvl = PlayerPrefs.GetInt("DamageLvl");
         upgrades.CritLvl = PlayerPrefs.GetInt("CritLvl");
@@ -165,7 +166,7 @@ public class Clicker : MonoBehaviour
         PlayerPrefs.SetFloat("Experience", Experience);
         PlayerPrefs.SetInt("Births", Births);
 
-        PlayerPrefs.SetInt("WashingmashineLvl", WashingmashineLvl);
+        PlayerPrefs.SetInt("MinerLvl", MinerLvl);
         PlayerPrefs.SetInt("DamageLvl", upgrades.DamageLvl);
         PlayerPrefs.SetInt("CritLvl", upgrades.CritLvl);
 
@@ -189,10 +190,10 @@ public class Clicker : MonoBehaviour
 
     public void StartData()
     {
-        minionManager.UnequipMinion(1);
-        minionManager.UnequipMinion(2);
-        PlayerPrefs.SetInt("Minion1ID", -1);
-        PlayerPrefs.SetInt("Minion2ID", -1);
+        unitManager.UnequipUnit(1);
+        unitManager.UnequipUnit(2);
+        PlayerPrefs.SetInt("Unit1ID", -1);
+        PlayerPrefs.SetInt("Unit2ID", -1);
 
         CritMultiplier = 3;
 
@@ -201,7 +202,7 @@ public class Clicker : MonoBehaviour
         Births = 0;
         Experience = 0;
 
-        WashingmashineLvl = 0;
+        MinerLvl = 0;
 
         enemyManager.EnemyHPMultiplier = 1;
 
@@ -244,7 +245,7 @@ public class Clicker : MonoBehaviour
         ResetData();
 
         Births = births + 1;
-        minionManager.AddRandomMinion();
+        unitManager.AddRandomUnit();
 
         for (int i = 2; i < upgradesGrid.transform.childCount; i++)
         {
@@ -262,27 +263,15 @@ public class Clicker : MonoBehaviour
 
     public void CalculateDmg()
     {
-        Damage = 1;
-        DmgCost = 10;
-        for (int i = 1; upgrades.DamageLvl > i; i++)
-        {
-            Damage *= 1.6;
-            DmgCost *= 1.6;
-        }
-        for (int i = 0; doubleDamageUpgradeLvl > i; i++)
-        {
-            Damage *= 2;
-        }
+        Damage = Utils.Progression(1, 1.6f, upgrades.DamageLvl);
+        Damage = Utils.Progression(Damage, 2, doubleDamageUpgradeLvl);
+        DmgCost = Utils.Progression(10, 1.6f, upgrades.DamageLvl);
         upgrades.UpdateIco();
     }
     public void CalculateCrit()
     {
         CritChance = 5 + upgrades.CritLvl - 1;
-        CritCost = 100;
-        for (int i = 1; upgrades.CritLvl > i; i++)
-        {
-            CritCost *= 100;
-        }
+        CritCost = Utils.Progression(100, 100, upgrades.CritLvl);
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Data manipulations
     public int critMultiplierUpgradeLvl;         public void CritMultiplierUpgrade()

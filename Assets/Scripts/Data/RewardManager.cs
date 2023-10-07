@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class GiveReward : MonoBehaviour
+public class RewardManager : MonoBehaviour
 {
     private Clicker clicker;
     private Inventory inventory;

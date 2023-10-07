@@ -12,7 +12,7 @@ public class Timer : MonoBehaviour
     private void Start()
     {
         enemyManager = GameObject.Find("ClickerManager").GetComponent<EnemyManager>();
-        slider = GameObject.Find("TimerBar").GetComponent<Slider>();
+        slider = GameObject.Find("Timer(sld)").GetComponent<Slider>();
     }
 
     void FixedUpdate()

@@ -12,9 +12,9 @@ public class StagesManager : MonoBehaviour
     public AudioClip WMAmbience;
 
     private EnemyManager enemyManager;
-    private GiveReward giveReward;
+    private RewardManager giveReward;
     private GameObject upgradesGrid;
-    private Interface interfaceManager;
+    private InterfaceManager interfaceManager;
     private TextManager tm;
 
     private SpriteRenderer BG;
@@ -34,8 +34,8 @@ public class StagesManager : MonoBehaviour
             started = true;
 
             enemyManager = GetComponent<EnemyManager>();
-            giveReward = GetComponent<GiveReward>();
-            interfaceManager = GameObject.Find("INTERFACE").GetComponent<Interface>();
+            giveReward = GetComponent<RewardManager>();
+            interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
             tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
             upgradesGrid = GameObject.Find("UpgradesGrid");
 
@@ -72,7 +72,7 @@ public class StagesManager : MonoBehaviour
 
         enemyManager.enemySpawnSound = StagesDataBase[StageIndex].EnemySpawn;
 
-        interfaceManager.UpdateUpgradeGraphics();
+        interfaceManager.UpdateUpgrades();
         AmbienceSource.Play();
     }
 

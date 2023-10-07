@@ -15,9 +15,9 @@ public class EnemyManager : MonoBehaviour
     private GameObject CurrencyParent;
 
     private StagesManager stagesManager;
-    private GiveReward giveReward;
+    private RewardManager giveReward;
     private Inventory inventory;
-    private Interface interfaceManager;
+    private InterfaceManager interfaceManager;
     private Slider hpSlider;
     private Clicker clicker;
     private Text text;
@@ -34,22 +34,22 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
-        giveReward = GetComponent<GiveReward>();
+        giveReward = GetComponent<RewardManager>();
         inventory = GetComponent<Inventory>();
-        interfaceManager = GameObject.Find("INTERFACE").GetComponent<Interface>();
+        interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
         clicker = GetComponent<Clicker>();
         stagesManager = GetComponent<StagesManager>();
 
         EnemyParent = GameObject.Find("Enemy Parent");
-        CurrencyParent = GameObject.Find("Currency Parent");
+        CurrencyParent = GameObject.Find("Drop Parent");
 
         clickable = false;
         able = true;
 
         enemySpawnInvoke = 0.2f;
 
-        hpSlider = GameObject.Find("HpSlider").GetComponent<Slider>();
-        text = GameObject.Find("HpTEXT").GetComponent<Text>();
+        hpSlider = GameObject.Find("HP(sld)").GetComponent<Slider>();
+        text = GameObject.Find("HP(txt)").GetComponent<Text>();
         enemySpawnSource = GameObject.Find("EnemySpawnSource").GetComponent<AudioSource>();
 
         HideEnemyInf();
@@ -80,7 +80,7 @@ public class EnemyManager : MonoBehaviour
                 Enemy enemyObj = Instantiate(EnemyList[rnd], EnemyParent.transform).GetComponent<Enemy>();
 
                 ObjectMovement enemy_OM = enemyObj.GetComponent<ObjectMovement>();
-                enemyObj.GetComponent<Injured>().startPos = new(0,35);
+                enemyObj.GetComponent<OnHurt>().startPos = new(0,35);
 
                 int xStart = 200;
                 if (Random.Range(0, 2) == 1)
@@ -124,9 +124,9 @@ public class EnemyManager : MonoBehaviour
 
     public void BossSpawnInv()
     {
-        if (interfaceManager.washingMashineOpened)
+        if (interfaceManager.minerOpened)
         {
-            interfaceManager.SwitchWashingmashine(0);
+            interfaceManager.SwitchMiner(0);
         }
         if (GameObject.Find("BossObj") == false)
         {
@@ -136,14 +136,14 @@ public class EnemyManager : MonoBehaviour
 
             Destroy(GameObject.Find("EnemyObj"));
 
-            interfaceManager.SwitchUpgradeMenu(0);
+            interfaceManager.SwitchUpgradesMenu(0);
 
             Invoke(nameof(BossSpawn), 1f);
         }
     }
     public void BossSpawn()
     {
-        interfaceManager.SwitchMainInterface(1);
+        interfaceManager.SwitchBattleInterface(1);
 
         HideEnemyInf();
 
@@ -154,7 +154,7 @@ public class EnemyManager : MonoBehaviour
         enemyObj.transform.localPosition = Boss.transform.localPosition;
 
         ObjectMovement enemy_OM = enemyObj.GetComponent<ObjectMovement>();
-        enemyObj.GetComponent<Injured>().startPos = new(0, 35);
+        enemyObj.GetComponent<OnHurt>().startPos = new(0, 35);
 
         int xStart = 250;
         if (Random.Range(0, 2) == 1)

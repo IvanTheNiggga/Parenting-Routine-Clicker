@@ -6,7 +6,7 @@ public class TextManager : MonoBehaviour
 {
     public StagesManager stagesManager;
     public Clicker clicker;
-    public Upgrades upgrades;
+    public UpgradesManager upgrades;
 
     public Text currencyText;
     public Text experienceText;
@@ -39,15 +39,15 @@ public class TextManager : MonoBehaviour
     }
     public void CurrencyTextUpdate()
     {
-        currencyText.text = FormatNumsHelper.FormatNumF1(clicker.Currency);
+        currencyText.text = NumFormat.FormatNumF1(clicker.Currency);
     }
     public void ExpirienceTextUpdate()
     {
-        experienceText.text = FormatNumsHelper.FormatNumF1(clicker.Experience);
+        experienceText.text = NumFormat.FormatNumF1(clicker.Experience);
     }
     public void CritUpgradeTextUpdate()
     {
-        critCostText.text = $"${FormatNumsHelper.FormatNumF0F1(clicker.CritCost)}";
+        critCostText.text = $"${NumFormat.FormatNumF0F1(clicker.CritCost)}";
         critDescText.text = $"{clicker.CritChance}% + 1% to deal x{clicker.CritMultiplier} damage";
         critLvlText.text = $"lv.{upgrades.CritLvl}";
         if (clicker.CritChance > 49)
@@ -57,8 +57,8 @@ public class TextManager : MonoBehaviour
     }
     public void DmgUpgradeTextUpdate()
     {
-        dmgCostText.text = $"${FormatNumsHelper.FormatNumF0F1(clicker.DmgCost)}";
-        dmgDescText.text = $"x1.6 your {FormatNumsHelper.FormatNumF0F1(clicker.Damage)} damage";
+        dmgCostText.text = $"${NumFormat.FormatNumF0F1(clicker.DmgCost)}";
+        dmgDescText.text = $"x1.6 your {NumFormat.FormatNumF0F1(clicker.Damage)} damage";
         dmgLvlText.text = $"lv.{upgrades.DamageLvl}";
         if (upgrades.DamageLvl > 1499)
         {

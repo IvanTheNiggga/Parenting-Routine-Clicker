@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Injured : MonoBehaviour
+public class OnHurt : MonoBehaviour
 {
     [Header("Hit Sound")]
     public AudioClip hit;

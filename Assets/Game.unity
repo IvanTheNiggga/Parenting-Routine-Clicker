@@ -104,7 +104,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 27140120}
   - component: {fileID: 27140124}
   m_Layer: 5
-  m_Name: Washingmashine
+  m_Name: Miner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 27140118}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea81762d2b0b3af43953e60ee25adfd1, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c7de535401d75045884522c0ab1a2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   secondsPassed: 0
@@ -432,7 +432,7 @@ GameObject:
   - component: {fileID: 55607092}
   - component: {fileID: 55607091}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Boss(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -585,7 +585,7 @@ GameObject:
   - component: {fileID: 70081924}
   - component: {fileID: 70081923}
   m_Layer: 5
-  m_Name: ==EquipMinion1==
+  m_Name: EquipUnit1(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -657,8 +657,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
-        m_MethodName: OpenMinionSelect
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: OpenUnitsSelect
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -718,7 +718,7 @@ GameObject:
   - component: {fileID: 70836899}
   - component: {fileID: 70836898}
   m_Layer: 5
-  m_Name: Text
+  m_Name: TargetFps(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -786,55 +786,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 70836896}
   m_CullTransparentMesh: 0
---- !u!1 &76431534
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 76431535}
-  - component: {fileID: 76431536}
-  m_Layer: 5
-  m_Name: Walls
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &76431535
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76431534}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1355336301}
-  - {fileID: 537128717}
-  - {fileID: 987286807}
-  - {fileID: 1529914541}
-  m_Father: {fileID: 1024828840}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &76431536
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76431534}
-  m_CullTransparentMesh: 1
 --- !u!1 &84508238
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,7 +798,7 @@ GameObject:
   - component: {fileID: 84508241}
   - component: {fileID: 84508240}
   m_Layer: 5
-  m_Name: Outline
+  m_Name: OutlineB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -922,7 +873,7 @@ GameObject:
   - component: {fileID: 85710448}
   - component: {fileID: 85710449}
   m_Layer: 5
-  m_Name: MinionsGrid
+  m_Name: UnitsGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -985,7 +936,7 @@ GameObject:
   - component: {fileID: 92522777}
   - component: {fileID: 92522776}
   m_Layer: 5
-  m_Name: ==SwitchMinionInterface==
+  m_Name: OpenMinions(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1058,8 +1009,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
-        m_MethodName: SwitchMinionInterface
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: SwitchUnitsInterface
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1232,7 +1183,7 @@ GameObject:
   - component: {fileID: 101207988}
   - component: {fileID: 101207987}
   m_Layer: 5
-  m_Name: Outline
+  m_Name: Outline32L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1306,7 +1257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 117159743}
   m_Layer: 0
-  m_Name: Currency Parent
+  m_Name: Drop Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1608,7 +1559,7 @@ GameObject:
   - component: {fileID: 124616008}
   - component: {fileID: 124616007}
   m_Layer: 5
-  m_Name: Item Info Window
+  m_Name: ItemInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1707,107 +1658,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 124616005}
   m_CullTransparentMesh: 1
---- !u!1 &125935691
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 125935692}
-  - component: {fileID: 125935695}
-  - component: {fileID: 125935694}
-  - component: {fileID: 125935693}
-  m_Layer: 5
-  m_Name: Minion Select Canvas
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &125935692
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 125935691}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1483738659}
-  m_Father: {fileID: 191221833}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
---- !u!114 &125935693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 125935691}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &125935694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 125935691}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 720, y: 1280}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
---- !u!223 &125935695
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 125935691}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 1
-  m_Camera: {fileID: 1365166252}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 635967363
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
 --- !u!1 &132580330
 GameObject:
   m_ObjectHideFlags: 0
@@ -1974,7 +1824,7 @@ GameObject:
   - component: {fileID: 134488550}
   - component: {fileID: 134488551}
   m_Layer: 5
-  m_Name: ==Birth==
+  m_Name: Birth(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2084,7 +1934,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: Action
         m_Mode: 5
         m_Arguments:
@@ -2237,7 +2087,7 @@ GameObject:
   - component: {fileID: 168878377}
   - component: {fileID: 168878376}
   m_Layer: 5
-  m_Name: DisagreeOptionTEXT
+  m_Name: SetCountDisagree(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2395,6 +2245,7 @@ GameObject:
   - component: {fileID: 191221833}
   - component: {fileID: 191221834}
   - component: {fileID: 191221835}
+  - component: {fileID: 191221836}
   m_Layer: 5
   m_Name: INTERFACE
   m_TagString: Untagged
@@ -2421,7 +2272,6 @@ Transform:
   - {fileID: 1961120429}
   - {fileID: 498989277}
   - {fileID: 1667580094}
-  - {fileID: 125935692}
   - {fileID: 1047720308}
   - {fileID: 240285190}
   - {fileID: 303298166}
@@ -2462,28 +2312,71 @@ MonoBehaviour:
   m_GameObject: {fileID: 191221832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc200c15afb109c4cac1aabbb244c779, type: 3}
+  m_Script: {fileID: 11500000, guid: f91844b569b906d4193e4ef05598f0f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Battle_Sprite: {fileID: 21300000, guid: 817fbfbbb8f8b6443a11d7f62f61527d, type: 3}
-  Washingmashine_Sprite: {fileID: 21300000, guid: 91f5294dc1f5934499f9b40b02e9bdc0,
-    type: 3}
+  miner_Sprite: {fileID: 21300000, guid: 91f5294dc1f5934499f9b40b02e9bdc0, type: 3}
   Upgrade_Prefab: {fileID: 4466329367944864032, guid: c2530824e82859b489354ca693707de6,
     type: 3}
   typeOfAction: 
   typeOfButtonAction: 
-  mainInterfaceOpened: 1
+  mainInterfaceOpened: 0
   agreeWindowOpened: 0
-  rightButtonsOpened: 0
+  actionButtonsOpened: 1
   settingsOpened: 0
-  washingMashineOpened: 0
+  minerOpened: 0
   upgradeOpened: 0
-  minionInterfaceOpened: 0
-  minionListOpened: 0
+  unitsInterfaceOpened: 0
+  unitsListOpened: 0
   inventoryOpened: 0
-  saleWindowOpened: 0
+  saleOpened: 0
   itemInfoOpened: 0
   setCountOpened: 0
+--- !u!114 &191221836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191221832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 0}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &192001026
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,9 +2412,9 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.15913515}
-  m_AnchoredPosition: {x: 0, y: -12.293823}
-  m_SizeDelta: {x: 0, y: 29.299004}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -858.7854}
+  m_SizeDelta: {x: 0, y: -726.027}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &192001028
 MonoBehaviour:
@@ -2650,7 +2543,7 @@ GameObject:
   - component: {fileID: 211699841}
   - component: {fileID: 211699840}
   m_Layer: 5
-  m_Name: ==OpenSaleWindow==
+  m_Name: OpenSale(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2722,13 +2615,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
-        m_MethodName: SwitchSaleWindow
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: SwitchSale
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2897,7 +2790,7 @@ GameObject:
   - component: {fileID: 240285192}
   - component: {fileID: 240285191}
   m_Layer: 5
-  m_Name: Sale Menu Canvas
+  m_Name: Sale Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2981,7 +2874,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -2997,7 +2892,7 @@ GameObject:
   - component: {fileID: 257486073}
   - component: {fileID: 257486072}
   m_Layer: 5
-  m_Name: MinionImage1
+  m_Name: Unit1(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3020,8 +2915,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.104, y: 0.104}
   m_AnchorMax: {x: 0.896, y: 0.90400004}
-  m_AnchoredPosition: {x: -0.00012207031, y: -1.0000305}
-  m_SizeDelta: {x: 2, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &257486072
 MonoBehaviour:
@@ -3073,7 +2968,7 @@ GameObject:
   - component: {fileID: 259879046}
   - component: {fileID: 259879045}
   m_Layer: 5
-  m_Name: StagePanel
+  m_Name: Stage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3151,7 +3046,7 @@ GameObject:
   - component: {fileID: 303298171}
   - component: {fileID: 303298170}
   m_Layer: 5
-  m_Name: Item Info Canvas
+  m_Name: ItemInfo Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3235,7 +3130,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -3252,7 +3149,7 @@ GameObject:
   - component: {fileID: 305509978}
   - component: {fileID: 305509977}
   m_Layer: 5
-  m_Name: ==GetWashingmashineIncomings==
+  m_Name: LootMiner(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3325,8 +3222,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 27140124}
-        m_TargetAssemblyTypeName: Washingmashine, Assembly-CSharp
-        m_MethodName: GetWashingmashineIncome
+        m_TargetAssemblyTypeName: Miner, Assembly-CSharp
+        m_MethodName: LootMiner
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3386,7 +3283,7 @@ GameObject:
   - component: {fileID: 307823321}
   - component: {fileID: 307823320}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Start(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3462,7 +3359,7 @@ GameObject:
   - component: {fileID: 309513218}
   - component: {fileID: 309513217}
   m_Layer: 5
-  m_Name: Outline
+  m_Name: OutlineB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3539,7 +3436,7 @@ GameObject:
   - component: {fileID: 315441008}
   - component: {fileID: 315441007}
   m_Layer: 5
-  m_Name: ==ExitGame==
+  m_Name: Quit(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3673,7 +3570,7 @@ GameObject:
   - component: {fileID: 317331764}
   - component: {fileID: 317331763}
   m_Layer: 5
-  m_Name: ==OpenSettings==
+  m_Name: OpenSettings(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3745,7 +3642,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: SwitchSettings
         m_Mode: 3
         m_Arguments:
@@ -3755,6 +3652,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 191221835}
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: SwitchActionButtons
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &317331764
 MonoBehaviour:
@@ -4141,7 +4050,7 @@ GameObject:
   - component: {fileID: 353446563}
   - component: {fileID: 353446562}
   m_Layer: 5
-  m_Name: Item Information
+  m_Name: ItemInfo(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4242,7 +4151,7 @@ GameObject:
   - component: {fileID: 359913047}
   - component: {fileID: 359913046}
   m_Layer: 5
-  m_Name: SellForXpPrice
+  m_Name: SetCountXp(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4321,7 +4230,7 @@ GameObject:
   - component: {fileID: 364810681}
   - component: {fileID: 364810682}
   m_Layer: 5
-  m_Name: ==VolumeSlider==
+  m_Name: Sound(sld)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4536,7 +4445,7 @@ GameObject:
   - component: {fileID: 373095181}
   - component: {fileID: 373095180}
   m_Layer: 5
-  m_Name: ==DeleteData==
+  m_Name: ResetData(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4669,7 +4578,7 @@ GameObject:
   - component: {fileID: 374785691}
   - component: {fileID: 374785690}
   m_Layer: 5
-  m_Name: Text
+  m_Name: UpgradeUnit2(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4749,7 +4658,7 @@ GameObject:
   - component: {fileID: 377365715}
   - component: {fileID: 377365714}
   m_Layer: 5
-  m_Name: SaleForCurrencyPrice
+  m_Name: SaleForCurrency(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4830,7 +4739,7 @@ GameObject:
   - component: {fileID: 391707668}
   - component: {fileID: 391707667}
   m_Layer: 5
-  m_Name: ==SellForCurrency==
+  m_Name: SaleForCurrency(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4964,7 +4873,7 @@ GameObject:
   - component: {fileID: 397187684}
   - component: {fileID: 397187683}
   m_Layer: 5
-  m_Name: WashingmashineLevelText
+  m_Name: MinerLvl(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5044,7 +4953,7 @@ GameObject:
   - component: {fileID: 405756027}
   - component: {fileID: 405756026}
   m_Layer: 5
-  m_Name: Description
+  m_Name: DeselectUnit(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5202,7 +5111,7 @@ GameObject:
   - component: {fileID: 442196896}
   - component: {fileID: 442196895}
   m_Layer: 5
-  m_Name: Text
+  m_Name: EquipUnit2(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5282,7 +5191,7 @@ GameObject:
   - component: {fileID: 442325603}
   - component: {fileID: 442325602}
   m_Layer: 5
-  m_Name: IcoOutline
+  m_Name: Outline64L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5361,7 +5270,7 @@ GameObject:
   - component: {fileID: 443287141}
   - component: {fileID: 443287140}
   m_Layer: 5
-  m_Name: ==SwitchWashingmashine==
+  m_Name: OpenMiner(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5434,8 +5343,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
-        m_MethodName: SwitchWashingmashine
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: SwitchMiner
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5495,7 +5404,7 @@ GameObject:
   - component: {fileID: 444794437}
   - component: {fileID: 444794436}
   m_Layer: 5
-  m_Name: ItemOutline
+  m_Name: Outline32L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5658,7 +5567,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -5674,7 +5585,7 @@ GameObject:
   - component: {fileID: 451099787}
   - component: {fileID: 451099786}
   m_Layer: 5
-  m_Name: UpgradePriceText
+  m_Name: UpgradePrice(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5831,7 +5742,9 @@ Canvas:
   m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 30000
   m_TargetDisplay: 0
@@ -6009,7 +5922,7 @@ GameObject:
   - component: {fileID: 474347740}
   - component: {fileID: 474347739}
   m_Layer: 5
-  m_Name: SetCount Window
+  m_Name: SetCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6159,7 +6072,7 @@ GameObject:
   - component: {fileID: 498989282}
   - component: {fileID: 498989281}
   m_Layer: 5
-  m_Name: Upgrade Menu Canvas
+  m_Name: Upgrades Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6243,7 +6156,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -6260,7 +6175,7 @@ GameObject:
   - component: {fileID: 504213808}
   - component: {fileID: 504213807}
   m_Layer: 5
-  m_Name: ==SwitchUpgrMenu==
+  m_Name: OpenUpgrades(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6333,8 +6248,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
-        m_MethodName: SwitchUpgradeMenu
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: SwitchUpgradesMenu
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6471,7 +6386,7 @@ GameObject:
   - component: {fileID: 512625182}
   - component: {fileID: 512625181}
   m_Layer: 5
-  m_Name: ==CountDisagree==
+  m_Name: SetCountDisagree(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6543,7 +6458,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: SwitchItemInfo
         m_Mode: 3
         m_Arguments:
@@ -6719,7 +6634,7 @@ GameObject:
   - component: {fileID: 519901259}
   - component: {fileID: 519901258}
   m_Layer: 5
-  m_Name: WashingmashineIncomingsText
+  m_Name: LootMiner(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6787,78 +6702,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519901256}
   m_CullTransparentMesh: 0
---- !u!1 &537128716
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 537128717}
-  - component: {fileID: 537128719}
-  - component: {fileID: 537128718}
-  m_Layer: 5
-  m_Name: Right
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &537128717
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 537128716}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -205.00003}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 76431535}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 380, y: -520}
-  m_SizeDelta: {x: 20, y: 1700}
-  m_Pivot: {x: 1, y: 0}
---- !u!61 &537128718
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 537128716}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -10, y: 850}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 20, y: 1700}
-  m_EdgeRadius: 0
---- !u!222 &537128719
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 537128716}
-  m_CullTransparentMesh: 1
 --- !u!1 &537204403
 GameObject:
   m_ObjectHideFlags: 0
@@ -7078,7 +6921,7 @@ GameObject:
   - component: {fileID: 540685476}
   - component: {fileID: 540685475}
   m_Layer: 5
-  m_Name: Outline
+  m_Name: OutlineB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7268,7 +7111,7 @@ GameObject:
   - component: {fileID: 570515556}
   - component: {fileID: 570515555}
   m_Layer: 5
-  m_Name: ==RightButtons==
+  m_Name: OpenActions(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7341,8 +7184,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
-        m_MethodName: SwitchRightButtons
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: SwitchActionButtons
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7555,7 +7398,7 @@ GameObject:
   - component: {fileID: 578084354}
   - component: {fileID: 578084353}
   m_Layer: 5
-  m_Name: ==TargetFPS==
+  m_Name: TargetFPS(dd)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7711,7 +7554,7 @@ GameObject:
   - component: {fileID: 579156411}
   - component: {fileID: 579156412}
   m_Layer: 5
-  m_Name: Settings Window
+  m_Name: Settings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7991,7 +7834,7 @@ GameObject:
   - component: {fileID: 615051870}
   - component: {fileID: 615051869}
   m_Layer: 5
-  m_Name: OutLine
+  m_Name: Outline32L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8068,7 +7911,7 @@ GameObject:
   - component: {fileID: 620812481}
   - component: {fileID: 620812480}
   m_Layer: 5
-  m_Name: ==Cancel==
+  m_Name: Disagree(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8140,8 +7983,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
-        m_MethodName: SwitchAgreeWindow
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: SwitchConfirmation
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8332,7 +8175,7 @@ GameObject:
   - component: {fileID: 628595237}
   - component: {fileID: 628595236}
   m_Layer: 5
-  m_Name: Text
+  m_Name: FPS(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8440,7 +8283,7 @@ GameObject:
   - component: {fileID: 636209533}
   - component: {fileID: 636209534}
   m_Layer: 5
-  m_Name: HpSlider
+  m_Name: HP(sld)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8588,7 +8431,7 @@ GameObject:
   - component: {fileID: 649738484}
   - component: {fileID: 649738483}
   m_Layer: 5
-  m_Name: Text
+  m_Name: LootMiner(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8836,7 +8679,7 @@ GameObject:
   - component: {fileID: 720649646}
   - component: {fileID: 720649645}
   m_Layer: 5
-  m_Name: ==DamageUpgrade==
+  m_Name: DamageUpgrade(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9124,7 +8967,7 @@ GameObject:
   - component: {fileID: 797098577}
   - component: {fileID: 797098576}
   m_Layer: 5
-  m_Name: Outline
+  m_Name: OutlineB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9200,7 +9043,7 @@ GameObject:
   - component: {fileID: 797212413}
   - component: {fileID: 797212412}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Disagree(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9280,7 +9123,7 @@ GameObject:
   - component: {fileID: 809569678}
   - component: {fileID: 809569677}
   m_Layer: 5
-  m_Name: Sale Description
+  m_Name: Sale(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9437,7 +9280,7 @@ GameObject:
   - component: {fileID: 815403781}
   - component: {fileID: 815403780}
   m_Layer: 5
-  m_Name: ItemCount
+  m_Name: ItemCount(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9595,7 +9438,7 @@ GameObject:
   - component: {fileID: 826647501}
   - component: {fileID: 826647500}
   m_Layer: 5
-  m_Name: Agree Description
+  m_Name: Agree(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9752,7 +9595,7 @@ GameObject:
   - component: {fileID: 888724985}
   - component: {fileID: 888724984}
   m_Layer: 5
-  m_Name: Image
+  m_Name: OpenInventory(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9828,7 +9671,7 @@ GameObject:
   - component: {fileID: 895273020}
   - component: {fileID: 895273019}
   m_Layer: 5
-  m_Name: LevelText
+  m_Name: Level(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9909,7 +9752,7 @@ GameObject:
   - component: {fileID: 912053584}
   - component: {fileID: 912053583}
   m_Layer: 5
-  m_Name: Minion Interface
+  m_Name: Units Interface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10005,7 +9848,7 @@ GameObject:
   - component: {fileID: 933148712}
   - component: {fileID: 933148711}
   m_Layer: 5
-  m_Name: ==UpgradeMinion1==
+  m_Name: UpgradeUnit1(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10077,7 +9920,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: Action
         m_Mode: 5
         m_Arguments:
@@ -10085,7 +9928,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: minionupgrade1
+          m_StringArgument: unitupgrade1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &933148712
@@ -10317,7 +10160,7 @@ GameObject:
   - component: {fileID: 955856321}
   - component: {fileID: 955856320}
   m_Layer: 5
-  m_Name: Sale Window
+  m_Name: Sale
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10413,7 +10256,7 @@ GameObject:
   - component: {fileID: 967942483}
   - component: {fileID: 967942482}
   m_Layer: 5
-  m_Name: Text
+  m_Name: UpgradeMiner(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10494,7 +10337,7 @@ GameObject:
   - component: {fileID: 977030929}
   - component: {fileID: 977030928}
   m_Layer: 5
-  m_Name: ==CloseMenu==
+  m_Name: CloseSettings(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10565,7 +10408,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: SwitchSettings
         m_Mode: 3
         m_Arguments:
@@ -10627,7 +10470,7 @@ GameObject:
   - component: {fileID: 987286809}
   - component: {fileID: 987286811}
   m_Layer: 5
-  m_Name: Floor
+  m_Name: LootCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10640,17 +10483,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 987286806}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 76431535}
-  m_RootOrder: 2
+  m_Father: {fileID: 1799071689}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 190}
+  m_AnchoredPosition: {x: -0.000061035156, y: 90.100006}
   m_SizeDelta: {x: 717.32, y: 214}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &987286809
@@ -10701,23 +10544,47 @@ EdgeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -360, y: 141.6}
-  - {x: -252.4, y: 141.2}
-  - {x: -248.8, y: 137.4}
-  - {x: -248.4, y: 25.5}
-  - {x: -178.3, y: 25.5}
-  - {x: -177.5, y: 102.1}
-  - {x: -162.2, y: 114.6}
-  - {x: 163.6, y: 116}
-  - {x: 177.4, y: 102.8}
-  - {x: 178, y: 26}
-  - {x: 360, y: 26}
+  - {x: -360, y: 2000}
+  - {x: -360, y: 141.2}
+  - {x: -250, y: 141.2}
+  - {x: -250, y: 25.5}
+  - {x: -178, y: 25.5}
+  - {x: -178, y: 102.1}
+  - {x: -164, y: 115}
+  - {x: 164, y: 115}
+  - {x: 180, y: 102.8}
+  - {x: 180, y: 26}
+  - {x: 250, y: 26}
+  - {x: 250, y: 110}
+  - {x: 263, y: 132}
+  - {x: 288, y: 145}
+  - {x: 360, y: 145}
+  - {x: 360, y: 2000}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -10819,7 +10686,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -10910,10 +10779,10 @@ GameObject:
   - component: {fileID: 999286380}
   - component: {fileID: 999286384}
   - component: {fileID: 999286383}
-  - component: {fileID: 999286382}
   - component: {fileID: 999286381}
+  - component: {fileID: 999286385}
   m_Layer: 5
-  m_Name: Minion2
+  m_Name: Unit2(obj)
   m_TagString: Minion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10954,8 +10823,8 @@ MonoBehaviour:
   onTargetReached:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 999286382}
-        m_TargetAssemblyTypeName: Minion, Assembly-CSharp
+      - m_Target: {fileID: 999286385}
+        m_TargetAssemblyTypeName: Unit, Assembly-CSharp
         m_MethodName: Attack
         m_Mode: 1
         m_Arguments:
@@ -10968,30 +10837,6 @@ MonoBehaviour:
         m_CallState: 2
   DoEvent: 1
   StartPos: {x: 1, y: 1}
---- !u!114 &999286382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 999286379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5248e2a33997204e9dcfad0542dba99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clicker: {fileID: 1322836597}
-  enemyManager: {fileID: 1322836600}
-  minionManager: {fileID: 1322836605}
-  objectMovement: {fileID: 999286381}
-  thisSprite: {fileID: 999286383}
-  text1: {fileID: 0}
-  text2: {fileID: 0}
-  id: -1
-  CurrentLevel: 1
-  DamageCoef: 0
-  nameobj: 
-  unfairLvl: 0
 --- !u!212 &999286383
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11052,6 +10897,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 999286379}
   m_CullTransparentMesh: 1
+--- !u!114 &999286385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999286379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c4f8d462c59f34e8569a0f45b3f93c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clicker: {fileID: 1322836597}
+  enemyManager: {fileID: 1322836600}
+  unitManager: {fileID: 0}
+  objectMovement: {fileID: 999286381}
+  thisSprite: {fileID: 999286383}
+  text1: {fileID: 0}
+  text2: {fileID: 0}
+  id: -1
+  CurrentLevel: 0
+  DamageCoef: 0
+  nameobj: 
+  unfairLvl: 0
 --- !u!1 &1005649584
 GameObject:
   m_ObjectHideFlags: 0
@@ -11215,7 +11084,7 @@ GameObject:
   - component: {fileID: 1024828840}
   - component: {fileID: 1024828841}
   m_Layer: 5
-  m_Name: Main Interface
+  m_Name: Battle Interface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11236,7 +11105,6 @@ RectTransform:
   - {fileID: 1540268115}
   - {fileID: 117159743}
   - {fileID: 518362446}
-  - {fileID: 76431535}
   m_Father: {fileID: 448484281}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11274,7 +11142,7 @@ GameObject:
   - component: {fileID: 1025113428}
   - component: {fileID: 1025113427}
   m_Layer: 5
-  m_Name: Upgrade Interface
+  m_Name: Upgrades Interface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11415,7 +11283,7 @@ GameObject:
   - component: {fileID: 1027478669}
   - component: {fileID: 1027478668}
   m_Layer: 5
-  m_Name: MinionImage2
+  m_Name: Unit2(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11438,8 +11306,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.104, y: 0.104}
   m_AnchorMax: {x: 0.896, y: 0.90400004}
-  m_AnchoredPosition: {x: -0.00012207031, y: -1.0000305}
-  m_SizeDelta: {x: 2, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1027478668
 MonoBehaviour:
@@ -11703,7 +11571,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -11719,7 +11589,7 @@ GameObject:
   - component: {fileID: 1059680589}
   - component: {fileID: 1059680588}
   m_Layer: 5
-  m_Name: Currency
+  m_Name: Currency(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11951,7 +11821,7 @@ GameObject:
   - component: {fileID: 1089553625}
   - component: {fileID: 1089553624}
   m_Layer: 5
-  m_Name: Text
+  m_Name: OpenSale(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12106,10 +11976,10 @@ GameObject:
   - component: {fileID: 1100920416}
   - component: {fileID: 1100920420}
   - component: {fileID: 1100920419}
-  - component: {fileID: 1100920418}
   - component: {fileID: 1100920417}
+  - component: {fileID: 1100920421}
   m_Layer: 5
-  m_Name: Minion1
+  m_Name: Unit1(obj)
   m_TagString: Minion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12150,8 +12020,8 @@ MonoBehaviour:
   onTargetReached:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1100920418}
-        m_TargetAssemblyTypeName: Minion, Assembly-CSharp
+      - m_Target: {fileID: 1100920421}
+        m_TargetAssemblyTypeName: Unit, Assembly-CSharp
         m_MethodName: Attack
         m_Mode: 1
         m_Arguments:
@@ -12164,30 +12034,6 @@ MonoBehaviour:
         m_CallState: 2
   DoEvent: 1
   StartPos: {x: 1, y: 1}
---- !u!114 &1100920418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1100920415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5248e2a33997204e9dcfad0542dba99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clicker: {fileID: 1322836597}
-  enemyManager: {fileID: 1322836600}
-  minionManager: {fileID: 1322836605}
-  objectMovement: {fileID: 1100920417}
-  thisSprite: {fileID: 1100920419}
-  text1: {fileID: 0}
-  text2: {fileID: 0}
-  id: -1
-  CurrentLevel: 1
-  DamageCoef: 0
-  nameobj: 
-  unfairLvl: 0
 --- !u!212 &1100920419
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12248,6 +12094,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1100920415}
   m_CullTransparentMesh: 1
+--- !u!114 &1100920421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100920415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c4f8d462c59f34e8569a0f45b3f93c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clicker: {fileID: 1322836597}
+  enemyManager: {fileID: 1322836600}
+  unitManager: {fileID: 0}
+  objectMovement: {fileID: 1100920417}
+  thisSprite: {fileID: 1100920419}
+  text1: {fileID: 0}
+  text2: {fileID: 0}
+  id: -1
+  CurrentLevel: 0
+  DamageCoef: 0
+  nameobj: 
+  unfairLvl: 0
 --- !u!1 &1117146751
 GameObject:
   m_ObjectHideFlags: 0
@@ -12413,7 +12283,7 @@ GameObject:
   - component: {fileID: 1141817163}
   - component: {fileID: 1141817162}
   m_Layer: 5
-  m_Name: ==CritUpgrade==
+  m_Name: CritUpgrade(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12706,7 +12576,7 @@ GameObject:
   - component: {fileID: 1152911823}
   - component: {fileID: 1152911822}
   m_Layer: 5
-  m_Name: Set Count Canvas
+  m_Name: SetCount Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12790,7 +12660,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -12806,7 +12678,7 @@ GameObject:
   - component: {fileID: 1153987021}
   - component: {fileID: 1153987020}
   m_Layer: 5
-  m_Name: OutLine
+  m_Name: Outline32L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12882,7 +12754,7 @@ GameObject:
   - component: {fileID: 1160382528}
   - component: {fileID: 1160382527}
   m_Layer: 5
-  m_Name: Item Info Image
+  m_Name: ItemInfo(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12961,7 +12833,7 @@ GameObject:
   - component: {fileID: 1174825063}
   - component: {fileID: 1174825062}
   m_Layer: 5
-  m_Name: ==ItemOptionsUse==
+  m_Name: ItemActionUse(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13033,7 +12905,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: OpenItemUsePanel
         m_Mode: 1
         m_Arguments:
@@ -13181,7 +13053,7 @@ GameObject:
   - component: {fileID: 1196167850}
   - component: {fileID: 1196167849}
   m_Layer: 5
-  m_Name: LevelText
+  m_Name: Level(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13365,9 +13237,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -13501,7 +13381,7 @@ GameObject:
   - component: {fileID: 1229138638}
   - component: {fileID: 1229138639}
   m_Layer: 5
-  m_Name: Washing Interface
+  m_Name: Miner Interface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13559,7 +13439,7 @@ GameObject:
   - component: {fileID: 1238697338}
   - component: {fileID: 1238697337}
   m_Layer: 5
-  m_Name: ==SellForXpAgree==
+  m_Name: SetCountXp(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13693,7 +13573,7 @@ GameObject:
   - component: {fileID: 1244659358}
   - component: {fileID: 1244659357}
   m_Layer: 5
-  m_Name: SetCount Description
+  m_Name: SetCount(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13773,7 +13653,7 @@ GameObject:
   - component: {fileID: 1245529575}
   - component: {fileID: 1245529574}
   m_Layer: 5
-  m_Name: Outline
+  m_Name: Outline32L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14002,7 +13882,7 @@ GameObject:
   - component: {fileID: 1304057511}
   - component: {fileID: 1304057510}
   m_Layer: 5
-  m_Name: ==EquipMinion2==
+  m_Name: EquipUnit2(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14074,8 +13954,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
-        m_MethodName: OpenMinionSelect
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: OpenUnitsSelect
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14224,7 +14104,7 @@ MonoBehaviour:
   timerObject: {fileID: 5614415608205846605}
   Births: 0
   Experience: 0
-  WashingmashineLvl: 0
+  MinerLvl: 0
   CritMultiplier: 0
   critMultiplierUpgradeLvl: 0
   crateDropChanceUpgradeLvl: 0
@@ -14479,40 +14359,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca11661d06ccc2b4fb7ba5a622e1aa97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minionsDataBase:
-  - name: Nigger1
+  unitsDataBase:
+  - name: "\u041B\u043E\u0448\u043F\u0435\u0434\u0443\u0441"
     Idle: {fileID: 21300000, guid: 9eb9f2beea2c8884f9440e7ba3a31d52, type: 3}
     Attack: {fileID: 21300000, guid: 9d8d098f3093fef43a5d37fe485f475b, type: 3}
-    Preview: {fileID: 21300000, guid: a6149fc722e257143b64df5baeb15f31, type: 3}
+    Preview: {fileID: 21300000, guid: 34a298293c4e830449bda9540e22f4e7, type: 3}
     DamageCoef: 0.5
-  - name: Nigger2
+  - name: "\u0414\u0430\u0443\u043D\u0438\u0442\u0430"
     Idle: {fileID: 21300000, guid: 9eb9f2beea2c8884f9440e7ba3a31d52, type: 3}
     Attack: {fileID: 21300000, guid: 9d8d098f3093fef43a5d37fe485f475b, type: 3}
-    Preview: {fileID: 21300000, guid: 9dc941a7bb73dbf4ba6a639cb99f9a91, type: 3}
+    Preview: {fileID: 21300000, guid: 34a298293c4e830449bda9540e22f4e7, type: 3}
     DamageCoef: 1
-  - name: Nigger3
-    Idle: {fileID: 21300000, guid: 9eb9f2beea2c8884f9440e7ba3a31d52, type: 3}
-    Attack: {fileID: 21300000, guid: 9d8d098f3093fef43a5d37fe485f475b, type: 3}
-    Preview: {fileID: 21300000, guid: 0748ffb5c831c004ea31c756d5862006, type: 3}
-    DamageCoef: 1.5
-  - name: Nigger4
-    Idle: {fileID: 21300000, guid: 9eb9f2beea2c8884f9440e7ba3a31d52, type: 3}
-    Attack: {fileID: 21300000, guid: 9d8d098f3093fef43a5d37fe485f475b, type: 3}
-    Preview: {fileID: 21300000, guid: 23023e80a0d35cf49bcfe2fa0d72e869, type: 3}
-    DamageCoef: 2
-  - name: Nigger5
-    Idle: {fileID: 21300000, guid: 9eb9f2beea2c8884f9440e7ba3a31d52, type: 3}
-    Attack: {fileID: 21300000, guid: 9d8d098f3093fef43a5d37fe485f475b, type: 3}
-    Preview: {fileID: 21300000, guid: 79d3611906e60c34d8f71447ee3c90c0, type: 3}
-    DamageCoef: 2.5
-  instockMinions: 
-  minion1: {fileID: 1100920418}
-  minion2: {fileID: 999286382}
-  MinionButton: {fileID: 5714413201788449043, guid: c59697e1f0870c844b58758f07539112,
+  instockUnits: 
+  unit1: {fileID: 1100920421}
+  unit2: {fileID: 999286385}
+  UnitButton: {fileID: 5714413201788449043, guid: c59697e1f0870c844b58758f07539112,
     type: 3}
   None: {fileID: 21300000, guid: 6ddbf0fee1ab23e47860c943c0eb3181, type: 3}
-  minion1id: 0
-  minion2id: 0
+  unit1id: 0
+  unit2id: 0
   slotid: 0
 --- !u!1 &1323693809
 GameObject:
@@ -14602,7 +14467,7 @@ GameObject:
   - component: {fileID: 1335935688}
   - component: {fileID: 1335935687}
   m_Layer: 5
-  m_Name: MinionWindow2
+  m_Name: Unit2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14682,7 +14547,7 @@ GameObject:
   - component: {fileID: 1337557967}
   - component: {fileID: 1337557966}
   m_Layer: 5
-  m_Name: ==OpenInventory==
+  m_Name: OpenInventory(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14754,7 +14619,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: SwitchInventory
         m_Mode: 3
         m_Arguments:
@@ -14828,7 +14693,7 @@ GameObject:
   - component: {fileID: 1353375864}
   - component: {fileID: 1353375863}
   m_Layer: 5
-  m_Name: Inventory Window
+  m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14925,7 +14790,7 @@ GameObject:
   - component: {fileID: 1354251183}
   - component: {fileID: 1354251182}
   m_Layer: 5
-  m_Name: ==NextStage==
+  m_Name: Boss(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14949,7 +14814,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 63.5}
+  m_AnchoredPosition: {x: 10, y: 294}
   m_SizeDelta: {x: 375, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1354251182
@@ -15046,78 +14911,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1354251180}
   m_CullTransparentMesh: 0
---- !u!1 &1355336300
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1355336301}
-  - component: {fileID: 1355336303}
-  - component: {fileID: 1355336302}
-  m_Layer: 5
-  m_Name: Left
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1355336301
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1355336300}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -205.00003}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 76431535}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -360, y: -520}
-  m_SizeDelta: {x: 20, y: 1700}
-  m_Pivot: {x: 1, y: 0}
---- !u!61 &1355336302
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1355336300}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -10, y: 850}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 20, y: 1700}
-  m_EdgeRadius: 0
---- !u!222 &1355336303
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1355336300}
-  m_CullTransparentMesh: 1
 --- !u!1 &1356458663
 GameObject:
   m_ObjectHideFlags: 0
@@ -15130,7 +14923,7 @@ GameObject:
   - component: {fileID: 1356458666}
   - component: {fileID: 1356458665}
   m_Layer: 5
-  m_Name: Image
+  m_Name: OpenMinions(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15225,9 +15018,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -15282,7 +15083,7 @@ GameObject:
   - component: {fileID: 1371331278}
   - component: {fileID: 1371331277}
   m_Layer: 5
-  m_Name: ==SellForXp==
+  m_Name: SaleForXp(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15417,7 +15218,7 @@ GameObject:
   - component: {fileID: 1378185147}
   - component: {fileID: 1378185146}
   m_Layer: 5
-  m_Name: ==CloseInventory==
+  m_Name: CloseInventory(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15488,7 +15289,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: SwitchInventory
         m_Mode: 3
         m_Arguments:
@@ -15637,7 +15438,7 @@ GameObject:
   - component: {fileID: 1423774576}
   - component: {fileID: 1423774575}
   m_Layer: 5
-  m_Name: Item Prices
+  m_Name: SetCount(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15724,7 +15525,7 @@ GameObject:
   - component: {fileID: 1431199580}
   - component: {fileID: 1431199579}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SaleForCurrency(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15875,7 +15676,7 @@ GameObject:
   - component: {fileID: 1449704046}
   - component: {fileID: 1449704048}
   m_Layer: 5
-  m_Name: WashingmashineMiddleBottom
+  m_Name: MinerMiddle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15925,7 +15726,7 @@ GameObject:
   - component: {fileID: 1459131384}
   - component: {fileID: 1459131383}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Experience(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16002,7 +15803,7 @@ GameObject:
   - component: {fileID: 1462249669}
   - component: {fileID: 1462249668}
   m_Layer: 5
-  m_Name: ==Confirm==
+  m_Name: Agree(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16085,6 +15886,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 191221835}
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: SwitchConfirmation
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1462249669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16135,7 +15948,7 @@ GameObject:
   - component: {fileID: 1463202144}
   - component: {fileID: 1463202143}
   m_Layer: 5
-  m_Name: MinionDescription1
+  m_Name: Unit1(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16215,7 +16028,7 @@ GameObject:
   - component: {fileID: 1466073653}
   - component: {fileID: 1466073652}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SaleForXp(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16368,7 +16181,7 @@ GameObject:
   - component: {fileID: 1483738659}
   - component: {fileID: 1483738660}
   m_Layer: 5
-  m_Name: Minion Select Interface
+  m_Name: UnitSelect Interface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16383,13 +16196,13 @@ RectTransform:
   m_GameObject: {fileID: 1483738658}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1962240877}
   - {fileID: 1729475117}
-  m_Father: {fileID: 125935692}
-  m_RootOrder: 0
+  m_Father: {fileID: 1667580094}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -16501,7 +16314,7 @@ GameObject:
   - component: {fileID: 1509140297}
   - component: {fileID: 1509140296}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Birth(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16692,7 +16505,7 @@ GameObject:
   - component: {fileID: 1522292584}
   - component: {fileID: 1522292583}
   m_Layer: 5
-  m_Name: FPSCounter
+  m_Name: FPS(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16802,7 +16615,7 @@ GameObject:
   - component: {fileID: 1524501944}
   - component: {fileID: 1524501943}
   m_Layer: 5
-  m_Name: Text
+  m_Name: ItemActionUse(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16883,7 +16696,7 @@ GameObject:
   - component: {fileID: 1525368882}
   - component: {fileID: 1525368881}
   m_Layer: 5
-  m_Name: ==StartWashingmashine==
+  m_Name: Start(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16956,8 +16769,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 27140124}
-        m_TargetAssemblyTypeName: Washingmashine, Assembly-CSharp
-        m_MethodName: StartWashingmashine
+        m_TargetAssemblyTypeName: Miner, Assembly-CSharp
+        m_MethodName: StartMiner
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17005,59 +16818,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525368879}
   m_CullTransparentMesh: 0
---- !u!1 &1529914540
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1529914541}
-  - component: {fileID: 1529914542}
-  m_Layer: 5
-  m_Name: ButtonCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1529914541
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1529914540}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 76431535}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -55.81006, y: 285}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!58 &1529914542
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1529914540}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 50
 --- !u!1 &1532993024
 GameObject:
   m_ObjectHideFlags: 0
@@ -17071,7 +16831,7 @@ GameObject:
   - component: {fileID: 1532993027}
   - component: {fileID: 1532993026}
   m_Layer: 5
-  m_Name: Agree Window
+  m_Name: ActionConfirmation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17168,7 +16928,7 @@ GameObject:
   - component: {fileID: 1540268116}
   - component: {fileID: 1540268118}
   m_Layer: 5
-  m_Name: Click Panel
+  m_Name: Clickable(cdr)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17262,7 +17022,7 @@ GameObject:
   - component: {fileID: 1544358886}
   - component: {fileID: 1544358885}
   m_Layer: 5
-  m_Name: UpgradesGridPanel
+  m_Name: UpgradesGrid)Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17371,7 +17131,7 @@ GameObject:
   - component: {fileID: 1551017597}
   - component: {fileID: 1551017596}
   m_Layer: 5
-  m_Name: DeleteDataTEXT
+  m_Name: ResetData(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17451,7 +17211,7 @@ GameObject:
   - component: {fileID: 1552084304}
   - component: {fileID: 1552084303}
   m_Layer: 5
-  m_Name: WashingmashineIncomingsPanel
+  m_Name: LootMiner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17602,7 +17362,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 1
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -17635,7 +17397,7 @@ GameObject:
   - component: {fileID: 1558965081}
   - component: {fileID: 1558965080}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SetCountXp(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17787,7 +17549,7 @@ GameObject:
   - component: {fileID: 1597051125}
   - component: {fileID: 1597051124}
   m_Layer: 5
-  m_Name: MinionDescription2
+  m_Name: Unit2(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18054,7 +17816,7 @@ GameObject:
   - component: {fileID: 1615759506}
   - component: {fileID: 1615759505}
   m_Layer: 5
-  m_Name: SellForCurrencyPrice
+  m_Name: SetCountCurrency(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18210,7 +17972,7 @@ GameObject:
   - component: {fileID: 1644983654}
   - component: {fileID: 1644983653}
   m_Layer: 5
-  m_Name: SaleForXpPrice
+  m_Name: SaleForXp(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18290,7 +18052,7 @@ GameObject:
   - component: {fileID: 1645575434}
   - component: {fileID: 1645575433}
   m_Layer: 5
-  m_Name: Image
+  m_Name: OpenUpgrades(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18366,7 +18128,7 @@ GameObject:
   - component: {fileID: 1663613313}
   - component: {fileID: 1663613312}
   m_Layer: 5
-  m_Name: IcoOutline
+  m_Name: Outline64L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18464,6 +18226,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 912053582}
+  - {fileID: 1483738659}
   m_Father: {fileID: 191221833}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18529,7 +18292,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -18545,7 +18310,7 @@ GameObject:
   - component: {fileID: 1674734913}
   - component: {fileID: 1674734912}
   m_Layer: 5
-  m_Name: MessageText
+  m_Name: Message(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18625,7 +18390,7 @@ GameObject:
   - component: {fileID: 1676693694}
   - component: {fileID: 1676693693}
   m_Layer: 5
-  m_Name: UpgradeDescriptionTEXT
+  m_Name: UpgradeDescription(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18705,7 +18470,7 @@ GameObject:
   - component: {fileID: 1677491968}
   - component: {fileID: 1677491967}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SetCountCurrency(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18781,7 +18546,7 @@ GameObject:
   - component: {fileID: 1680284585}
   - component: {fileID: 1680284584}
   m_Layer: 5
-  m_Name: Text
+  m_Name: SetCountAgree(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18861,7 +18626,7 @@ GameObject:
   - component: {fileID: 1680948185}
   - component: {fileID: 1680948184}
   m_Layer: 5
-  m_Name: UpgradePriceText
+  m_Name: UpgradePrice(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18940,7 +18705,7 @@ GameObject:
   - component: {fileID: 1681315655}
   - component: {fileID: 1681315656}
   m_Layer: 5
-  m_Name: ==FPSToggle==
+  m_Name: FPS(tgg)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19041,7 +18806,7 @@ GameObject:
   - component: {fileID: 1699346756}
   - component: {fileID: 1699346755}
   m_Layer: 5
-  m_Name: ==UseAgree==
+  m_Name: SetCountAgree(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19174,7 +18939,7 @@ GameObject:
   - component: {fileID: 1699991007}
   - component: {fileID: 1699991006}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Start(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19254,7 +19019,7 @@ GameObject:
   - component: {fileID: 1712872540}
   - component: {fileID: 1712872539}
   m_Layer: 5
-  m_Name: StageText
+  m_Name: Stage(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19422,7 +19187,7 @@ GameObject:
   - component: {fileID: 1714869263}
   - component: {fileID: 1714869262}
   m_Layer: 5
-  m_Name: ==UpgradeMinion2==
+  m_Name: UpgradeUnit2(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19494,7 +19259,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: Action
         m_Mode: 5
         m_Arguments:
@@ -19502,7 +19267,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: minionupgrade2
+          m_StringArgument: unitupgrade2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1714869263
@@ -19631,7 +19396,7 @@ GameObject:
   - component: {fileID: 1720991739}
   - component: {fileID: 1720991738}
   m_Layer: 5
-  m_Name: AttackModeTEXT
+  m_Name: AttackMode(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19711,7 +19476,7 @@ GameObject:
   - component: {fileID: 1727247454}
   - component: {fileID: 1727247453}
   m_Layer: 5
-  m_Name: Text
+  m_Name: EquipUnit1(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19792,7 +19557,7 @@ GameObject:
   - component: {fileID: 1729065128}
   - component: {fileID: 1729065127}
   m_Layer: 5
-  m_Name: ==CloseItemInfo==
+  m_Name: CloseItemInfo(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19863,7 +19628,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: SwitchInventory
         m_Mode: 3
         m_Arguments:
@@ -19926,7 +19691,7 @@ GameObject:
   - component: {fileID: 1729475119}
   - component: {fileID: 1729475118}
   m_Layer: 5
-  m_Name: MinionsGridPanel
+  m_Name: UnitsGridPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20188,7 +19953,7 @@ GameObject:
   - component: {fileID: 1764854150}
   - component: {fileID: 1764854149}
   m_Layer: 5
-  m_Name: ==ItemOptionsSell==
+  m_Name: ItemActionSell(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20260,7 +20025,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: OpenItemSellPanel
         m_Mode: 1
         m_Arguments:
@@ -20321,7 +20086,7 @@ GameObject:
   - component: {fileID: 1770707465}
   - component: {fileID: 1770707464}
   m_Layer: 5
-  m_Name: Image
+  m_Name: DeselectUnit(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20504,7 +20269,7 @@ GameObject:
   - component: {fileID: 1795433383}
   - component: {fileID: 1795433382}
   m_Layer: 5
-  m_Name: ==SellForCurrencyAgree==
+  m_Name: SetCountCurrency(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20736,6 +20501,7 @@ RectTransform:
   - {fileID: 1337557965}
   - {fileID: 570515554}
   - {fileID: 134488547}
+  - {fileID: 987286807}
   m_Father: {fileID: 518362446}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20755,7 +20521,7 @@ GameObject:
   - component: {fileID: 1801977970}
   - component: {fileID: 1801977971}
   m_Layer: 5
-  m_Name: Right Buttons
+  m_Name: Actions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20798,7 +20564,7 @@ MonoBehaviour:
   onTargetReached:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 191221835}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Interface, Assembly-CSharp
         m_MethodName: SwitchButtonsActive
         m_Mode: 6
@@ -20824,7 +20590,7 @@ GameObject:
   - component: {fileID: 1820966989}
   - component: {fileID: 1820966988}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Agree(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20904,7 +20670,7 @@ GameObject:
   - component: {fileID: 1833145138}
   - component: {fileID: 1833145137}
   m_Layer: 5
-  m_Name: LocationIco
+  m_Name: Location(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20980,7 +20746,7 @@ GameObject:
   - component: {fileID: 1834258108}
   - component: {fileID: 1834258107}
   m_Layer: 5
-  m_Name: Text
+  m_Name: UpgradeMinion1(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21280,7 +21046,7 @@ GameObject:
   - component: {fileID: 1847524202}
   - component: {fileID: 1847524201}
   m_Layer: 5
-  m_Name: ==AttackMode==
+  m_Name: AttackMode(dd)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21660,7 +21426,7 @@ GameObject:
   - component: {fileID: 1875669809}
   - component: {fileID: 1875669808}
   m_Layer: 5
-  m_Name: Text
+  m_Name: TargetFps2(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21818,7 +21584,7 @@ GameObject:
   - component: {fileID: 1901871796}
   - component: {fileID: 1901871797}
   m_Layer: 5
-  m_Name: CountSlider
+  m_Name: SetCount(sld)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21899,7 +21665,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: OnCountSliderValChange
         m_Mode: 1
         m_Arguments:
@@ -21999,7 +21765,9 @@ Canvas:
   m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 30000
   m_TargetDisplay: 0
@@ -22095,7 +21863,7 @@ GameObject:
   - component: {fileID: 1906905529}
   - component: {fileID: 1906905528}
   m_Layer: 5
-  m_Name: Text
+  m_Name: ItemActionSell(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22493,7 +22261,7 @@ GameObject:
   - component: {fileID: 1944347957}
   - component: {fileID: 1944347956}
   m_Layer: 5
-  m_Name: Label
+  m_Name: ShowFPS(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22568,7 +22336,7 @@ LightingSettings:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Settings.lighting
-  serializedVersion: 4
+  serializedVersion: 6
   m_GIWorkflowMode: 1
   m_EnableBakedLightmaps: 0
   m_EnableRealtimeLightmaps: 0
@@ -22577,7 +22345,7 @@ LightingSettings:
   m_AlbedoBoost: 1
   m_IndirectOutputScale: 1
   m_UsingShadowmask: 1
-  m_BakeBackend: 0
+  m_BakeBackend: 1
   m_LightmapMaxSize: 1024
   m_BakeResolution: 40
   m_Padding: 2
@@ -22602,13 +22370,13 @@ LightingSettings:
   m_PVRCulling: 1
   m_PVRSampling: 1
   m_PVRDirectSampleCount: 32
-  m_PVRSampleCount: 500
-  m_PVREnvironmentSampleCount: 500
+  m_PVRSampleCount: 512
+  m_PVREnvironmentSampleCount: 512
   m_PVREnvironmentReferencePointCount: 2048
   m_LightProbeSampleCountMultiplier: 4
   m_PVRBounces: 2
   m_PVRMinBounces: 2
-  m_PVREnvironmentMIS: 0
+  m_PVREnvironmentImportanceSampling: 0
   m_PVRFilteringMode: 2
   m_PVRDenoiserTypeDirect: 0
   m_PVRDenoiserTypeIndirect: 0
@@ -22623,6 +22391,8 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
   m_PVRTiledBaking: 0
+  m_NumRaysToShootPerTexel: -1
+  m_RespectSceneVisibilityWhenBakingGI: 0
 --- !u!1 &1961120428
 GameObject:
   m_ObjectHideFlags: 0
@@ -22636,7 +22406,7 @@ GameObject:
   - component: {fileID: 1961120434}
   - component: {fileID: 1961120433}
   m_Layer: 5
-  m_Name: Washing Mashine Canvas
+  m_Name: Miner Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22720,7 +22490,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 635967363
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -22736,7 +22508,7 @@ GameObject:
   - component: {fileID: 1962070061}
   - component: {fileID: 1962070060}
   m_Layer: 5
-  m_Name: MinionLockedText1
+  m_Name: Unit1Locked(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22818,7 +22590,7 @@ GameObject:
   - component: {fileID: 1962240879}
   - component: {fileID: 1962240878}
   m_Layer: 5
-  m_Name: DeselectMinionButton
+  m_Name: DeselectUnit(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22907,8 +22679,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1322836605}
-        m_TargetAssemblyTypeName: MinionManager, Assembly-CSharp
-        m_MethodName: UnequipSelectedMinion
+        m_TargetAssemblyTypeName: UnitManager, Assembly-CSharp
+        m_MethodName: UnequipSelectedUnit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -22919,8 +22691,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
-        m_MethodName: CloseMinionSelect
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
+        m_MethodName: CloseUnitsSelect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -22981,7 +22753,7 @@ GameObject:
   - component: {fileID: 1986420734}
   - component: {fileID: 1986420733}
   m_Layer: 5
-  m_Name: ==UpgradeWashingmashine==
+  m_Name: UpgradeMiner(btn)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23054,7 +22826,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 191221835}
-        m_TargetAssemblyTypeName: Interface, Assembly-CSharp
+        m_TargetAssemblyTypeName: InterfaceManager, Assembly-CSharp
         m_MethodName: Action
         m_Mode: 5
         m_Arguments:
@@ -23062,7 +22834,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: wmupgrade
+          m_StringArgument: minerupgrade
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1986420734
@@ -23115,7 +22887,7 @@ GameObject:
   - component: {fileID: 1998000624}
   - component: {fileID: 1998000623}
   m_Layer: 5
-  m_Name: WashingmashineLevelPanel
+  m_Name: MinerLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23191,7 +22963,7 @@ GameObject:
   - component: {fileID: 2005978142}
   - component: {fileID: 2005978143}
   m_Layer: 5
-  m_Name: TimerBar
+  m_Name: Timer(sld)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23405,7 +23177,7 @@ GameObject:
   - component: {fileID: 2025662889}
   - component: {fileID: 2025662888}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Currency(img)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23481,7 +23253,7 @@ GameObject:
   - component: {fileID: 2042249128}
   - component: {fileID: 2042249127}
   m_Layer: 5
-  m_Name: UpgradeDescriptionText
+  m_Name: UpgradeDescription(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23655,6 +23427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -23741,7 +23514,7 @@ GameObject:
   - component: {fileID: 2092490558}
   - component: {fileID: 2092490557}
   m_Layer: 5
-  m_Name: MinionLockedText2
+  m_Name: Unit2Locked(lbl)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23821,7 +23594,7 @@ GameObject:
   - component: {fileID: 2099181805}
   - component: {fileID: 2099181804}
   m_Layer: 5
-  m_Name: HpTEXT
+  m_Name: HP(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23899,7 +23672,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2109640182}
   m_Layer: 5
-  m_Name: Click Parent
+  m_Name: PartParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23937,7 +23710,7 @@ GameObject:
   - component: {fileID: 2125183285}
   - component: {fileID: 2125183284}
   m_Layer: 5
-  m_Name: MinionWindow1
+  m_Name: Unit1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24225,7 +23998,7 @@ GameObject:
   - component: {fileID: 2143162311}
   - component: {fileID: 2143162310}
   m_Layer: 5
-  m_Name: Experience
+  m_Name: Experience(txt)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

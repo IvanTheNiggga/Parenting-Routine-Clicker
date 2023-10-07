@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Upgrades : MonoBehaviour
+public class UpgradesManager : MonoBehaviour
 {
     public List<Upgrade> upgradesDataBase = new List<Upgrade>();
     public List<Sprite> damageIcons = new();

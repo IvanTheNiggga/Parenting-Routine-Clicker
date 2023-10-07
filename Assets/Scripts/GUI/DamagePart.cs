@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 
-public class ClickObj : MonoBehaviour
+public class DamagePart : MonoBehaviour
 {
     private Clicker clicker;
 
@@ -19,7 +19,7 @@ public class ClickObj : MonoBehaviour
     private void Start()
     {
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
-        text.text = FormatNumsHelper.FormatNumF1(clicker.CurrDealedDamage);
+        text.text = NumFormat.FormatNumF1(clicker.CurrDealedDamage);
         if (clicker.Damage < clicker.CurrDealedDamage && big == true)
         {
             text.color = Color.red;

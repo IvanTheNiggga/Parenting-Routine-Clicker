@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour
 {
     private Clicker clicker;
     private EnemyManager enemyManager;
-    private Injured sprSwap;
+    private OnHurt sprSwap;
     private Panel panel;
     private Timer timer;
 
@@ -15,8 +15,8 @@ public class Enemy : MonoBehaviour
     private Text text;
     private Slider hpSlider;
 
-    private Minion minion1;
-    private Minion minion2;
+    private Unit unit1;
+    private Unit unit2;
 
     public double startHp;
     public double HP;
@@ -29,18 +29,18 @@ public class Enemy : MonoBehaviour
 
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
         addCrit = clicker.critMultiplierUpgradeLvl;
-        panel = GameObject.Find("Click Panel").GetComponent<Panel>();
+        panel = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
         panel.EnemyGetComponent(name);
-        text = GameObject.Find("HpTEXT").GetComponent<Text>();
-        text.text = FormatNumsHelper.FormatNumF1(HP) + " / " + FormatNumsHelper.FormatNumF1(startHp);
-        hpSlider = GameObject.Find("HpSlider").GetComponent<Slider>();
+        text = GameObject.Find("HP(txt)").GetComponent<Text>();
+        text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
+        hpSlider = GameObject.Find("HP(sld)").GetComponent<Slider>();
         hpSlider.maxValue = 1;
         hpSlider.value = (float)(HP / startHp);
 
-        sprSwap = GetComponent<Injured>();
-        minion1 = GameObject.Find("Minion1").GetComponent<Minion>();
-        minion2 = GameObject.Find("Minion2").GetComponent<Minion>();
-        ClickParent = GameObject.Find("Click Parent");
+        sprSwap = GetComponent<OnHurt>();
+        unit1 = GameObject.Find("Unit1(obj)").GetComponent<Unit>();
+        unit2 = GameObject.Find("Unit2(obj)").GetComponent<Unit>();
+        ClickParent = GameObject.Find("Clickable(cdr)");
         enemyManager = GameObject.Find("ClickerManager").GetComponent<EnemyManager>();
 
         timer = GameObject.Find("Timer").GetComponent<Timer>();
@@ -51,13 +51,13 @@ public class Enemy : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Preparation
     public void AbleToAttack()
     {
-        if (minion1 != null)
+        if (unit1 != null)
         {
-            minion1.GetEnemyComponent(this);
+            unit1.GetEnemyComponent(this);
         }
-        if (minion2 != null)
+        if (unit2 != null)
         {
-            minion2.GetEnemyComponent(this);
+            unit2.GetEnemyComponent(this);
         }
 
         if (name == ("EnemyObj"))
@@ -80,8 +80,8 @@ public class Enemy : MonoBehaviour
         enemyManager.clickable = true;
         timer.StartTimer(20);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Minion actions
-    public void MinionKick(double damage)
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Unit actions
+    public void UnitKick(double damage)
     {
         sprSwap.SetInjured();
         sprSwap.Kicked();
@@ -99,7 +99,7 @@ public class Enemy : MonoBehaviour
             hpSlider.value = (float)(HP / startHp);
         }
 
-        text.text = (FormatNumsHelper.FormatNumF1(HP) + " / " + FormatNumsHelper.FormatNumF1(startHp));
+        text.text = (NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp));
 
         if (ClickParent.transform.childCount < 13)
         {
@@ -109,7 +109,7 @@ public class Enemy : MonoBehaviour
         CheckHP();
         return;
     }
-    public void MinionSabotage()
+    public void UnitSabotage()
     {
         HP += startHp / 2;
         hpSlider.value = 1;
@@ -145,7 +145,7 @@ public class Enemy : MonoBehaviour
                 hpSlider.value = (float)(HP / startHp);
             }
 
-            text.text = FormatNumsHelper.FormatNumF1(HP) + " / " + FormatNumsHelper.FormatNumF1(startHp);
+            text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
 
             if (ClickParent.transform.childCount < 13)
             {
@@ -174,13 +174,13 @@ public class Enemy : MonoBehaviour
 
         CreateDmgPart(true);
 
-        text.text = FormatNumsHelper.FormatNumF1(HP) + " / " + FormatNumsHelper.FormatNumF1(startHp);
+        text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
 
         CheckHP();
     }
     void CreateDmgPart(bool big)
     {
-        ClickObj part = Instantiate(DmgPart_Prefab, ClickParent.transform).GetComponent<ClickObj>();
+        DamagePart part = Instantiate(DmgPart_Prefab, ClickParent.transform).GetComponent<DamagePart>();
 
         part.big = big;
         Vector2 v = transform.position;
@@ -192,13 +192,13 @@ public class Enemy : MonoBehaviour
     {
         if (HP <= 0.5f)
         {
-            if (minion1 != null)
+            if (unit1 != null)
             {
-                minion1.GetEnemyComponent(null);
+                unit1.GetEnemyComponent(null);
             }
-            if (minion2 != null)
+            if (unit2 != null)
             {
-                minion2.GetEnemyComponent(null);
+                unit2.GetEnemyComponent(null);
             }
 
             if (name == "BossObj")
@@ -219,13 +219,13 @@ public class Enemy : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (minion1 != null)
+        if (unit1 != null)
         {
-            minion1.GetEnemyComponent(null);
+            unit1.GetEnemyComponent(null);
         }
-        if (minion2 != null)
+        if (unit2 != null)
         {
-            minion2.GetEnemyComponent(null);
+            unit2.GetEnemyComponent(null);
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class OptionsMenu : MonoBehaviour
+public class Settings : MonoBehaviour
 {
     public AudioMixerGroup mixer;
 
@@ -25,16 +25,16 @@ public class OptionsMenu : MonoBehaviour
     {
         confirmInt = 0;
 
-        fpscounter = GameObject.Find("FPSCounter");
-        fpsToggle = GameObject.Find("==FPSToggle==").GetComponent<Toggle>();
-        fpsCapOption = GameObject.Find("==TargetFPS==").GetComponent<Dropdown>();
-        attackOption = GameObject.Find("==AttackMode==").GetComponent<Dropdown>();
-        panel = GameObject.Find("Click Panel").GetComponent<Panel>();
+        fpscounter = GameObject.Find("FPS(txt)");
+        fpsToggle = GameObject.Find("FPS(tgg)").GetComponent<Toggle>();
+        fpsCapOption = GameObject.Find("TargetFPS(dd)").GetComponent<Dropdown>();
+        attackOption = GameObject.Find("AttackMode(dd)").GetComponent<Dropdown>();
+        panel = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
 
-        text = GameObject.Find("DeleteDataTEXT").GetComponent<Text>();
+        text = GameObject.Find("ResetData(txt)").GetComponent<Text>();
 
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
-        volumeSlider = GameObject.Find("==VolumeSlider==").GetComponent<Slider>();
+        volumeSlider = GameObject.Find("Sound(sld)").GetComponent<Slider>();
 
         LoadOptions();
     }
@@ -61,10 +61,10 @@ public class OptionsMenu : MonoBehaviour
             DisagreeToDelete();
             clicker.ResetData();
 
-            Washingmashine washingmashine = GameObject.Find("Washingmashine").GetComponent<Washingmashine>();
-            washingmashine.DeleteWashingmashineIncome();
+            Miner washingmashine = GameObject.Find("Miner").GetComponent<Miner>();
+            washingmashine.ResetMinerLoot();
 
-            EntranceTimeUtils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
+            Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
 
             EnemyManager enemyManager = GameObject.Find("ClickerManager").GetComponent<EnemyManager>();
             enemyManager.RespawnEnemy();
@@ -94,7 +94,7 @@ public class OptionsMenu : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Set FPS cap
     public void SetDefaultCap()
     {
-        fpsCapOption = GameObject.Find("==TargetFPS==").GetComponent<Dropdown>();
+        fpsCapOption = GameObject.Find("TargetFPS(dd)").GetComponent<Dropdown>();
         fpsCapOption.value = 1;
         SetFpsCap();
     }

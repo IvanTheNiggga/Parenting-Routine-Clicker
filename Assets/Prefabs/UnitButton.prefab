@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 637364818317614802}
   - component: {fileID: 3604306347968537048}
   m_Layer: 5
-  m_Name: MinionButton
+  m_Name: UnitButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

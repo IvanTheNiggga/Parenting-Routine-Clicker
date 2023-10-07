@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class UpgradeForXp : MonoBehaviour
 {
     private Clicker clicker;
-    private Interface interfaceManager;
-    private Upgrades upgrades;
+    private InterfaceManager interfaceManager;
+    private UpgradesManager upgrades;
     private Message message;
     private SoundManager soundManager;
     private StagesManager stagesManager;
@@ -36,11 +36,11 @@ public class UpgradeForXp : MonoBehaviour
         if (loaded == false)
         {
             clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
-            upgrades = GameObject.Find("ClickerManager").GetComponent<Upgrades>();
-            interfaceManager = GameObject.Find("INTERFACE").GetComponent<Interface>();
+            upgrades = GameObject.Find("ClickerManager").GetComponent<UpgradesManager>();
+            interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
             textManager = GameObject.Find("INTERFACE").GetComponent<TextManager>();
             message = GameObject.Find("Message").GetComponent<Message>();
-            name = GameObject.Find("ClickerManager").GetComponent<Upgrades>().upgradesDataBase[index].upgradeName;
+            name = GameObject.Find("ClickerManager").GetComponent<UpgradesManager>().upgradesDataBase[index].upgradeName;
             stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
             soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 
@@ -100,7 +100,7 @@ public class UpgradeForXp : MonoBehaviour
             PlayerPrefs.SetInt(upgradeName, currentLvl);
             Use();
 
-            interfaceManager.UpdateUpgradeGraphics();
+            interfaceManager.UpdateUpgrades();
             soundManager.PlayApplauseSound();
             clicker.Save();
         }

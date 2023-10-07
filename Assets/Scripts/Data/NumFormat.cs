@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FormatNumsHelper : MonoBehaviour
+public class NumFormat : MonoBehaviour
 {
     private static string[] names = new[]
     {

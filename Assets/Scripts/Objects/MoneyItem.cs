@@ -6,7 +6,7 @@ public class MoneyItem : MonoBehaviour
     public AudioClip pickupCurrency;
     private AudioSource pcAudiosource;
 
-    private GiveReward giveReward;
+    private RewardManager giveReward;
 
     public GameObject countTextObj;
     public Text countText;
@@ -20,7 +20,7 @@ public class MoneyItem : MonoBehaviour
     private void Start()
     {
         pcAudiosource = GameObject.Find("PickupCurrencySource").GetComponent<AudioSource>();
-        giveReward = GameObject.Find("ClickerManager").GetComponent<GiveReward>();
+        giveReward = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
 
         transform.position = new Vector2(Random.Range(-115f, 115f), 300f);
         if (Random.Range(0, 2) <= 0)

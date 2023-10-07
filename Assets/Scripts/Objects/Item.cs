@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class Item : MonoBehaviour, IPointerClickHandler
 {
     private Clicker clicker;
-    private GiveReward giveReward;
+    private RewardManager giveReward;
     private Inventory inventory;
     private StagesManager stagesManager;
     public Text text;
@@ -39,7 +39,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public void Start()
     {
-        SaleDescription_Text = GameObject.Find("Sale Description").GetComponent<Text>();
+        SaleDescription_Text = GameObject.Find("Sale(lbl)").GetComponent<Text>();
 
         transform.localScale = new Vector3(1, 1, 1);
         taps = 0;
@@ -71,7 +71,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
             clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
             stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
-            giveReward = GameObject.Find("ClickerManager").GetComponent<GiveReward>();
+            giveReward = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
 
             ico.sprite = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].ico;
             nameObject = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].nameObject;
@@ -90,7 +90,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             string keyName = $"{itemName}Count";
             PlayerPrefs.SetInt(keyName, count);
         }
-        text.text = FormatNumsHelper.FormatNumF0F1(count);
+        text.text = NumFormat.FormatNumF0F1(count);
     }
 
     private void DestroyOnEmpty()
@@ -123,9 +123,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
     {
         if (clickable == true)
         {
-            Interface interfaceManager = GameObject.Find("INTERFACE").GetComponent<Interface>();
+            InterfaceManager interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
 
-            if (interfaceManager.saleWindowOpened)
+            if (interfaceManager.saleOpened)
             {
                 AddToInvestGrid();
                 MultiSellAddgraphics();
@@ -135,15 +135,15 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 inventory.SelectedItem = gameObject;
 
                 interfaceManager.SwitchItemInfo(1);
-                interfaceManager.SwitchMainInterface(0);
+                interfaceManager.SwitchBattleInterface(0);
             }
         }
     }
 
     public void MultiSellAddgraphics()
     {
-        SaleForCurrencyPrice_Text = GameObject.Find("SaleForCurrencyPrice").GetComponent<Text>();
-        SaleForXpPrice_Text = GameObject.Find("SaleForXpPrice").GetComponent<Text>();
+        SaleForCurrencyPrice_Text = GameObject.Find("SaleForCurrency(txt)").GetComponent<Text>();
+        SaleForXpPrice_Text = GameObject.Find("SaleForXp(txt)").GetComponent<Text>();
 
         int itemsCount = 0;
         float esPrice = 0;
@@ -163,9 +163,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            SaleForCurrencyPrice_Text.text = "+" + FormatNumsHelper.FormatNumF1(pcPrice);
-            SaleForXpPrice_Text.text = "+" + FormatNumsHelper.FormatNumF1(esPrice);
-            SaleDescription_Text.text = $"Sell {FormatNumsHelper.FormatNumF0(itemsCount)} items ?";
+            SaleForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(pcPrice);
+            SaleForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(esPrice);
+            SaleDescription_Text.text = $"Sell {NumFormat.FormatNumF0(itemsCount)} items ?";
         }
     }
 

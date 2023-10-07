@@ -2,7 +2,7 @@
 using System.Globalization;
 using UnityEngine;
 
-public static class EntranceTimeUtils
+public static class Utils
 {
     public static void SetDataTime(string key, DateTime value)
     {
@@ -15,7 +15,7 @@ public static class EntranceTimeUtils
         if (PlayerPrefs.HasKey(key))
         {
             string stored = PlayerPrefs.GetString(key);
-            DateTime result = DateTime.ParseExact(stored,"u", CultureInfo.InvariantCulture);
+            DateTime result = DateTime.ParseExact(stored, "u", CultureInfo.InvariantCulture);
 
             return result;
         }
@@ -23,5 +23,14 @@ public static class EntranceTimeUtils
         {
             return defaultValue;
         }
+    }
+
+    public static double Progression(double num, float multiplier, int times)
+    {
+        for (int i = 0; times > i; i++)
+        {
+            num *= multiplier;
+        }
+        return num;
     }
 }

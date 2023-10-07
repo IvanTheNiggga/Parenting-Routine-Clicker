@@ -8,11 +8,11 @@ public class Inventory : MonoBehaviour
     public List<Item> investItems = new();
 
     private Clicker clicker;
-    private GiveReward giveReward;
-    private Interface interfaceManager;
+    private RewardManager giveReward;
+    private InterfaceManager interfaceManager;
     private StagesManager stagesManager;
     private SoundManager soundManager;
-    private Washingmashine washingmashine;
+    private Miner miner;
 
     private ContentSwipe InventoryGridPanel_CSwipe;
     private ContentSwipe SaleGridPanel_CSwipe;
@@ -30,6 +30,8 @@ public class Inventory : MonoBehaviour
     private Text Currency_Text;
     private Text Experience_Text;
     private Text SaleDescription_Text;
+    private Text SaleForCurrency_Text;
+    private Text SaleForXp_Text;
 
     public bool ableToInvest;
 
@@ -39,23 +41,26 @@ public class Inventory : MonoBehaviour
 
         stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
-        interfaceManager = GameObject.Find("INTERFACE").GetComponent<Interface>();
-        giveReward = GameObject.Find("ClickerManager").GetComponent<GiveReward>();
+        interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
+        giveReward = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
 
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 
-        Count_Slider = GameObject.Find("CountSlider").GetComponent<Slider>();
+        Count_Slider = GameObject.Find("SetCount(sld)").GetComponent<Slider>();
 
-        SaleDescription_Text = GameObject.Find("Sale Description").GetComponent<Text>();
-        Currency_Text = GameObject.Find("Currency").GetComponent<Text>();
-        Experience_Text = GameObject.Find("Experience").GetComponent<Text>();
+        SaleDescription_Text = GameObject.Find("Sale(lbl)").GetComponent<Text>();
+        Currency_Text = GameObject.Find("Currency(txt)").GetComponent<Text>();
+        Experience_Text = GameObject.Find("Experience(txt)").GetComponent<Text>();
 
 
         SaleGrid = GameObject.Find("SaleGrid");
         InventoryGrid = GameObject.Find("InventoryGrid");
-        CurrencyParent = GameObject.Find("Currency Parent");
+        CurrencyParent = GameObject.Find("Drop Parent");
 
-        washingmashine = GameObject.Find("Washingmashine").GetComponent<Washingmashine>();
+        miner = GameObject.Find("Miner").GetComponent<Miner>();
+
+        SaleForCurrency_Text = GameObject.Find("SaleForCurrency(txt)").GetComponent<Text>();
+        SaleForXp_Text = GameObject.Find("SaleForXp(txt)").GetComponent<Text>();
     }
     void CheckFloors()
     {
@@ -168,11 +173,13 @@ public class Inventory : MonoBehaviour
         {
             Item item = investItems[i];
             clicker.Experience += item.count * item.xpPrice;
-            Experience_Text.text = FormatNumsHelper.FormatNumF1(clicker.Experience);
+            Experience_Text.text = NumFormat.FormatNumF1(clicker.Experience);
             investItems[i].count = 0;
             investItems[i].AddGraphics();
 
             SaleDescription_Text.text = "Select items, you want to sell";
+            SaleForCurrency_Text.text = "";
+            SaleForXp_Text.text = "";
         }
         SortInventory();
         soundManager.PlayBuySound();
@@ -183,11 +190,13 @@ public class Inventory : MonoBehaviour
         {
             Item item = investItems[i];
             clicker.Currency += item.count * item.currencyPrice;
-            Currency_Text.text = FormatNumsHelper.FormatNumF1(clicker.Currency);
+            Currency_Text.text = NumFormat.FormatNumF1(clicker.Currency);
             investItems[i].count = 0;
             investItems[i].AddGraphics();
 
             SaleDescription_Text.text = "Select items, you want to sell";
+            SaleForCurrency_Text.text = "";
+            SaleForXp_Text.text = "";
         }
         SortInventory();
         soundManager.PlayBuySound();
@@ -200,7 +209,7 @@ public class Inventory : MonoBehaviour
             if (interfaceManager.typeOfAction == "Buy")
             {
                 clicker.Experience -= (int)Count_Slider.value * item.xpPrice;
-                Experience_Text.text = FormatNumsHelper.FormatNumF1(clicker.Experience);
+                Experience_Text.text = NumFormat.FormatNumF1(clicker.Experience);
                 AddItem(item.stage, item.index, (int)Count_Slider.value);
                 item.AddGraphics();
                 Count_Slider.maxValue = Mathf.FloorToInt(clicker.Experience / item.xpPrice);
@@ -220,7 +229,7 @@ public class Inventory : MonoBehaviour
                 else
                 {
                     clicker.Experience += (int)Count_Slider.value * item.xpPrice;
-                    Experience_Text.text = FormatNumsHelper.FormatNumF1(clicker.Experience);
+                    Experience_Text.text = NumFormat.FormatNumF1(clicker.Experience);
                     item.count -= (int)Count_Slider.value;
                     item.AddGraphics();
                     Count_Slider.maxValue = item.count;
@@ -239,7 +248,7 @@ public class Inventory : MonoBehaviour
         {
             Item item = SelectedItem.GetComponent<Item>();
             clicker.Currency += (int)Count_Slider.value * item.currencyPrice;
-            Currency_Text.text = FormatNumsHelper.FormatNumF1(clicker.Currency);
+            Currency_Text.text = NumFormat.FormatNumF1(clicker.Currency);
             item.count -= (int)Count_Slider.value;
             item.AddGraphics();
             Count_Slider.maxValue = item.count;

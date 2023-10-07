@@ -1,35 +1,34 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Interface : MonoBehaviour
+public class InterfaceManager : MonoBehaviour
 {
     public Sprite Battle_Sprite;
-    public Sprite Washingmashine_Sprite;
+    public Sprite miner_Sprite;
     public GameObject Upgrade_Prefab;
 
     private Clicker clicker;
     private EnemyManager enemyManager;
     private Inventory inventory;
     private Message message;
-    private MinionManager minionManager;
+    private UnitManager unitManager;
     private SoundManager soundManager;
     private StagesManager stagesManager;
     private TextManager textManager;
-    private Upgrades upgrades;
-    private Washingmashine washingmashine;
+    private UpgradesManager upgradesManager;
+    private Miner miner;
 
-    private ContentSwipe InventoryGridPanel_CSwipe;
+    private ContentSwipe InventorySwipe;
 
     private Image ItemInfo_Image;
     private Image Location_Image;
 
     private GameObject InventoryGrid;
     private GameObject UpgradesGrid;
-    private GameObject SellForCurrencyAgree;
-    private GameObject SellForXpAgree;
+    private GameObject SellForCurrency;
+    private GameObject SellForXp;
     private GameObject UseAgree;
     private GameObject ClickPanel;
-    private GameObject RightButtons;
     private GameObject ItemOptionsUse;
 
     private ObjectMovement AgreeWindow_OM;
@@ -38,13 +37,13 @@ public class Interface : MonoBehaviour
     private ObjectMovement ItemInfoWindow_OM;
     private ObjectMovement SaleWindow_OM;
     private ObjectMovement MainInterface_OM;
-    private ObjectMovement RightButtons_OM;
-    private ObjectMovement MinionInterface_OM;
-    private ObjectMovement MinionSelectInterface_OM;
+    private ObjectMovement Actions_OM;
+    private ObjectMovement UnitInterface_OM;
+    private ObjectMovement UnitSelectInterface_OM;
     private ObjectMovement UpgradeInterface_OM;
     private ObjectMovement SettingsWindow_OM;
     private ObjectMovement SetCountWindow_OM;
-    private ObjectMovement WashingInterface_OM;
+    private ObjectMovement MinerInterface_OM;
     private ObjectMovement BirthButton_OM;
 
     private Slider Count_Slider;
@@ -59,8 +58,8 @@ public class Interface : MonoBehaviour
     private Text ItemInfoDescription_Text;
     private Text SaleForCurrencyPrice_Text;
     private Text SaleForXpPrice_Text;
-    private Text MinionLocked1_Text;
-    private Text MinionLocked2_Text;
+    private Text UnitLocked1_Text;
+    private Text UnitLocked2_Text;
 
     public string typeOfAction;
     public string typeOfButtonAction;
@@ -71,64 +70,63 @@ public class Interface : MonoBehaviour
         clicker = cm.GetComponent<Clicker>();
         enemyManager = cm.GetComponent<EnemyManager>();
         inventory = cm.GetComponent<Inventory>();
-        upgrades = cm.GetComponent<Upgrades>();
-        minionManager = cm.GetComponent<MinionManager>();
+        upgradesManager = cm.GetComponent<UpgradesManager>();
+        unitManager = cm.GetComponent<UnitManager>();
         stagesManager = cm.GetComponent<StagesManager>();
         message = GameObject.Find("Message").GetComponent<Message>();
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         textManager = GameObject.Find("INTERFACE").GetComponent<TextManager>();
-        washingmashine = GameObject.Find("Washingmashine").GetComponent<Washingmashine>();
+        miner = GameObject.Find("Miner").GetComponent<Miner>();
 
-        InventoryGridPanel_CSwipe = GameObject.Find("InventoryGridPanel").GetComponent<ContentSwipe>();
+        InventorySwipe = GameObject.Find("InventoryGridPanel").GetComponent<ContentSwipe>();
 
-        Location_Image = GameObject.Find("LocationIco").GetComponent<Image>();
-        ItemInfo_Image = GameObject.Find("Item Info Image").GetComponent<Image>();
+        Location_Image = GameObject.Find("Location(img)").GetComponent<Image>();
+        ItemInfo_Image = GameObject.Find("ItemInfo(img)").GetComponent<Image>();
 
         InventoryGrid = GameObject.Find("InventoryGrid");
         UpgradesGrid = GameObject.Find("UpgradesGrid");
-        SellForCurrencyAgree = GameObject.Find("==SellForCurrencyAgree==");
-        SellForXpAgree = GameObject.Find("==SellForXpAgree==");
-        UseAgree = GameObject.Find("==UseAgree==");
-        ClickPanel = GameObject.Find("Click Panel");
-        RightButtons = GameObject.Find("Right Buttons");
-        ItemOptionsUse = GameObject.Find("==ItemOptionsUse==");
+        SellForCurrency = GameObject.Find("SetCountCurrency(btn)");
+        SellForXp = GameObject.Find("SetCountXp(btn)");
+        UseAgree = GameObject.Find("SetCountAgree(btn)");
+        ClickPanel = GameObject.Find("Clickable(cdr)");
+        ItemOptionsUse = GameObject.Find("ItemActionUse(btn)");
 
-        AgreeWindow_OM = GameObject.Find("Agree Window").GetComponent<ObjectMovement>();
+        AgreeWindow_OM = GameObject.Find("ActionConfirmation").GetComponent<ObjectMovement>();
         EnemyParent_OM = GameObject.Find("Enemy Parent").GetComponent<ObjectMovement>();
-        SaleWindow_OM = GameObject.Find("Sale Window").GetComponent<ObjectMovement>();
-        InventoryWindow_OM = GameObject.Find("Inventory Window").GetComponent<ObjectMovement>();
-        ItemInfoWindow_OM = GameObject.Find("Item Info Window").GetComponent<ObjectMovement>();
-        MainInterface_OM = GameObject.Find("Main Interface").GetComponent<ObjectMovement>();
-        RightButtons_OM = GameObject.Find("Right Buttons").GetComponent<ObjectMovement>();
-        MinionSelectInterface_OM = GameObject.Find("Minion Select Interface").GetComponent<ObjectMovement>();
-        MinionInterface_OM = GameObject.Find("Minion Interface").GetComponent<ObjectMovement>();
-        SetCountWindow_OM = GameObject.Find("SetCount Window").GetComponent<ObjectMovement>();
-        SettingsWindow_OM = GameObject.Find("Settings Window").GetComponent<ObjectMovement>();
-        BirthButton_OM = GameObject.Find("==Birth==").GetComponent<ObjectMovement>();
-        UpgradeInterface_OM = GameObject.Find("Upgrade Interface").GetComponent<ObjectMovement>();
-        WashingInterface_OM = GameObject.Find("Washing Interface").GetComponent<ObjectMovement>();
+        SaleWindow_OM = GameObject.Find("Sale").GetComponent<ObjectMovement>();
+        InventoryWindow_OM = GameObject.Find("Inventory").GetComponent<ObjectMovement>();
+        ItemInfoWindow_OM = GameObject.Find("ItemInfo").GetComponent<ObjectMovement>();
+        MainInterface_OM = GameObject.Find("Battle Interface").GetComponent<ObjectMovement>();
+        Actions_OM = GameObject.Find("Actions").GetComponent<ObjectMovement>();
+        UnitSelectInterface_OM = GameObject.Find("UnitSelect Interface").GetComponent<ObjectMovement>();
+        UnitInterface_OM = GameObject.Find("Units Interface").GetComponent<ObjectMovement>();
+        SetCountWindow_OM = GameObject.Find("SetCount").GetComponent<ObjectMovement>();
+        SettingsWindow_OM = GameObject.Find("Settings").GetComponent<ObjectMovement>();
+        BirthButton_OM = GameObject.Find("Birth(btn)").GetComponent<ObjectMovement>();
+        UpgradeInterface_OM = GameObject.Find("Upgrades Interface").GetComponent<ObjectMovement>();
+        MinerInterface_OM = GameObject.Find("Miner Interface").GetComponent<ObjectMovement>();
 
-        Count_Slider = GameObject.Find("CountSlider").GetComponent<Slider>();
+        Count_Slider = GameObject.Find("SetCount(sld)").GetComponent<Slider>();
 
-        AgreeDescription_Text = GameObject.Find("Agree Description").GetComponent<Text>();
-        SellForCurrencyPrice_Text = GameObject.Find("SellForCurrencyPrice").GetComponent<Text>();
-        SellForXpPrice_Text = GameObject.Find("SellForXpPrice").GetComponent<Text>();
-        SetCountDescription_Text = GameObject.Find("SetCount Description").GetComponent<Text>();
-        ItemPrices_Text = GameObject.Find("Item Prices").GetComponent<Text>();
-        SaleDescription_Text = GameObject.Find("Sale Description").GetComponent<Text>();
-        ItemInfoCount_Text = GameObject.Find("ItemCount").GetComponent<Text>();
-        ItemInfoDescription_Text = GameObject.Find("Item Information").GetComponent<Text>();
-        SaleForCurrencyPrice_Text = GameObject.Find("SaleForCurrencyPrice").GetComponent<Text>();
-        SaleForXpPrice_Text = GameObject.Find("SaleForXpPrice").GetComponent<Text>();
-        MinionLocked1_Text = GameObject.Find("MinionLockedText1").GetComponent<Text>();
-        MinionLocked2_Text = GameObject.Find("MinionLockedText2").GetComponent<Text>();
+        AgreeDescription_Text = GameObject.Find("Agree(txt)").GetComponent<Text>();
+        SellForCurrencyPrice_Text = GameObject.Find("SetCountCurrency(txt)").GetComponent<Text>();
+        SellForXpPrice_Text = GameObject.Find("SetCountXp(txt)").GetComponent<Text>();
+        SetCountDescription_Text = GameObject.Find("SetCount(txt)").GetComponent<Text>();
+        ItemPrices_Text = GameObject.Find("SetCount(txt)").GetComponent<Text>();
+        SaleDescription_Text = GameObject.Find("Sale(lbl)").GetComponent<Text>();
+        ItemInfoCount_Text = GameObject.Find("ItemCount(txt)").GetComponent<Text>();
+        ItemInfoDescription_Text = GameObject.Find("ItemInfo(txt)").GetComponent<Text>();
+        SaleForCurrencyPrice_Text = GameObject.Find("SaleForCurrency(txt)").GetComponent<Text>();
+        SaleForXpPrice_Text = GameObject.Find("SaleForXp(txt)").GetComponent<Text>();
+        UnitLocked1_Text = GameObject.Find("Unit1Locked(lbl)").GetComponent<Text>();
+        UnitLocked2_Text = GameObject.Find("Unit2Locked(lbl)").GetComponent<Text>();
 
         AddUpgrades();
     }
 
     public void CheckRebirth()
     {
-        if (minionManager.isAbleToBirth())
+        if (unitManager.isAbleToBirth())
         {
             BirthButton_OM.MoveTo(new Vector2(-298.5f, 170), 0.3f, 1, false);
         }
@@ -140,35 +138,35 @@ public class Interface : MonoBehaviour
 
     public void CloseAll()
     {
-        if (agreeWindowOpened) { SwitchAgreeWindow(0); }
-        if (rightButtonsOpened) { SwitchRightButtons(0); }
+        if (agreeWindowOpened) { SwitchConfirmation(0); }
         if (settingsOpened) { SwitchSettings(0); }
-        if (washingMashineOpened) { WashingInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false); }
-        if (upgradeOpened) { SwitchUpgradeMenu(0); }
-        if (minionInterfaceOpened) { SwitchMinionInterface(0); }
-        if (minionListOpened) { CloseMinionSelect(); }
+        if (minerOpened) { MinerInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false); }
+        if (upgradeOpened) { SwitchUpgradesMenu(0); }
+        if (unitsInterfaceOpened) { SwitchUnitsInterface(0); }
+        if (unitsListOpened) { CloseUnitsSelect(); }
         if (inventoryOpened) { SwitchInventory(0); }
-        if (saleWindowOpened) { SwitchSaleWindow(0); }
+        if (saleOpened) { SwitchSale(0); }
         if (itemInfoOpened) { SwitchItemInfo(0); }
         if (setCountOpened) { CloseSetCount(); }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// MAIN INTERFACE
     public bool mainInterfaceOpened;
-    public void SwitchMainInterface(int mode)
+    public void SwitchBattleInterface(int mode)
     {
         switch (mode)
         {
             case 1:
-                if (washingMashineOpened)
+                if (minerOpened)
                 {
-                    WashingInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false); 
+                    MinerInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false); 
                 }
                 else
                 {
                     mainInterfaceOpened = true;
                     ClickPanel.SetActive(true);
 
+                    Actions_OM.gameObject.SetActive(true);
                     MainInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                     EnemyParent_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
 
@@ -177,15 +175,16 @@ public class Interface : MonoBehaviour
                 }
                 break;
             case 0:
-                if (washingMashineOpened)
+                if (minerOpened)
                 {
-                    WashingInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+                    MinerInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
                 }
                 else
                 {
                     mainInterfaceOpened = false;
                     ClickPanel.SetActive(false);
 
+                    Actions_OM.gameObject.SetActive(false);
                     MainInterface_OM.MoveTo(new Vector2(-720, 0), 0.3f, 1, false);
                     EnemyParent_OM.MoveTo(new Vector2(-360, 0), 0.3f, 1, false);
 
@@ -195,13 +194,13 @@ public class Interface : MonoBehaviour
                 break;
 
             default:
-                SwitchMainInterface(!mainInterfaceOpened ? 1 : 0);
+                SwitchBattleInterface(!mainInterfaceOpened ? 1 : 0);
                 break;
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Agree menu
     public bool agreeWindowOpened;
-    public void SwitchAgreeWindow(int mode)
+    public void SwitchConfirmation(int mode)
     {
         switch (mode)
         {
@@ -209,50 +208,68 @@ public class Interface : MonoBehaviour
                 switch (typeOfButtonAction)
                 {
                     case "birth":
-                        AgreeDescription_Text.text = $"Make another one child for {FormatNumsHelper.FormatNumF1(minionManager.BirthCost())}$ ?";
+                        AgreeDescription_Text.text = $"Make another one child for {NumFormat.FormatNumF1(unitManager.BirthCost())}$ ?";
                         break;
-                    case "wmupgrade":
-                        if (inventory.ItemTypeFind("Cloth") == null || clicker.WashingmashineLvl == 0)
+                    case "minerupgrade":
+                        if (inventory.ItemTypeFind("Cloth") == null)
                         {
                             message.SendMessage($"You need at least one cloth in inventory", 2);
                             soundManager.PlayBruhSound();
                             return;
                         }
+                        else if (clicker.MinerLvl == 0)
+                        {
+                            message.SendMessage($"Fix washing mashine at first", 2);
+                            soundManager.PlayBruhSound();
+                            return;
+                        }
                         AgreeDescription_Text.text = $"Upgrade washing mashine for Cloth item?";
                         break;
-                    case "minionupgrade1":
+                    case "unitupgrade1":
                         if (inventory.ItemTypeFind("Toy") == null)
                         {
                             message.SendMessage($"You need at least one toy in inventory", 2);
+                            soundManager.PlayBruhSound();
+                            return;
+                        }
+                        else if (clicker.Births < 1)
+                        {
+                            message.SendMessage($"You need at least one children", 2);
                             soundManager.PlayBruhSound();
                             return;
                         }
                         AgreeDescription_Text.text = $"Upgrade fisrt child for one Toy item ?";
-                        SwitchMinionInterface(0);
+                        SwitchUnitsInterface(0);
                         break;
-                    case "minionupgrade2":
+                    case "unitupgrade2":
                         if (inventory.ItemTypeFind("Toy") == null)
                         {
                             message.SendMessage($"You need at least one toy in inventory", 2);
                             soundManager.PlayBruhSound();
                             return;
                         }
+                        else if(clicker.Births < 2)
+                        {
+                            message.SendMessage($"You need at least two children", 2);
+                            soundManager.PlayBruhSound();
+                            return;
+                        }
                         AgreeDescription_Text.text = $"Upgrade second child for one Toy item ?";
-                        SwitchMinionInterface(0);
+                        SwitchUnitsInterface(0);
                         break;
                 }
                 CloseAll();
                 agreeWindowOpened = true;
                 AgreeWindow_OM.MoveTo(new Vector2(0, 90), 0.3f, 1, false);
-                SwitchMainInterface(0);
+                SwitchBattleInterface(0);
                 break;
             case 0:
                 agreeWindowOpened = false;
                 AgreeWindow_OM.MoveTo(new Vector2(-720, 90), 0.3f, 1, false);
-                SwitchMainInterface(1);
+                SwitchBattleInterface(1);
                 break;
             default:
-                SwitchAgreeWindow(!agreeWindowOpened ? 1 : 0);
+                SwitchConfirmation(!agreeWindowOpened ? 1 : 0);
                 break;
         }
     }
@@ -261,7 +278,7 @@ public class Interface : MonoBehaviour
         switch (typeOfButtonAction)
         {
             case "birth":
-                if (minionManager.isAbleToBuy())
+                if (unitManager.isAbleToBuy())
                 {
                     clicker.Birth();
                 }
@@ -271,50 +288,45 @@ public class Interface : MonoBehaviour
                     soundManager.PlayBruhSound();
                 }
                 break;
-            case "wmupgrade":
-                washingmashine.UpgradeWashingmashine();
+            case "minerupgrade":
+                miner.UpgradeMiner();
                 inventory.ConsumeAnyItemOfType("Cloth");
                 break;
-            case "minionupgrade1":
-                minionManager.UpgradeMinion(1);
+            case "unitupgrade1":
+                unitManager.UpgradeUnit(1);
                 inventory.ConsumeAnyItemOfType("Toy");
                 break;
-            case "minionupgrade2":
-                minionManager.UpgradeMinion(2);
+            case "unitupgrade2":
+                unitManager.UpgradeUnit(2);
                 inventory.ConsumeAnyItemOfType("Toy");
                 break;
         }
-        SwitchMainInterface(1);
+        SwitchBattleInterface(1);
     }
 
     public void Action(string s)
     {
         typeOfButtonAction = s;
-        SwitchAgreeWindow(1);
+        SwitchConfirmation(1);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Right Buttons
-    public bool rightButtonsOpened;
-    public void SwitchRightButtons(int mode)
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Action Buttons
+    public bool actionButtonsOpened;
+    public void SwitchActionButtons(int mode)
     {
         switch (mode)
         {
             case 1:
-                rightButtonsOpened = true;
-                SwitchButtonsActive(true);
-                RightButtons_OM.MoveTo(new Vector2(0, 178), 0.3f, 5, false);
+                actionButtonsOpened = true;
+                Actions_OM.MoveTo(new Vector2(0, 178), 0.3f, 5, false);
                 break;
             case 0:
-                rightButtonsOpened = false;
-                RightButtons_OM.MoveTo(new Vector2(120, 178), 0.3f, 5, true);
+                actionButtonsOpened = false;
+                Actions_OM.MoveTo(new Vector2(120, 178), 0.3f, 5, true);
                 break;
             default:
-                SwitchRightButtons(!rightButtonsOpened ? 1 : 0);
+                SwitchActionButtons(!actionButtonsOpened ? 1 : 0);
                 break;
         }
-    }
-    public void SwitchButtonsActive(bool b)
-    {
-        RightButtons.SetActive(b);
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Settings
     public bool settingsOpened;
@@ -326,10 +338,10 @@ public class Interface : MonoBehaviour
                 CloseAll();
                 settingsOpened = true;
                 SettingsWindow_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
-                SwitchMainInterface(0);
+                SwitchBattleInterface(0);
                 break;
             case 0:
-                SwitchMainInterface(1);
+                SwitchBattleInterface(1);
                 settingsOpened = false;
                 SettingsWindow_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
                 break;
@@ -339,58 +351,58 @@ public class Interface : MonoBehaviour
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Washing Mashine
-    public bool washingMashineOpened;
-    public void SwitchWashingmashine(int mode)
+    public bool minerOpened;
+    public void SwitchMiner(int mode)
     {
         switch (mode)
         {
             case 1:
                 CloseAll();
-                SwitchMainInterface(0);
-                washingMashineOpened = true;
-                WashingInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+                SwitchBattleInterface(0);
+                minerOpened = true;
+                MinerInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                 stagesManager.ChangeAmbience(false);
                 Location_Image.sprite = Battle_Sprite;
                 break;
             case 0:
                 CloseAll();
-                washingMashineOpened = false;
-                SwitchMainInterface(1);
-                WashingInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+                minerOpened = false;
+                SwitchBattleInterface(1);
+                MinerInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
                 stagesManager.ChangeAmbience(true);
-                Location_Image.sprite = Washingmashine_Sprite;
+                Location_Image.sprite = miner_Sprite;
                 break;
             default:
-                SwitchWashingmashine(!washingMashineOpened ? 1 : 0);
+                SwitchMiner(!minerOpened ? 1 : 0);
                 break;
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Upgrade Menu
     public bool upgradeOpened;
-    public void SwitchUpgradeMenu(int mode)
+    public void SwitchUpgradesMenu(int mode)
     {
         switch (mode)
         {
             case 1:
                 CloseAll();
                 upgradeOpened = true;
-                UpdateUpgradeGraphics();
+                UpdateUpgrades();
                 UpgradeInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
-                SwitchMainInterface(0);
+                SwitchBattleInterface(0);
                 break;
             case 0:
                 upgradeOpened = false;
                 UpgradeInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
-                SwitchMainInterface(1);
+                SwitchBattleInterface(1);
                 break;
             default:
-                SwitchUpgradeMenu(!upgradeOpened ? 1 : 0);
+                SwitchUpgradesMenu(!upgradeOpened ? 1 : 0);
                 break;
         }
     }
     private void AddUpgrades()
     {
-        for (int i = 0; i < upgrades.upgradesDataBase.Count; i++)
+        for (int i = 0; i < upgradesManager.upgradesDataBase.Count; i++)
         {
             UpgradeForXp upgrade = Instantiate(Upgrade_Prefab, UpgradesGrid.transform).GetComponent<UpgradeForXp>();
             upgrade.index = i;
@@ -398,20 +410,20 @@ public class Interface : MonoBehaviour
         }
     }
 
-    public void UpdateUpgradeGraphics()
+    public void UpdateUpgrades()
     {
-        upgrades = GameObject.Find("ClickerManager").GetComponent<Upgrades>();
+        upgradesManager = GameObject.Find("ClickerManager").GetComponent<UpgradesManager>();
 
-        for (int i = 0; i < upgrades.upgradesDataBase.Count; i++)
+        for (int i = 0; i < upgradesManager.upgradesDataBase.Count; i++)
         {
-            UpgradeForXp upgradeForXpTemp = GameObject.Find(upgrades.upgradesDataBase[i].upgradeName).GetComponent<UpgradeForXp>();
+            UpgradeForXp upgradeForXpTemp = GameObject.Find(upgradesManager.upgradesDataBase[i].upgradeName).GetComponent<UpgradeForXp>();
             upgradeForXpTemp.AddGraphics();
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Minion Menu
-    public bool minionInterfaceOpened;
-    public void SwitchMinionInterface(int mode)
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Unit Menu
+    public bool unitsInterfaceOpened;
+    public void SwitchUnitsInterface(int mode)
     {
         switch (mode)
         {
@@ -423,38 +435,38 @@ public class Interface : MonoBehaviour
                     return;
                 }
                 CloseAll();
-                minionInterfaceOpened = true;
-                MinionInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+                unitsInterfaceOpened = true;
+                UnitInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                 switch (clicker.Births)
                 {
                     case 0:
-                        MinionLocked1_Text.text = "1 Birth required.";
-                        MinionLocked2_Text.text = "2 Birth required.";
+                        UnitLocked1_Text.text = "1 Birth required.";
+                        UnitLocked2_Text.text = "2 Birth required.";
                         break;
                     case 1:
-                        MinionLocked1_Text.text = "";
-                        MinionLocked2_Text.text = "2 Birth required.";
+                        UnitLocked1_Text.text = "";
+                        UnitLocked2_Text.text = "2 Birth required.";
                         break;
                     default:
-                        MinionLocked1_Text.text = "";
-                        MinionLocked2_Text.text = "";
+                        UnitLocked1_Text.text = "";
+                        UnitLocked2_Text.text = "";
                         break;
                 }
-                SwitchMainInterface(0);
+                SwitchBattleInterface(0);
                 break;
             case 0:
-                minionInterfaceOpened = false;
-                MinionInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
-                SwitchMainInterface(1);
+                unitsInterfaceOpened = false;
+                UnitInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+                SwitchBattleInterface(1);
                 break;
             default:
-                SwitchMinionInterface(!minionInterfaceOpened ? 1 : 0);
+                SwitchUnitsInterface(!unitsInterfaceOpened ? 1 : 0);
                 break;
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Minion List
-    public bool minionListOpened;
-    public void OpenMinionSelect(int slot)
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Unit List
+    public bool unitsListOpened;
+    public void OpenUnitsSelect(int slot)
     {
         if (slot > clicker.Births)
         {
@@ -463,16 +475,16 @@ public class Interface : MonoBehaviour
             return;
         }
         CloseAll();
-        SwitchMainInterface(0);
-        minionListOpened = true;
-        minionManager.slotid = slot;
-        MinionSelectInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+        SwitchBattleInterface(0);
+        unitsListOpened = true;
+        unitManager.slotid = slot;
+        UnitSelectInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
     }
-    public void CloseMinionSelect()
+    public void CloseUnitsSelect()
     {
-        minionListOpened = false;
-        MinionSelectInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
-        SwitchMinionInterface(1);
+        unitsListOpened = false;
+        UnitSelectInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+        SwitchUnitsInterface(1);
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Inventory
     public bool inventoryOpened;
@@ -482,19 +494,19 @@ public class Interface : MonoBehaviour
         {
             case 1:
                 CloseAll();
-                SwitchMainInterface(0);
+                SwitchBattleInterface(0);
                 inventoryOpened = true;
                 inventory.SortInventory();
                 InventoryWindow_OM.MoveTo(new Vector2(0, 290), 0.3f, 1, false);
                 break;
             case 0:
-                if (saleWindowOpened) { SwitchSaleWindow(0); }
-                SwitchMainInterface(1);
+                if (saleOpened) { SwitchSale(0); }
+                SwitchBattleInterface(1);
                 inventoryOpened = false;
                 InventoryWindow_OM.MoveTo(new Vector2(0, 1480), 0.3f, 1, false);
-                InventoryGridPanel_CSwipe.SetBack();
+                InventorySwipe.SetBack();
                 inventory.SetItemsBack();
-                SwitchMainInterface(1);
+                SwitchBattleInterface(1);
                 break;
             default:
                 SwitchInventory(!inventoryOpened ? 1 : 0);
@@ -502,8 +514,8 @@ public class Interface : MonoBehaviour
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Sale Window
-    public bool saleWindowOpened;
-    public void SwitchSaleWindow(int mode)
+    public bool saleOpened;
+    public void SwitchSale(int mode)
     {
         switch (mode)
         {
@@ -515,7 +527,7 @@ public class Interface : MonoBehaviour
                 }
                 else 
                 { 
-                    saleWindowOpened = true;
+                    saleOpened = true;
                     SaleWindow_OM.MoveTo(new Vector2(0, -305f), 0.3f, 1, false);
 
                     SaleForCurrencyPrice_Text.text = "";
@@ -526,20 +538,15 @@ public class Interface : MonoBehaviour
                 }
                 break;
             case 0:
-                saleWindowOpened = false;
+                saleOpened = false;
                 inventory.SetItemsBack();
                 inventory.ableToInvest = false;
                 SaleWindow_OM.MoveTo(new Vector2(0, -1200), 0.3f, 1, false);
                 break;
             default:
-                SwitchSaleWindow(!saleWindowOpened ? 1 : 0);
+                SwitchSale(!saleOpened ? 1 : 0);
                 break;
         }
-    }
-    public void ResetMultiSellButtonText()
-    {
-        SaleForXpPrice_Text.text = "";
-        SaleForCurrencyPrice_Text.text = "";
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Item Info
     public bool itemInfoOpened;
@@ -554,8 +561,8 @@ public class Interface : MonoBehaviour
 
                 Item item = inventory.SelectedItem.GetComponent<Item>();
 
-                SellForCurrencyAgree.SetActive(true);
-                SellForXpAgree.SetActive(true);
+                SellForCurrency.SetActive(true);
+                SellForXp.SetActive(true);
                 ItemOptionsUse.SetActive(true);
 
                 if (item.useMethodName == "")
@@ -563,8 +570,8 @@ public class Interface : MonoBehaviour
                     ItemOptionsUse.SetActive(false);
                 }
                 ItemInfo_Image.sprite = item.ico.sprite;
-                ItemInfoDescription_Text.text = "Type : " + item.type + " \n Name: " + item.nameObject + " \n Price: " + FormatNumsHelper.FormatNumF1(item.xpPrice);
-                ItemInfoCount_Text.text = FormatNumsHelper.FormatNumF0F1(item.count);
+                ItemInfoDescription_Text.text = "Type : " + item.type + " \n Name: " + item.nameObject + " \n Price: " + NumFormat.FormatNumF1(item.xpPrice);
+                ItemInfoCount_Text.text = NumFormat.FormatNumF0F1(item.count);
                 break;
             case 0:
                 itemInfoOpened = false;
@@ -585,17 +592,17 @@ public class Interface : MonoBehaviour
 
             if (typeOfAction == "Use")
             {
-                ItemPrices_Text.text = $" Do you wanna use your {FormatNumsHelper.FormatNumF0F1(Count_Slider.value)}\n\"{item.nameObject}\" ?";
+                ItemPrices_Text.text = $" Do you wanna use your {NumFormat.FormatNumF0F1(Count_Slider.value)}\n\"{item.nameObject}\" ?";
                 return;
             }
             if (typeOfAction == "Sell")
             {
-                ItemPrices_Text.text = " Do you wanna sell your " + FormatNumsHelper.FormatNumF0F1(Count_Slider.value) +
+                ItemPrices_Text.text = " Do you wanna sell your " + NumFormat.FormatNumF0F1(Count_Slider.value) +
                                       $"\n\"{item.nameObject}\" ?" +
-                                       "\nfor " + FormatNumsHelper.FormatNumF1(Count_Slider.value * item.xpPrice) + " experience ?" +
-                                       "\n or $" + FormatNumsHelper.FormatNumF1(Count_Slider.value * item.currencyPrice) + " ?";
-                SellForCurrencyPrice_Text.text = "+" + FormatNumsHelper.FormatNumF1(Count_Slider.value * item.currencyPrice);
-                SellForXpPrice_Text.text = "+" + FormatNumsHelper.FormatNumF1(Count_Slider.value * item.xpPrice);
+                                       "\nfor " + NumFormat.FormatNumF1(Count_Slider.value * item.xpPrice) + " experience ?" +
+                                       "\n or $" + NumFormat.FormatNumF1(Count_Slider.value * item.currencyPrice) + " ?";
+                SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(Count_Slider.value * item.currencyPrice);
+                SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(Count_Slider.value * item.xpPrice);
                 return;
             }
         }
@@ -607,12 +614,12 @@ public class Interface : MonoBehaviour
         Item item = inventory.SelectedItem.GetComponent<Item>();
         if (item.type == "Toy")
         {
-            SwitchItemInfo(0); SwitchInventory(0); SwitchMinionInterface(1);
+            SwitchItemInfo(0); SwitchInventory(0); SwitchUnitsInterface(1);
             return;
         }
         if (item.type == "Cloth")
         {
-            SwitchItemInfo(0); SwitchInventory(0); SwitchWashingmashine(1);
+            SwitchItemInfo(0); SwitchInventory(0); SwitchMiner(1);
             return;
         }
         SetCountWindow_OM.MoveTo(new Vector2(0, 110), 0.3f, 1, false);
@@ -620,8 +627,8 @@ public class Interface : MonoBehaviour
         typeOfAction = "Use";
 
         UseAgree.SetActive(true);
-        SellForCurrencyAgree.SetActive(false);
-        SellForXpAgree.SetActive(false);
+        SellForCurrency.SetActive(false);
+        SellForXp.SetActive(false);
 
 
         Count_Slider.maxValue = item.count;
@@ -645,11 +652,11 @@ public class Interface : MonoBehaviour
         typeOfAction = "Sell";
 
         UseAgree.SetActive(false);
-        SellForCurrencyAgree.SetActive(true);
-        SellForXpAgree.SetActive(true);
+        SellForCurrency.SetActive(true);
+        SellForXp.SetActive(true);
 
-        SellForCurrencyPrice_Text.text = "+" + FormatNumsHelper.FormatNumF1(Count_Slider.value * item.currencyPrice);
-        SellForXpPrice_Text.text = "+" + FormatNumsHelper.FormatNumF1(Count_Slider.value * item.xpPrice);
+        SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(Count_Slider.value * item.currencyPrice);
+        SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(Count_Slider.value * item.xpPrice);
 
         Count_Slider.maxValue = item.count;
         Count_Slider.value = 1;

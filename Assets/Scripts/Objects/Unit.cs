@@ -33,7 +33,15 @@ public class Unit : MonoBehaviour
         id = PlayerPrefs.GetInt(name + "ID");
 
         UpdateUnitData();
-        Invoke(nameof(MoveToEnemy), 2f);
+        switch (name)
+        {
+            case "Unit1(obj)":
+                Invoke(nameof(MoveToEnemy), 2.5f);
+                break;
+            case "Unit2(obj)":
+                Invoke(nameof(MoveToEnemy), 5f);
+                break;
+        }
     }
 
     public void UpdateUnitData()
@@ -59,14 +67,12 @@ public class Unit : MonoBehaviour
             {
                 case "Unit1(obj)":
                     imageUnit1.sprite = unitManager.unitsDataBase[id].Preview;
-                    string s = CurrentLevel > 0 ? $"+ {unitManager.unitsDataBase[id].DamageCoef * (0.2 * CurrentLevel) * 100}% " : "";
-                    text1.text = $"{nameobj}\nLevel {CurrentLevel}\n{unitManager.unitsDataBase[id].DamageCoef * 100}% {s}of your damage";
-                    break;
+                    text1.text = $"{nameobj} (Lv. {CurrentLevel})\n\nx{DamageCoef} from your damage.";
+                break;
                 case "Unit2(obj)":
-                    imageUnit2.sprite = unitManager.unitsDataBase[id].Preview;
-                    string s1 = CurrentLevel > 0 ? $"+ {unitManager.unitsDataBase[id].DamageCoef * (0.2 * CurrentLevel) * 100}% " : "";
-                    text2.text = $"{nameobj}\nLevel {CurrentLevel}\n{unitManager.unitsDataBase[id].DamageCoef * 100}% {s1}of your damage";
-                    break;
+                    imageUnit2.sprite = unitManager.unitsDataBase[id].Preview; 
+                    text2.text = $"{nameobj} (Lv. {CurrentLevel})\n\nx{DamageCoef} from your damage.";
+                break;
             }
             if (loaded)
             {

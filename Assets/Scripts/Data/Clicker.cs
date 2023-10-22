@@ -237,12 +237,32 @@ public class Clicker : MonoBehaviour
         StartData();
         Save();
     }
+    public void RebirthData()
+    {
+        inventory.DeleteItems();
+
+        CritMultiplier = 3;
+
+        stagesManager.CurrentStage = 1;
+        Currency = 0;
+        Experience = 0;
+
+        MinerLvl = 1;
+
+        enemyManager.EnemyHPMultiplier = 1;
+
+        upgrades.DamageLvl = 1;
+        upgrades.CritLvl = 1;
+
+        stagesManager.LoadStageData(true);
+        tm.UpdateAllText();
+    }
 
     public void Birth()
     {
         int births = Births;
 
-        ResetData();
+        RebirthData();
 
         Births = births + 1;
         unitManager.AddRandomUnit();
@@ -266,7 +286,6 @@ public class Clicker : MonoBehaviour
         Damage = Utils.Progression(1, 1.6f, upgrades.DamageLvl);
         Damage = Utils.Progression(Damage, 2, doubleDamageUpgradeLvl);
         DmgCost = Utils.Progression(10, 1.6f, upgrades.DamageLvl);
-        upgrades.UpdateIco();
     }
     public void CalculateCrit()
     {
@@ -290,7 +309,6 @@ public class Clicker : MonoBehaviour
                                                  { doubleDamageUpgradeLvl++; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Exit and postgame
-public void Exit() { Application.Quit(); }
     public void OnApplicationQuit()
     {
         inventory.SetItemsBack();

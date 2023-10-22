@@ -7,7 +7,6 @@ public class DamagePart : MonoBehaviour
     private Clicker clicker;
 
     public Text text;
-    private Transform clickParent;
 
     private Vector2 vector;
     public float acceleration;
@@ -20,7 +19,7 @@ public class DamagePart : MonoBehaviour
     {
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
         text.text = NumFormat.FormatNumF1(clicker.CurrDealedDamage);
-        if (clicker.Damage < clicker.CurrDealedDamage && big == true)
+        if (big)
         {
             text.color = Color.red;
             text.fontSize += 15;

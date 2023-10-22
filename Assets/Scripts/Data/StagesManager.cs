@@ -26,23 +26,28 @@ public class StagesManager : MonoBehaviour
 
     private bool started;
 
+    private void Awake()
+    {
+        InitializeComponents();
+    }
+
+    private void InitializeComponents()
+    {
+        enemyManager = GetComponent<EnemyManager>();
+        giveReward = GetComponent<RewardManager>();
+        interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
+        tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
+        upgradesGrid = GameObject.Find("UpgradesGrid");
+        AmbienceSource = GameObject.Find("AmbienceSource").GetComponent<AudioSource>();
+        WMAmbienceSource = GameObject.Find("WMAmbienceSource").GetComponent<AudioSource>();
+        BG = GameObject.Find("BG").GetComponent<SpriteRenderer>();
+    }
 
     public void LoadStageData(bool newStage)
     {
         if (!started)
         {
             started = true;
-
-            enemyManager = GetComponent<EnemyManager>();
-            giveReward = GetComponent<RewardManager>();
-            interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
-            tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
-            upgradesGrid = GameObject.Find("UpgradesGrid");
-
-            AmbienceSource = GameObject.Find("AmbienceSource").GetComponent<AudioSource>();
-            WMAmbienceSource = GameObject.Find("WMAmbienceSource").GetComponent<AudioSource>();
-            BG = GameObject.Find("BG").GetComponent<SpriteRenderer>();
-
             tm.UpdateAllText();
         }
 
@@ -53,12 +58,14 @@ public class StagesManager : MonoBehaviour
             StageIndex = Random.Range(0, StagesDataBase.Count);
         }
 
-        BG.sprite = StagesDataBase[StageIndex].BG;
-        enemyManager.Boss = StagesDataBase[StageIndex].Boss;
-        enemyManager.EnemyList = StagesDataBase[StageIndex].EnemyList;
-        Ambience = StagesDataBase[StageIndex].Ambience;
+        Stage currentStage = StagesDataBase[StageIndex];
+
+        BG.sprite = currentStage.BG;
+        enemyManager.Boss = currentStage.Boss;
+        enemyManager.EnemyList = currentStage.EnemyList;
+        Ambience = currentStage.Ambience;
         AmbienceSource.clip = Ambience;
-        enemyManager.enemySpawnSound = StagesDataBase[StageIndex].EnemySpawn;
+        enemyManager.enemySpawnSound = currentStage.EnemySpawn;
 
         giveReward.KillReward = 1;
         enemyManager.EnemyHPMultiplier = 1;
@@ -69,8 +76,7 @@ public class StagesManager : MonoBehaviour
         }
         CheckUpgrades();
 
-
-        enemyManager.enemySpawnSound = StagesDataBase[StageIndex].EnemySpawn;
+        enemyManager.enemySpawnSound = currentStage.EnemySpawn;
 
         interfaceManager.UpdateUpgrades();
         AmbienceSource.Play();
@@ -97,7 +103,8 @@ public class StagesManager : MonoBehaviour
         {
             BG.sprite = WMBG;
             AmbienceSource.Pause();
-            if (WMAmbienceSource.isPlaying == true) WMAmbienceSource.UnPause(); else WMAmbienceSource.Play();
+            if (WMAmbienceSource.isPlaying) WMAmbienceSource.UnPause();
+            else WMAmbienceSource.Play();
         }
     }
 

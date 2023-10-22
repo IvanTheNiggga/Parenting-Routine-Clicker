@@ -14,7 +14,6 @@ public class InterfaceManager : MonoBehaviour
     private UnitManager unitManager;
     private SoundManager soundManager;
     private StagesManager stagesManager;
-    private TextManager textManager;
     private UpgradesManager upgradesManager;
     private Miner miner;
 
@@ -37,7 +36,6 @@ public class InterfaceManager : MonoBehaviour
     private ObjectMovement ItemInfoWindow_OM;
     private ObjectMovement SaleWindow_OM;
     private ObjectMovement MainInterface_OM;
-    private ObjectMovement Actions_OM;
     private ObjectMovement UnitInterface_OM;
     private ObjectMovement UnitSelectInterface_OM;
     private ObjectMovement UpgradeInterface_OM;
@@ -51,7 +49,6 @@ public class InterfaceManager : MonoBehaviour
     private Text SellForCurrencyPrice_Text;
     private Text SellForXpPrice_Text;
     private Text AgreeDescription_Text;
-    private Text SetCountDescription_Text;
     private Text ItemPrices_Text;
     private Text SaleDescription_Text;
     private Text ItemInfoCount_Text;
@@ -66,6 +63,12 @@ public class InterfaceManager : MonoBehaviour
 
     private void Start()
     {
+        InitializeComponents();
+        AddUpgrades();
+    }
+
+    private void InitializeComponents()
+    {
         GameObject cm = GameObject.Find("ClickerManager");
         clicker = cm.GetComponent<Clicker>();
         enemyManager = cm.GetComponent<EnemyManager>();
@@ -75,7 +78,6 @@ public class InterfaceManager : MonoBehaviour
         stagesManager = cm.GetComponent<StagesManager>();
         message = GameObject.Find("Message").GetComponent<Message>();
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
-        textManager = GameObject.Find("INTERFACE").GetComponent<TextManager>();
         miner = GameObject.Find("Miner").GetComponent<Miner>();
 
         InventorySwipe = GameObject.Find("InventoryGridPanel").GetComponent<ContentSwipe>();
@@ -97,7 +99,6 @@ public class InterfaceManager : MonoBehaviour
         InventoryWindow_OM = GameObject.Find("Inventory").GetComponent<ObjectMovement>();
         ItemInfoWindow_OM = GameObject.Find("ItemInfo").GetComponent<ObjectMovement>();
         MainInterface_OM = GameObject.Find("Battle Interface").GetComponent<ObjectMovement>();
-        Actions_OM = GameObject.Find("Actions").GetComponent<ObjectMovement>();
         UnitSelectInterface_OM = GameObject.Find("UnitSelect Interface").GetComponent<ObjectMovement>();
         UnitInterface_OM = GameObject.Find("Units Interface").GetComponent<ObjectMovement>();
         SetCountWindow_OM = GameObject.Find("SetCount").GetComponent<ObjectMovement>();
@@ -111,7 +112,6 @@ public class InterfaceManager : MonoBehaviour
         AgreeDescription_Text = GameObject.Find("Agree(txt)").GetComponent<Text>();
         SellForCurrencyPrice_Text = GameObject.Find("SetCountCurrency(txt)").GetComponent<Text>();
         SellForXpPrice_Text = GameObject.Find("SetCountXp(txt)").GetComponent<Text>();
-        SetCountDescription_Text = GameObject.Find("SetCount(txt)").GetComponent<Text>();
         ItemPrices_Text = GameObject.Find("SetCount(txt)").GetComponent<Text>();
         SaleDescription_Text = GameObject.Find("Sale(lbl)").GetComponent<Text>();
         ItemInfoCount_Text = GameObject.Find("ItemCount(txt)").GetComponent<Text>();
@@ -120,8 +120,6 @@ public class InterfaceManager : MonoBehaviour
         SaleForXpPrice_Text = GameObject.Find("SaleForXp(txt)").GetComponent<Text>();
         UnitLocked1_Text = GameObject.Find("Unit1Locked(lbl)").GetComponent<Text>();
         UnitLocked2_Text = GameObject.Find("Unit2Locked(lbl)").GetComponent<Text>();
-
-        AddUpgrades();
     }
 
     public void CheckRebirth()
@@ -166,7 +164,6 @@ public class InterfaceManager : MonoBehaviour
                     mainInterfaceOpened = true;
                     ClickPanel.SetActive(true);
 
-                    Actions_OM.gameObject.SetActive(true);
                     MainInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                     EnemyParent_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
 
@@ -184,7 +181,6 @@ public class InterfaceManager : MonoBehaviour
                     mainInterfaceOpened = false;
                     ClickPanel.SetActive(false);
 
-                    Actions_OM.gameObject.SetActive(false);
                     MainInterface_OM.MoveTo(new Vector2(-720, 0), 0.3f, 1, false);
                     EnemyParent_OM.MoveTo(new Vector2(-360, 0), 0.3f, 1, false);
 
@@ -308,25 +304,6 @@ public class InterfaceManager : MonoBehaviour
     {
         typeOfButtonAction = s;
         SwitchConfirmation(1);
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Action Buttons
-    public bool actionButtonsOpened;
-    public void SwitchActionButtons(int mode)
-    {
-        switch (mode)
-        {
-            case 1:
-                actionButtonsOpened = true;
-                Actions_OM.MoveTo(new Vector2(0, 178), 0.3f, 5, false);
-                break;
-            case 0:
-                actionButtonsOpened = false;
-                Actions_OM.MoveTo(new Vector2(120, 178), 0.3f, 5, true);
-                break;
-            default:
-                SwitchActionButtons(!actionButtonsOpened ? 1 : 0);
-                break;
-        }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Settings
     public bool settingsOpened;

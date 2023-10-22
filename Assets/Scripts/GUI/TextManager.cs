@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-
 public class TextManager : MonoBehaviour
 {
     public StagesManager stagesManager;
@@ -23,46 +22,53 @@ public class TextManager : MonoBehaviour
 
     private void Start()
     {
-        currencyText.transform.localPosition = new(currencyText.transform.localPosition.x, currencyText.transform.localPosition.y - Screen.safeArea.yMin / 2, currencyText.transform.localPosition.z);
-        experienceText.transform.localPosition = new(experienceText.transform.localPosition.x, experienceText.transform.localPosition.y - Screen.safeArea.yMin / 2, experienceText.transform.localPosition.z);
+        AdjustUITextPosition();
         Invoke(nameof(UpdateAllText), 0.5f);
+    }
+
+    private void AdjustUITextPosition()
+    {
+        float safeAreaOffsetY = Screen.safeArea.yMin / 2;
+
+        currencyText.rectTransform.localPosition -= new Vector3(0f, safeAreaOffsetY, 0f);
+        experienceText.rectTransform.localPosition -= new Vector3(0f, safeAreaOffsetY, 0f);
     }
 
     public void UpdateAllText()
     {
-        StageTextUpdate(); CurrencyTextUpdate(); ExpirienceTextUpdate(); CritUpgradeTextUpdate(); DmgUpgradeTextUpdate();
+        StageTextUpdate();
+        CurrencyTextUpdate();
+        ExperienceTextUpdate();
+        UpdateCritUpgradeText();
+        UpdateDamageUpgradeText();
     }
 
     public void StageTextUpdate()
     {
-        stageText.text = $"Stage :  {stagesManager.CurrentStage}";
+        stageText.text = $"Stage: {stagesManager.CurrentStage}";
     }
+
     public void CurrencyTextUpdate()
     {
         currencyText.text = NumFormat.FormatNumF1(clicker.Currency);
     }
-    public void ExpirienceTextUpdate()
+
+    public void ExperienceTextUpdate()
     {
         experienceText.text = NumFormat.FormatNumF1(clicker.Experience);
     }
-    public void CritUpgradeTextUpdate()
+
+    public void UpdateCritUpgradeText()
     {
         critCostText.text = $"${NumFormat.FormatNumF0F1(clicker.CritCost)}";
         critDescText.text = $"{clicker.CritChance}% + 1% to deal x{clicker.CritMultiplier} damage";
-        critLvlText.text = $"lv.{upgrades.CritLvl}";
-        if (clicker.CritChance > 49)
-        {
-            critLvlText.text = $"max";
-        }
+        critLvlText.text = clicker.CritChance > 49 ? "max" : $"lv.{upgrades.CritLvl}";
     }
-    public void DmgUpgradeTextUpdate()
+
+    public void UpdateDamageUpgradeText()
     {
         dmgCostText.text = $"${NumFormat.FormatNumF0F1(clicker.DmgCost)}";
         dmgDescText.text = $"x1.6 your {NumFormat.FormatNumF0F1(clicker.Damage)} damage";
-        dmgLvlText.text = $"lv.{upgrades.DamageLvl}";
-        if (upgrades.DamageLvl > 1499)
-        {
-            dmgLvlText.text = $"max";
-        }
+        dmgLvlText.text = upgrades.DamageLvl > 1499 ? "max" : $"lv.{upgrades.DamageLvl}";
     }
 }

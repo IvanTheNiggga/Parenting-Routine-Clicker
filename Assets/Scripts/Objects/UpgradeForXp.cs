@@ -92,7 +92,7 @@ public class UpgradeForXp : MonoBehaviour
             }
 
             clicker.Experience -= lvlPrice;
-            textManager.ExpirienceTextUpdate();
+            textManager.ExperienceTextUpdate();
             currentLvl++;
             if (reqStages.Length != 0)
             { OnLvlBlock(); }

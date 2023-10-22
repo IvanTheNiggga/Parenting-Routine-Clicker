@@ -9,6 +9,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip xpUpgrade;
     public AudioClip openinv;
     public AudioClip closeinv;
+    public AudioClip click;
     public void PlayBruhSound()
     {
         interfaceSource.PlayOneShot(bruh, 1);
@@ -28,5 +29,9 @@ public class SoundManager : MonoBehaviour
     public void PlayOpenInventorySound()
     {
         interfaceSource.PlayOneShot(openinv, 2f);
+    }
+    public void PlayClickSound()
+    {
+        interfaceSource.PlayOneShot(click, 1f);
     }
 }

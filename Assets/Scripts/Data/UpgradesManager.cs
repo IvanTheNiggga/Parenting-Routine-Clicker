@@ -5,11 +5,8 @@ using UnityEngine.UI;
 public class UpgradesManager : MonoBehaviour
 {
     public List<Upgrade> upgradesDataBase = new List<Upgrade>();
-    public List<Sprite> damageIcons = new();
-    public int updateIcoLvlCount;
 
     private Clicker clicker;
-    private Image damageIco;
     private Message message;
     private SoundManager soundManager;
     private TextManager tm;
@@ -25,12 +22,6 @@ public class UpgradesManager : MonoBehaviour
         tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
     }
 
-    public void UpdateIco()
-    {
-        damageIco = GameObject.Find("DamageIco").GetComponent<Image>();
-        damageIco.sprite = DamageLvl > updateIcoLvlCount - 1 ? damageIcons[DamageLvl / updateIcoLvlCount] : damageIcons[0];
-    }
-
     public void Upgrade()
     {
         if (clicker.Currency >= clicker.DmgCost && DamageLvl < 1501)
@@ -40,7 +31,7 @@ public class UpgradesManager : MonoBehaviour
 
             clicker.Save();
             clicker.CalculateDmg();
-            tm.DmgUpgradeTextUpdate();
+            tm.UpdateDamageUpgradeText();
             tm.CurrencyTextUpdate();
             soundManager.PlayBuySound();
         }
@@ -59,7 +50,7 @@ public class UpgradesManager : MonoBehaviour
 
             clicker.Save();
             clicker.CalculateCrit();
-            tm.CritUpgradeTextUpdate();
+            tm.UpdateCritUpgradeText();
             tm.CurrencyTextUpdate();
             soundManager.PlayBuySound();
         }

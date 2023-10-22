@@ -46,6 +46,27 @@ public class Item : MonoBehaviour, IPointerClickHandler
         clickable = true;
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (clickable == true)
+        {
+            InterfaceManager interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
+
+            if (interfaceManager.saleOpened)
+            {
+                AddToInvestGrid();
+                MultiSellAddgraphics();
+            }
+            else
+            {
+                inventory.SelectedItem = gameObject;
+
+                interfaceManager.SwitchItemInfo(1);
+                interfaceManager.SwitchBattleInterface(0);
+            }
+        }
+    }
+
     void CheckName()
     {
         if (name == itemName)
@@ -93,51 +114,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
         text.text = NumFormat.FormatNumF0F1(count);
     }
 
-    private void DestroyOnEmpty()
-    {
-        if (count <= 0 && Loaded)
-        {
-            if (name == investItemName)
-            {
-                inventory.investItems.Remove(this);
-            }
-            else
-            {
-                string keyName = $"{itemName}Count";
-                PlayerPrefs.DeleteKey(keyName);
-                inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
-                inventory.SelectedItem = null;
-                inventory.items.Remove(this);
-            }
-            Destroy(gameObject);
-            inventory.SortInventory();
-        }
-    }
 
     public void Use()
     {
         inventory.Invoke(useMethodName, 0f);
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (clickable == true)
-        {
-            InterfaceManager interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
-
-            if (interfaceManager.saleOpened)
-            {
-                AddToInvestGrid();
-                MultiSellAddgraphics();
-            }
-            else
-            {
-                inventory.SelectedItem = gameObject;
-
-                interfaceManager.SwitchItemInfo(1);
-                interfaceManager.SwitchBattleInterface(0);
-            }
-        }
     }
 
     public void MultiSellAddgraphics()
@@ -169,7 +149,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
     }
 
-
     public void AddToInvestGrid()
     {
         taps++;
@@ -197,7 +176,26 @@ public class Item : MonoBehaviour, IPointerClickHandler
         taps = 0;
     }
 
-
+    private void DestroyOnEmpty()
+    {
+        if (count <= 0 && Loaded)
+        {
+            if (name == investItemName)
+            {
+                inventory.investItems.Remove(this);
+            }
+            else
+            {
+                string keyName = $"{itemName}Count";
+                PlayerPrefs.DeleteKey(keyName);
+                inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
+                inventory.SelectedItem = null;
+                inventory.items.Remove(this);
+            }
+            Destroy(gameObject);
+            inventory.SortInventory();
+        }
+    }
     private void OnBecameInvisible()
     {
         clickable = false;

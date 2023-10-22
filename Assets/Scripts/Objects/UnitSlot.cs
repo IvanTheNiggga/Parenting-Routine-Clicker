@@ -20,7 +20,7 @@ public class UnitSlot : MonoBehaviour
             interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
             unitManager = GameObject.Find("ClickerManager").GetComponent<UnitManager>();
             image.sprite = unitManager.unitsDataBase[id].Preview;
-            text.text = $"{unitManager.unitsDataBase[id].name}.\n{unitManager.unitsDataBase[id].DamageCoef} from your damage.";
+            text.text = $"{unitManager.unitsDataBase[id].name}.\nx{unitManager.unitsDataBase[id].DamageCoef} from your damage.";
             transform.localScale = new(1, 1, 1);
         }
     }

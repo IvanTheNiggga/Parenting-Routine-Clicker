@@ -6,19 +6,20 @@ public class UnitManager : MonoBehaviour
     public List<UnitElement> unitsDataBase = new();
     public List<int> instockUnits = new();
 
-    private Clicker clicker;
-    private Transform unitsGrid;
-    private StagesManager stagesManager;
     public Unit unit1;
     public Unit unit2;
 
     public GameObject UnitButton;
-
     public Sprite None;
+
+    private Clicker clicker;
+    private StagesManager stagesManager;
 
     public int unit1id;
     public int unit2id;
     public int slotid;
+
+    private Transform unitsGrid;
 
     private void Start()
     {
@@ -150,29 +151,25 @@ public class UnitManager : MonoBehaviour
     {
         if(unit1.id != -1 && unit2.id != -1)
         {
-            if (unit2.CurrentLevel > unit1.CurrentLevel)
+            if (unit2.CurrentLevel > unit1.CurrentLevel + 1)
             {
                 unit1.unfairLvl = unit2.CurrentLevel - unit1.CurrentLevel;
-                string s = unit1.CurrentLevel > 0 ? $"+ {unit1.unitManager.unitsDataBase[unit1.id].DamageCoef * (0.2 * unit1.CurrentLevel) * 100}% " : "";
-                unit1.text1.text = $"{unit1.nameobj}\nLevel {unit1.CurrentLevel}\n{unit1.unitManager.unitsDataBase[unit1.id].DamageCoef * 100}% {s}of your damage.\nBut he`s mad, his brother have {unit1.unfairLvl} more toys.";
+                unit1.text1.text = $"{unit1.nameobj} (Lv. {unit1.CurrentLevel})\n\nx{unit1.DamageCoef} from your damage.\nBut he`s mad, his brother have {unit1.unfairLvl} more toys.";
             }
             else
             {
                 unit1.unfairLvl = 0;
-                string s = unit1.CurrentLevel > 0 ? $"+ {unit1.unitManager.unitsDataBase[unit1.id].DamageCoef * (0.2 * unit1.CurrentLevel) * 100}% " : "";
-                unit1.text1.text = $"{unit1.nameobj}\nLevel {unit1.CurrentLevel}\n{unit1.unitManager.unitsDataBase[unit1.id].DamageCoef * 100}% {s}of your damage.";
+                unit1.text1.text = $"{unit1.nameobj} (Lv. {unit1.CurrentLevel})\n\nx{unit1.DamageCoef} from your damage.";
             }
-            if (unit1.CurrentLevel > unit2.CurrentLevel)
+            if (unit1.CurrentLevel > unit2.CurrentLevel + 1)
             {
                 unit2.unfairLvl = unit1.CurrentLevel - unit2.CurrentLevel;
-                string s1 = unit2.CurrentLevel > 0 ? $"+ {unit2.unitManager.unitsDataBase[unit2.id].DamageCoef * (0.2 * unit2.CurrentLevel) * 100}% " : "";
-                unit2.text2.text = $"{unit2.nameobj}\nLevel {unit2.CurrentLevel}\n{unit2.unitManager.unitsDataBase[unit2.id].DamageCoef * 100}% {s1}of your damage.\nBut he`s mad, his brother have {unit2.unfairLvl} more toys.";
+                unit2.text2.text = $"{unit2.nameobj} (Lv. {unit2.CurrentLevel})\n\nx{unit2.DamageCoef} from your damage.\nBut he`s mad, his brother have {unit2.unfairLvl} more toys.";
             }
             else
             {
                 unit2.unfairLvl = 0;
-                string s1 = unit2.CurrentLevel > 0 ? $"+ {unit2.unitManager.unitsDataBase[unit2.id].DamageCoef * (0.2 * unit2.CurrentLevel) * 100}% " : "";
-                unit2.text2.text = $"{unit2.nameobj}\nLevel {unit2.CurrentLevel}\n{unit2.unitManager.unitsDataBase[unit2.id].DamageCoef * 100}% {s1}of your damage.";
+                unit2.text2.text = $"{unit2.nameobj} (Lv. {unit2.CurrentLevel})\n\nx{unit2.DamageCoef} from your damage.";
             }
         }
     }

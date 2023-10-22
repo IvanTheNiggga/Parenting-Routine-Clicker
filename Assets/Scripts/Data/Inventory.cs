@@ -64,8 +64,8 @@ public class Inventory : MonoBehaviour
     }
     void CheckFloors()
     {
-        InventoryGridPanel_CSwipe.CheckFloor();
-        SaleGridPanel_CSwipe.CheckFloor();
+        InventoryGridPanel_CSwipe.GetCeilValue();
+        SaleGridPanel_CSwipe.GetCeilValue();
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Item manipulation
     public Item ItemTypeFind(string itemtype)

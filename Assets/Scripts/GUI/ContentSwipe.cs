@@ -1,72 +1,56 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ContentSwipe : MonoBehaviour, IDragHandler
 {
     public GameObject content;
-
     public float swipeCoef;
-
-    public PointerEventData eventData;
-
     public int visibleRows;
-    public float floor;
-    public float ceil;
     public GameObject itemGrid;
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (content.transform.localPosition.y > ceil)
-        {
-            content.transform.localPosition = new Vector2(content.transform.localPosition.x, content.transform.localPosition.y + (eventData.delta.y * swipeCoef));
-        }
-        else
-        {
-            content.transform.localPosition = new Vector2(content.transform.localPosition.x, ceil);
-        }
-        if (content.transform.localPosition.y < floor)
-        {
-            content.transform.localPosition = new Vector2(content.transform.localPosition.x, content.transform.localPosition.y + (eventData.delta.y * swipeCoef));
-        }
-        else
-        {
-            content.transform.localPosition = new Vector2(content.transform.localPosition.x, floor);
-        }
-    }
+    private float ceil;
+    private float floor;
+
+    private GridLayoutGroup gridLayout;
 
     void Start()
     {
-        if(Screen.height < 1920)
-        {
-            swipeCoef *= 2;
-        }
-        if (Screen.height < 1000)
-        {
-            swipeCoef *= 2;
-        }
-        ceil = content.transform.localPosition.y;
-        Invoke(nameof(CheckFloor), 1f);
+        AdjustSwipeCoef();
+        GetCeilValue();
     }
 
-    public void CheckFloor()
+    void AdjustSwipeCoef()
+    {
+        if (Screen.height < 1000)
+        {
+            swipeCoef *= 4; // You can adjust this value based on your needs.
+        }
+        else if (Screen.height < 1920)
+        {
+            swipeCoef *= 2;
+        }
+    }
+
+    public void GetCeilValue()
     {
         if (itemGrid != null)
         {
-            GridLayoutGroup gl = itemGrid.GetComponent<GridLayoutGroup>();
-            int rows = 0;
-            int noVisibleChildCount = itemGrid.transform.childCount;
-            while (noVisibleChildCount > 0)
+            gridLayout = itemGrid.GetComponent<GridLayoutGroup>();
+            int rowCount = Mathf.CeilToInt((float)itemGrid.transform.childCount / gridLayout.constraintCount);
+            if (rowCount > visibleRows)
             {
-                noVisibleChildCount -= gl.constraintCount;
-                rows++;
+                ceil = content.transform.localPosition.y;
+                floor = (gridLayout.cellSize.y + gridLayout.spacing.y) * (rowCount - visibleRows) - ceil;
             }
-            if (rows > visibleRows)
-            {
-                floor = ((gl.cellSize.y + gl.spacing.y) * (rows - visibleRows)) - ceil;
-    }   }   }
+        }
+    }
 
+    public void OnDrag(PointerEventData eventData)
+    {
+        float newY = content.transform.localPosition.y + (eventData.delta.y * swipeCoef);
+        content.transform.localPosition = new Vector2(content.transform.localPosition.x, Mathf.Clamp(newY, ceil, floor));
+    }
 
     public void SetBack()
     {

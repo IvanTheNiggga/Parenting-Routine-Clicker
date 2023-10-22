@@ -6,40 +6,27 @@ using UnityEngine.UI;
 public class Settings : MonoBehaviour
 {
     public AudioMixerGroup mixer;
-
-    private Toggle fpsToggle;
-    private Dropdown fpsCapOption;
-    private Dropdown attackOption;
-    private Slider volumeSlider;
-    private Text text;
+    public GameObject fpsCounter;
+    public Toggle fpsToggle;
+    public Dropdown fpsCapOption;
+    public Dropdown attackOption;
+    public Slider volumeSlider;
+    public Text resetDataText;
 
     private Panel panel;
     private Clicker clicker;
-    private GameObject fpscounter;
 
     private int confirmInt;
-
-    public float volume;
+    private float volume;
 
     void Start()
     {
         confirmInt = 0;
-
-        fpscounter = GameObject.Find("FPS(txt)");
-        fpsToggle = GameObject.Find("FPS(tgg)").GetComponent<Toggle>();
-        fpsCapOption = GameObject.Find("TargetFPS(dd)").GetComponent<Dropdown>();
-        attackOption = GameObject.Find("AttackMode(dd)").GetComponent<Dropdown>();
         panel = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
-
-        text = GameObject.Find("ResetData(txt)").GetComponent<Text>();
-
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
-        volumeSlider = GameObject.Find("Sound(sld)").GetComponent<Slider>();
-
         LoadOptions();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Data manipulations
     public void DeleteData()
     {
         confirmInt++;
@@ -47,13 +34,13 @@ public class Settings : MonoBehaviour
         if (confirmInt == 1)
         {
             Invoke(nameof(DisagreeToDelete), 3f);
-            text.text = "Delete data??";
+            resetDataText.text = "Delete data??";
         }
         else if (confirmInt == 2)
         {
             CancelInvoke(nameof(DisagreeToDelete));
             Invoke(nameof(DisagreeToDelete), 3f);
-            text.text = "Really?";
+            resetDataText.text = "Really?";
         }
         else if (confirmInt == 3)
         {
@@ -61,8 +48,8 @@ public class Settings : MonoBehaviour
             DisagreeToDelete();
             clicker.ResetData();
 
-            Miner washingmashine = GameObject.Find("Miner").GetComponent<Miner>();
-            washingmashine.ResetMinerLoot();
+            Miner washingMachine = GameObject.Find("Miner").GetComponent<Miner>();
+            washingMachine.ResetMinerLoot();
 
             Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
 
@@ -73,97 +60,78 @@ public class Settings : MonoBehaviour
 
     void DisagreeToDelete()
     {
-        text.text = "Delete data";
+        resetDataText.text = "Delete data";
         confirmInt = 0;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Objects activation
     public void ShowElement(GameObject g)
     {
         g.SetActive(true);
     }
+
     public void HideElement(GameObject g)
     {
         g.SetActive(false);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Toggle FPS Counter
+
     public void ToggleFPSCounter()
     {
-        fpscounter.SetActive(fpsToggle.isOn);
+        fpsCounter.SetActive(fpsToggle.isOn);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Set FPS cap
+
     public void SetDefaultCap()
     {
-        fpsCapOption = GameObject.Find("TargetFPS(dd)").GetComponent<Dropdown>();
         fpsCapOption.value = 1;
         SetFpsCap();
     }
+
     public void SetFpsCap()
     {
+        int frameRate = 0;
+
         switch (fpsCapOption.value)
         {
             case 0:
-                Application.targetFrameRate = 30;
+                frameRate = 30;
                 break;
             case 1:
-                Application.targetFrameRate = 60;
+                frameRate = 60;
                 break;
             case 2:
-                Application.targetFrameRate = 90;
+                frameRate = 90;
                 break;
             case 3:
-                Application.targetFrameRate = 144;
+                frameRate = 144;
                 break;
-
         }
+
+        Application.targetFrameRate = frameRate;
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Attack mode
+
     public void SetAttackMode()
     {
-        switch (attackOption.value)
-        {
-            case 0:
-                panel.clickMode = true;
-                panel.swapMode = true;
-                break;
-            case 1:
-                 panel.clickMode = true;
-                 panel.swapMode = false;
-                 break;
-            case 2:
-                panel.clickMode = false;
-                panel.swapMode = true;
-                break;
-        }
+        panel.clickMode = attackOption.value == 0 || attackOption.value == 1;
+        panel.swapMode = attackOption.value == 0 || attackOption.value == 2;
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Volume
+
     public void ChangeVolume()
     {
-        if(volumeSlider.value != volumeSlider.minValue)
-        {
-            mixer.audioMixer.SetFloat("Master", volumeSlider.value);
-        }
-        else
-        {
-            mixer.audioMixer.SetFloat("Master", -80f);
-        }
+        float volumeValue = volumeSlider.value;
+        mixer.audioMixer.SetFloat("Master", volumeValue != volumeSlider.minValue ? volumeValue : -80f);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Save/Load
+
     public void SaveOptions()
     {
         PlayerPrefs.SetInt("fpsCapOption", fpsCapOption.value);
-
         PlayerPrefs.SetInt("fpsToggle", fpsToggle.isOn ? 1 : 0);
-
         PlayerPrefs.SetInt("attackOption", attackOption.value);
-
         PlayerPrefs.SetFloat("volumeSlider", volumeSlider.value);
     }
 
     public void LoadOptions()
     {
         fpsToggle.isOn = PlayerPrefs.GetInt("fpsToggle") == 1;
-        fpscounter.SetActive(fpsToggle.isOn);
+        ToggleFPSCounter();
 
         fpsCapOption.value = PlayerPrefs.GetInt("fpsCapOption");
         SetFpsCap();
@@ -173,6 +141,6 @@ public class Settings : MonoBehaviour
 
         volume = PlayerPrefs.GetFloat("volumeSlider");
         volumeSlider.value = volume;
-        mixer.audioMixer.SetFloat("Master", volumeSlider.value);
+        mixer.audioMixer.SetFloat("Master", volume);
     }
 }

@@ -7,98 +7,84 @@ public class OnHurt : MonoBehaviour
     private AudioSource hitSource;
     private Enemy enemy;
     private ObjectMovement objectMovement;
-    private SpriteRenderer thisSR;
-
-    [Header("Enemy or Boss Sprites")]
-    public Sprite FullHP;
-    public Sprite[] injured;
 
     private float enemyScaleX;
     private float enemyScaleY;
 
     public Vector2 startPos;
+
+    private bool isBoss;
+
+    private const float MinPitch = 0.9f;
+    private const float MaxPitch = 1.15f;
+
+    private const int KnockbackAmount = 5;
+
     void Start()
     {
-        hitSource = GameObject.Find("HitSource").GetComponent<AudioSource>();
+        hitSource = GameObject.Find("HitSource").GetComponent <AudioSource>();
 
         enemyScaleX = transform.lossyScale.x;
         enemyScaleY = transform.lossyScale.y;
 
         enemy = GetComponent<Enemy>();
         objectMovement = GetComponent<ObjectMovement>();
-        thisSR = GetComponent<SpriteRenderer>();
 
-        thisSR.sprite = FullHP;
+        isBoss = GameObject.Find("Boss") != null;
     }
 
     void SetBack()
     {
-        objectMovement.MoveTo( startPos, 1, 0.1f, false);
-    }
-
-    public void SetInjured()
-    {
-        if (injured.Length > 1)
-        {
-            if (enemy.HP < enemy.startHp)
-            {
-                double district = enemy.startHp / injured.Length;
-                thisSR.sprite = injured[Mathf.FloorToInt((float)(enemy.HP / district))];
-            }
-            else
-            {
-                thisSR.sprite = FullHP;
-            }
-        }
+        objectMovement.MoveTo(startPos, 1, 0.1f, false);
     }
 
     void Knockback(int i)
     {
-        objectMovement.MoveTo( new Vector2(transform.localPosition.x + Random.Range(-i, i), transform.localPosition.y + Random.Range(-i, i)), 1, 0.1f, false);
+        objectMovement.MoveTo(new Vector2(transform.localPosition.x + Random.Range(-i, i), transform.localPosition.y + Random.Range(-i, i)), 1, 0.1f, false);
         Invoke(nameof(SetBack), 0.05f);
+    }
+
+    private void PlayHitSound()
+    {
+        hitSource.pitch = Random.Range(MinPitch, MaxPitch);
+        hitSource.PlayOneShot(hit, 3f);
     }
 
     public void Kicked()
     {
-        if (GameObject.Find("Boss") == null)
+        if (!isBoss)
         {
-            hitSource.pitch = Random.Range(0.9f, 1.15f);
-            hitSource.PlayOneShot(hit, 3f);
-
-            Knockback(5);
+            PlayHitSound();
+            Knockback(KnockbackAmount);
         }
         else
         {
             KickedBoss();
         }
     }
+
     public void KickedCrit()
     {
-        if (GameObject.Find("Boss") == null)
+        if (!isBoss)
         {
-            hitSource.pitch = Random.Range(0.9f, 1.15f);
-            hitSource.PlayOneShot(hit, 3f);
-
-            Knockback(10);
+            PlayHitSound();
+            Knockback(KnockbackAmount * 2); // Increased knockback for critical hit
         }
         else
         {
             KickedCritBoss();
         }
     }
+
     public void KickedBoss()
     {
-        hitSource.pitch = Random.Range(0.9f, 1.15f);
-        hitSource.PlayOneShot(hit, 3f);
-
-        Knockback(5);
+        PlayHitSound();
+        Knockback(KnockbackAmount);
     }
+
     public void KickedCritBoss()
     {
-        hitSource.pitch = Random.Range(0.9f, 1.15f);
-        hitSource.PlayOneShot(hit, 3f);
-
-        Knockback(10);
+        PlayHitSound();
+        Knockback(KnockbackAmount * 2); // Increased knockback for critical hit
     }
-
 }

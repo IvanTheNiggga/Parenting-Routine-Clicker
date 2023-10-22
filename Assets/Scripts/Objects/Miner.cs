@@ -13,63 +13,63 @@ public class Miner : MonoBehaviour
     private SoundManager soundManager;
     private TextManager textManager;
 
-    private GameObject investMenuGrid;
-    private GameObject startButton;
     private Text minerLootText;
     private Text minerLevelText;
 
+    private double incomeMultiplier = 1;
+
     public DateTime LastEntranceTime;
 
-    public TimeSpan timePassed;
-
-
-    public int secondsPassed;
-
-    public double incomeMultiplier;
-
-
     private void Start()
+    {
+        InitializeReferences();
+
+        LastEntranceTime = Utils.GetDataTime("LastEntranceTime", DateTime.UtcNow);
+        UpdateLootText();
+        InvokeRepeating(nameof(UpdateLootText), 0f, 1f);
+        Invoke(nameof(UpdateLevel), 0.2f);
+    }
+
+    private void InitializeReferences()
     {
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
         rewardManager = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
         interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
         message = GameObject.Find("Message").GetComponent<Message>();
         inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
-
-        investMenuGrid = GameObject.Find("InvestMenuGrid");
-        startButton = GameObject.Find("Start(btn)");
-
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         textManager = GameObject.Find("INTERFACE").GetComponent<TextManager>();
-
         minerLevelText = GameObject.Find("MinerLvl(txt)").GetComponent<Text>();
         minerLootText = GameObject.Find("LootMiner(txt)").GetComponent<Text>();
+    }
 
-
-        LastEntranceTime = Utils.GetDataTime("LastEntranceTime", DateTime.UtcNow);
-        timePassed = DateTime.UtcNow - LastEntranceTime;
-        secondsPassed = (int)timePassed.TotalSeconds;
-        minerLootText.text = "$" + NumFormat.FormatNumF0F1(rewardManager.GetRewardInfo(secondsPassed * incomeMultiplier));
-
-        InvokeRepeating(nameof(UpdateLootText), 0f, 1f);
-        Invoke(nameof(UpdateLevel), 0.2f);
+    private void UpdateLootText()
+    {
+        if (interfaceManager.minerOpened)
+        {
+            LastEntranceTime = Utils.GetDataTime("LastEntranceTime", DateTime.UtcNow);
+            TimeSpan timePassed = DateTime.UtcNow - LastEntranceTime;
+            int secondsPassed = (int)timePassed.TotalSeconds;
+            minerLootText.text = "$" + NumFormat.FormatNumF0F1(rewardManager.GetRewardInfo(secondsPassed * incomeMultiplier));
+        }
     }
 
     public void StartMiner()
     {
         if (clicker.Currency >= 5000)
         {
+            soundManager.PlayBuySound();
             clicker.MinerLvl = 1;
             UpdateLevel();
 
             clicker.Currency -= 5000;
             Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
-            Destroy(startButton);
+            Destroy(GameObject.Find("Start(btn)"));
         }
         else
         {
             message.SendMessage("You need $5000", 2);
-            soundManager.PlayBruhSound(); 
+            soundManager.PlayBruhSound();
         }
     }
 
@@ -83,13 +83,14 @@ public class Miner : MonoBehaviour
     public void LootMiner()
     {
         LastEntranceTime = Utils.GetDataTime("LastEntranceTime", DateTime.UtcNow);
-        timePassed = DateTime.UtcNow - LastEntranceTime;
-        secondsPassed = (int)timePassed.TotalSeconds;
+        TimeSpan timePassed = DateTime.UtcNow - LastEntranceTime;
+        int secondsPassed = (int)timePassed.TotalSeconds;
+
         if (clicker.MinerLvl == 0)
         {
-            message.SendMessage("Your washing mashine not even works", 2);
-            soundManager.PlayBruhSound(); 
-            return; 
+            message.SendMessage("Your washing machine is not working yet", 2);
+            soundManager.PlayBruhSound();
+            return;
         }
 
         soundManager.PlayBuySound();
@@ -100,48 +101,35 @@ public class Miner : MonoBehaviour
         textManager.CurrencyTextUpdate();
         UpdateLootText();
     }
+
     public void ResetMinerLoot()
     {
         LastEntranceTime = DateTime.UtcNow;
         Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
 
-        timePassed = DateTime.UtcNow - LastEntranceTime;
-        secondsPassed = (int)timePassed.TotalSeconds;
+        TimeSpan timePassed = DateTime.UtcNow - LastEntranceTime;
+        int secondsPassed = (int)timePassed.TotalSeconds;
 
         textManager.CurrencyTextUpdate();
         UpdateLootText();
     }
+
     public void UpdateLevel()
     {
         if (clicker.MinerLvl > 0)
         {
-            Destroy(startButton);
+            Destroy(GameObject.Find("Start(btn)"));
         }
 
-        minerLevelText.text = $"Level  {clicker.MinerLvl}";
+        minerLevelText.text = $"Level {clicker.MinerLvl}";
         CalculateIncomeMultiplier();
     }
 
-    public void CalculateIncomeMultiplier()
+    private void CalculateIncomeMultiplier()
     {
         if (clicker.MinerLvl > 0)
         {
-            incomeMultiplier = 1;
-
-            for (int i = 1; i < clicker.MinerLvl; i++)
-            {
-                incomeMultiplier *= 5;
-            }
-        }
-    }
-    public void UpdateLootText()
-    {
-        if (interfaceManager.minerOpened)
-        {
-            LastEntranceTime = Utils.GetDataTime("LastEntranceTime", DateTime.UtcNow);
-            timePassed = DateTime.UtcNow - LastEntranceTime;
-            secondsPassed = (int)timePassed.TotalSeconds;
-            minerLootText.text = "$" + NumFormat.FormatNumF0F1(rewardManager.GetRewardInfo(secondsPassed * incomeMultiplier));
+            incomeMultiplier = Math.Pow(5, clicker.MinerLvl - 1);
         }
     }
 }

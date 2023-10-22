@@ -23,21 +23,10 @@ public class Timer : MonoBehaviour
             { time -= Time.deltaTime; slider.value = time; }
             if (time <= 0)
             { enemyManager.BossFailed();
-                TakeResult();
                 PauseTimer();
                 ClearTimer(); 
     }   }   }
 
-    public void Destroy()
-    {
-        Destroy(gameObject);
-    }
-
-    public void TakeResult()
-    {
-        Debug.Log(slider.maxValue - time);
-        slider.value = slider.maxValue;
-    }
     public void ClearTimer()
     {
         slider.value = slider.maxValue;

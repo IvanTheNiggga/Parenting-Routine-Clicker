@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
+    #region Local
     private Clicker clicker;
     private EnemyManager enemyManager;
     private OnHurt sprSwap;
@@ -14,13 +15,18 @@ public class Enemy : MonoBehaviour
     public Slider hpSlider;
     public Unit unit1;
     public Unit unit2;
+    private int addCrit;
 
+    private float cooldown;
+    #endregion
+
+    #region Variables
     public double startHp;
     public double HP;
-
-    private int addCrit;
     private bool isBoss;
+    #endregion
 
+    #region Init
     private void Start()
     {
         isBoss = name == "BossObj";
@@ -55,39 +61,37 @@ public class Enemy : MonoBehaviour
         ClickParent = GameObject.Find("Clickable(cdr)");
     }
 
-    public void AbleToAttack()
-    {
-        AssignUnits();
-        enemyManager.clickable = true;
-    }
-
     private void AssignUnits()
     {
         if (unit1 != null) unit1.GetEnemyComponent(this);
         if (unit2 != null) unit2.GetEnemyComponent(this);
     }
+    private void ClearUnits()
+    {
+        if (unit1 != null) unit1.GetEnemyComponent(null);
+        if (unit2 != null) unit2.GetEnemyComponent(null);
+    }
+    #endregion
 
+    #region Enemy Control
+    public void AbleToAttack()
+    {
+        AssignUnits();
+        enemyManager.clickable = true;
+    }
     public void BossAbleToAttack()
     {
         enemyManager.clickable = true;
         timer.StartTimer(isBoss ? 20 : 0);
     }
+    #endregion
 
+    #region Damaging Behaviour
     public void UnitKick(double damage)
     {
-        sprSwap.Kicked();
-
-        if (HP <= damage)
-        {
-            HandleDeath(damage);
-        }
-        else
-        {
-            HandleDamageDealt(damage);
-        }
+        HandleDamageDealt(damage);
 
         text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
-        CreateDmgPart(false);
         CheckHP();
     }
 
@@ -95,84 +99,52 @@ public class Enemy : MonoBehaviour
     {
         HP += startHp / 2;
         hpSlider.value = 1;
-        sprSwap.Kicked();
         CheckHP();
     }
 
+    private void FixedUpdate()=> cooldown += Time.deltaTime;
     public void Kick()
     {
-        sprSwap.Kicked();
+        if (cooldown < 0.02) return;
+        cooldown = 0;
 
-        if (IsCriticalHit())
-        {
-            HandleCriticalHit();
-        }
-        else
-        {
-            HandleNormalHit();
-        }
+        double damage;
+        if (Random.Range(0, 100 / clicker.CritChance) <= 0) damage = clicker.Damage * (clicker.CritMultiplier + addCrit);
+        else damage = clicker.Damage;
+        HandleDamageDealt(damage);
 
         text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
-        CreateDmgPart(false);
         clicker.Experience += 0.05f;
         CheckHP();
     }
+    #endregion
 
-    private void HandleDeath(double damage)
-    {
-        clicker.CurrDealedDamage = HP;
-        HP = 0;
-        hpSlider.value = 0;
-    }
+    #region Handlers
 
     private void HandleDamageDealt(double damage)
     {
         clicker.CurrDealedDamage = damage;
         HP -= damage;
         hpSlider.value = (float)(HP / startHp);
-    }
 
-    private void HandleCriticalHit()
-    {
-        if (HP < (clicker.Damage * clicker.CritMultiplier))
-        {
-            HandleDeath(HP);
-        }
+        if (HP <= damage) HandleDeath();
         else
         {
-            clicker.CurrDealedDamage = clicker.Damage * (clicker.CritMultiplier + addCrit);
-            HP -= clicker.Damage * (clicker.CritMultiplier + addCrit);
-            hpSlider.value = (float)(HP / startHp);
-            CreateDmgPart(true);
+            sprSwap.Kicked();
+            DamagePart part = Instantiate(DmgPart_Prefab, ClickParent.transform).GetComponent<DamagePart>();
+
+            part.big = clicker.Damage < damage;
+            Vector2 v = transform.position;
+            part.transform.position = new Vector2(v.x + 25, v.y);
         }
     }
 
-    private void HandleNormalHit()
+    private void HandleDeath()
     {
-        if (HP <= clicker.Damage)
-        {
-            HandleDeath(HP);
-        }
-        else
-        {
-            HandleDamageDealt(clicker.Damage);
-        }
+        clicker.CurrDealedDamage = HP;
+        HP = 0;
+        hpSlider.value = 0;
     }
-
-    private bool IsCriticalHit()
-    {
-        return Random.Range(0, 100 / clicker.CritChance) <= 0;
-    }
-
-    private void CreateDmgPart(bool big)
-    {
-        DamagePart part = Instantiate(DmgPart_Prefab, ClickParent.transform).GetComponent<DamagePart>();
-
-        part.big = big;
-        Vector2 v = transform.position;
-        part.transform.position = new Vector2(v.x + 25, v.y);
-    }
-
     private void CheckHP()
     {
         if (HP <= 0.5f)
@@ -180,26 +152,19 @@ public class Enemy : MonoBehaviour
             ClearUnits();
             if (isBoss)
             {
-                UnableToAttack();
                 timer.PauseTimer();
                 timer.ClearTimer();
                 enemyManager.BossDown();
             }
             else
             {
-                UnableToAttack();
                 enemyManager.EnemyDown();
             }
         }
     }
+    #endregion
 
-    private void ClearUnits()
-    {
-        if (unit1 != null) unit1.GetEnemyComponent(null);
-        if (unit2 != null) unit2.GetEnemyComponent(null);
-    }
-
-    private void UnableToAttack()
+    private void OnDestroy()
     {
         enemyManager.HideEnemyInf();
         enemyManager.clickable = false;

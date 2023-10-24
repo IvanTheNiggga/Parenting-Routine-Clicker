@@ -2,6 +2,14 @@
 
 public class OnHurt : MonoBehaviour
 {
+    #region Settings
+    private const float MinPitch = 0.9f;
+    private const float MaxPitch = 1.15f;
+
+    private const int KnockbackAmount = 5;
+    #endregion
+
+    #region Local
     [Header("Hit Sound")]
     public AudioClip hit;
     private AudioSource hitSource;
@@ -14,15 +22,12 @@ public class OnHurt : MonoBehaviour
     public Vector2 startPos;
 
     private bool isBoss;
+    #endregion
 
-    private const float MinPitch = 0.9f;
-    private const float MaxPitch = 1.15f;
-
-    private const int KnockbackAmount = 5;
-
+    #region Init
     void Start()
     {
-        hitSource = GameObject.Find("HitSource").GetComponent <AudioSource>();
+        hitSource = GameObject.Find("HitSource").GetComponent<AudioSource>();
 
         enemyScaleX = transform.lossyScale.x;
         enemyScaleY = transform.lossyScale.y;
@@ -32,59 +37,23 @@ public class OnHurt : MonoBehaviour
 
         isBoss = GameObject.Find("Boss") != null;
     }
-
-    void SetBack()
-    {
-        objectMovement.MoveTo(startPos, 1, 0.1f, false);
-    }
-
-    void Knockback(int i)
-    {
-        objectMovement.MoveTo(new Vector2(transform.localPosition.x + Random.Range(-i, i), transform.localPosition.y + Random.Range(-i, i)), 1, 0.1f, false);
-        Invoke(nameof(SetBack), 0.05f);
-    }
-
-    private void PlayHitSound()
-    {
-        hitSource.pitch = Random.Range(MinPitch, MaxPitch);
-        hitSource.PlayOneShot(hit, 3f);
-    }
+    #endregion
 
     public void Kicked()
     {
-        if (!isBoss)
-        {
-            PlayHitSound();
-            Knockback(KnockbackAmount);
-        }
-        else
-        {
-            KickedBoss();
-        }
-    }
+        hitSource.pitch = Random.Range(MinPitch, MaxPitch);
+        hitSource.PlayOneShot(hit, 3f);
 
-    public void KickedCrit()
-    {
-        if (!isBoss)
-        {
-            PlayHitSound();
-            Knockback(KnockbackAmount * 2); // Increased knockback for critical hit
-        }
-        else
-        {
-            KickedCritBoss();
-        }
-    }
+        objectMovement.MoveTo(
+            new Vector2(transform.localPosition.x + Random.Range(-KnockbackAmount, KnockbackAmount), transform.localPosition.y + Random.Range(-KnockbackAmount, KnockbackAmount)), 
+            1, 
+            0.1f, 
+            false);
 
-    public void KickedBoss()
-    {
-        PlayHitSound();
-        Knockback(KnockbackAmount);
+        Invoke(nameof(SetBack), 0.05f);
     }
-
-    public void KickedCritBoss()
+    void SetBack()
     {
-        PlayHitSound();
-        Knockback(KnockbackAmount * 2); // Increased knockback for critical hit
+        objectMovement.MoveTo(startPos, 1, 0.1f, false);
     }
 }

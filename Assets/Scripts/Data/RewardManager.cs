@@ -2,6 +2,7 @@
 
 public class RewardManager : MonoBehaviour
 {
+    #region Local
     private Clicker clicker;
     private Inventory inventory;
     private StagesManager stagesManager;
@@ -18,7 +19,9 @@ public class RewardManager : MonoBehaviour
         get { return killReward; }
         set { killReward = Mathf.Min(float.MaxValue, (float)value); }
     }
+    #endregion
 
+    #region Init
     void Start()
     {
         clicker = GetComponent<Clicker>();
@@ -54,8 +57,9 @@ public class RewardManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    // GET CURRENCY
+    #region GET CURRENCY
     public void GiveCurrency(double count)
     {
         double reward = count * (clicker.multiplyCurrencyUpgradeLvl + 1);
@@ -104,8 +108,9 @@ public class RewardManager : MonoBehaviour
             SpawnItemRandom(1 + clicker.crateMultiplyUpgradeLvl);
         }
     }
+    #endregion
 
-    // GET/SPAWN ITEMS
+    #region GET/SPAWN ITEMS
     public void GetRandomItem(int count)
     {
         if (Random.Range(0, 100f / (clicker.betterLootChanceUpgradeLvl + 5f)) < 1f)
@@ -146,4 +151,5 @@ public class RewardManager : MonoBehaviour
     {
         inventory.AddItem(stagesManager.StageIndex, Random.Range(0, toyscount), count);
     }
+    #endregion
 }

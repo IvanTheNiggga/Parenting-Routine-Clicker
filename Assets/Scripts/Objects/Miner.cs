@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class Miner : MonoBehaviour
 {
+    #region Local
     private Clicker clicker;
     private RewardManager rewardManager;
     private InterfaceManager interfaceManager;
@@ -19,7 +20,9 @@ public class Miner : MonoBehaviour
     private double incomeMultiplier = 1;
 
     public DateTime LastEntranceTime;
+    #endregion
 
+    #region Init
     private void Start()
     {
         InitializeReferences();
@@ -42,7 +45,9 @@ public class Miner : MonoBehaviour
         minerLevelText = GameObject.Find("MinerLvl(txt)").GetComponent<Text>();
         minerLootText = GameObject.Find("LootMiner(txt)").GetComponent<Text>();
     }
+    #endregion
 
+    #region UI
     private void UpdateLootText()
     {
         if (interfaceManager.minerOpened)
@@ -53,7 +58,9 @@ public class Miner : MonoBehaviour
             minerLootText.text = "$" + NumFormat.FormatNumF0F1(rewardManager.GetRewardInfo(secondsPassed * incomeMultiplier));
         }
     }
+    #endregion
 
+    #region Miner Behaviour
     public void StartMiner()
     {
         if (clicker.Currency >= 5000)
@@ -122,14 +129,7 @@ public class Miner : MonoBehaviour
         }
 
         minerLevelText.text = $"Level {clicker.MinerLvl}";
-        CalculateIncomeMultiplier();
+        if (clicker.MinerLvl > 0) incomeMultiplier = Math.Pow(5, clicker.MinerLvl - 1);
     }
-
-    private void CalculateIncomeMultiplier()
-    {
-        if (clicker.MinerLvl > 0)
-        {
-            incomeMultiplier = Math.Pow(5, clicker.MinerLvl - 1);
-        }
-    }
+    #endregion
 }

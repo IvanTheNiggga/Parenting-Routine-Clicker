@@ -3,7 +3,11 @@ using UnityEngine.UI;
 
 public class EnemyManager : MonoBehaviour
 {
+    #region Spawn Settings
     public float enemySpawnInvoke = 0.2f;
+    #endregion
+
+    #region Local
     public GameObject Boss;
     public GameObject[] EnemyList;
     public GameObject Panel;
@@ -25,7 +29,9 @@ public class EnemyManager : MonoBehaviour
 
     public bool clickable;
     public bool able;
+    #endregion
 
+    #region Init
     void Start()
     {
         InitializeComponents();
@@ -52,14 +58,9 @@ public class EnemyManager : MonoBehaviour
         text = GameObject.Find("HP(txt)").GetComponent<Text>();
         enemySpawnSource = GameObject.Find("EnemySpawnSource").GetComponent<AudioSource>();
     }
+    #endregion
 
-    public void HideEnemyInf()
-    {
-        hpSlider.value = 1;
-        hpSlider.maxValue = 1;
-        text.text = ("");
-    }
-
+    #region Enemy Management
     public void EnemySpawn()
     {
         if (!able) return;
@@ -103,7 +104,9 @@ public class EnemyManager : MonoBehaviour
         Destroy(GameObject.Find("EnemyObj"));
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
     }
+    #endregion
 
+    #region Boss Management
     public void BossSpawnInv()
     {
         if (interfaceManager.minerOpened) interfaceManager.SwitchMiner(0);
@@ -158,4 +161,12 @@ public class EnemyManager : MonoBehaviour
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
         HideEnemyInf();
     }
+    #endregion
+    public void HideEnemyInf()
+    {
+        hpSlider.value = 1;
+        hpSlider.maxValue = 1;
+        text.text = ("");
+    }
+
 }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using UnityEngine;
-using UnityEngine.Diagnostics;
 
 public class Clicker : MonoBehaviour
 {
+    #region Local
     private EnemyManager enemyManager;
     private Inventory inventory;
     private UnitManager unitManager;
@@ -15,7 +15,9 @@ public class Clicker : MonoBehaviour
 
     public GameObject timerObject;
     private GameObject upgradesGrid;
+    #endregion
 
+    #region Variables
     public int Births;
     public float Experience;
     public int MinerLvl;
@@ -59,7 +61,8 @@ public class Clicker : MonoBehaviour
             if (value > double.MaxValue || double.IsNaN(value) == true || double.IsInfinity(value) == true)
             { currency = double.MaxValue * 0.9; return; }
             currency = value;
-    }   }
+        }
+    }
 
     private double damage; public double Damage
     {
@@ -73,13 +76,15 @@ public class Clicker : MonoBehaviour
     }
 
     private int critChance; public int CritChance
-    {   get { return critChance; }
+    {
+        get { return critChance; }
         set
         {
             if (value > 100)
             { critChance = 100; return; }
             critChance = value;
-    }   }
+        }
+    }
 
     private float afterSaveSeconds; public float AfterSaveSeconds
     {
@@ -89,8 +94,11 @@ public class Clicker : MonoBehaviour
             if (value > 60)
             { afterSaveSeconds = 0; Save(); return; }
             afterSaveSeconds = value;
-    }   }
+        }
+    }
+    #endregion
 
+    #region Per-Frame Methods
     private void Start()
     {
         enemyManager = GetComponent<EnemyManager>();
@@ -117,8 +125,10 @@ public class Clicker : MonoBehaviour
     {
         AfterSaveSeconds += Time.deltaTime;
     }
+    #endregion
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Data manipalations
+
+    #region Data manipalations
     public void Load()
     {
         CritMultiplier = PlayerPrefs.GetInt("CritMultiplier");
@@ -278,7 +288,9 @@ public class Clicker : MonoBehaviour
         CalculateDamages();
         enemyManager.RespawnEnemy();
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Calculations
+    #endregion
+
+    #region Calculations
     public void CalculateDamages() { CalculateCrit(); CalculateDmg(); }
 
     public void CalculateDmg()
@@ -292,26 +304,28 @@ public class Clicker : MonoBehaviour
         CritChance = 5 + upgrades.CritLvl - 1;
         CritCost = Utils.Progression(100, 100, upgrades.CritLvl);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Data manipulations
-    public int critMultiplierUpgradeLvl;         public void CritMultiplierUpgrade()
-                                                 { critMultiplierUpgradeLvl++; }
-    public int crateDropChanceUpgradeLvl;        public void CrateDropChanceUpgrade()
-                                                 { crateDropChanceUpgradeLvl++; }
-    public int crateMultiplyUpgradeLvl;          public void CrateMultiplyUpgrade()
-                                                 { crateMultiplyUpgradeLvl++; }
-    public int multiplyCurrencyChanceUpgradeLvl; public void MultiplyCurrencyChanceUpgrade()
-                                                 { multiplyCurrencyChanceUpgradeLvl++; }
-    public int multiplyCurrencyUpgradeLvl;       public void MultiplyCurrencyUpgrade()
-                                                 { multiplyCurrencyUpgradeLvl++; }
-    public int betterLootChanceUpgradeLvl;       public void BetterLootChanceUpgrade()
-                                                 { betterLootChanceUpgradeLvl++; }
-    public int doubleDamageUpgradeLvl;           public void DoubleDamageUpgrade()
-                                                 { doubleDamageUpgradeLvl++; }
+    #endregion
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Exit and postgame
+    #region Upgrades
+    public int critMultiplierUpgradeLvl; public void CritMultiplierUpgrade()
+    { critMultiplierUpgradeLvl++; }
+    public int crateDropChanceUpgradeLvl; public void CrateDropChanceUpgrade()
+    { crateDropChanceUpgradeLvl++; }
+    public int crateMultiplyUpgradeLvl; public void CrateMultiplyUpgrade()
+    { crateMultiplyUpgradeLvl++; }
+    public int multiplyCurrencyChanceUpgradeLvl; public void MultiplyCurrencyChanceUpgrade()
+    { multiplyCurrencyChanceUpgradeLvl++; }
+    public int multiplyCurrencyUpgradeLvl; public void MultiplyCurrencyUpgrade()
+    { multiplyCurrencyUpgradeLvl++; }
+    public int betterLootChanceUpgradeLvl; public void BetterLootChanceUpgrade()
+    { betterLootChanceUpgradeLvl++; }
+    public int doubleDamageUpgradeLvl; public void DoubleDamageUpgrade()
+    { doubleDamageUpgradeLvl++; }
+    #endregion
+
     public void OnApplicationQuit()
     {
         inventory.SetItemsBack();
-        if (Currency > 0 || Births >= 0) { Save(); } 
+        if (Currency > 0 || Births >= 0) { Save(); }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    #region Local
     public List<Item> items = new();
     public List<Item> investItems = new();
 
@@ -34,7 +35,9 @@ public class Inventory : MonoBehaviour
     private Text SaleForXp_Text;
 
     public bool ableToInvest;
+    #endregion
 
+    #region Init
     public void Start()
     {
         ableToInvest = false;
@@ -67,7 +70,9 @@ public class Inventory : MonoBehaviour
         InventoryGridPanel_CSwipe.GetCeilValue();
         SaleGridPanel_CSwipe.GetCeilValue();
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Item manipulation
+    #endregion
+
+    #region Item manipulation
     public Item ItemTypeFind(string itemtype)
     {
         for (int i = 0; i < items.Count; i++)
@@ -166,7 +171,9 @@ public class Inventory : MonoBehaviour
 
         Invoke(nameof(CheckFloors), 0.01f);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Item sell/use
+    #endregion
+
+    #region Item sell/use
     public void MultiSellForXP()
     {
         for (int i = investItems.Count - 1; i >= 0; i--)
@@ -291,7 +298,9 @@ public class Inventory : MonoBehaviour
     {
         giveReward.GetRandomItem(1);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Item spawning
+    #endregion
+
+    #region Item spawning
     public void AddItem(int stage, int id, int count)
     {
         string gameObjectName = $"Item_S{stage}ID{id}";
@@ -324,7 +333,9 @@ public class Inventory : MonoBehaviour
         it.index = index;
         it.count = count;
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// LOAD ITEMS
+    #endregion
+
+    #region Load Items
     public void ItemGetData()
     {
         stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
@@ -341,4 +352,5 @@ public class Inventory : MonoBehaviour
 
                     AddItem(i, ii, count);
     }   }   }   }
+    #endregion
 }

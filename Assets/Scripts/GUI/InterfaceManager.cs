@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class InterfaceManager : MonoBehaviour
 {
+    #region Local
     public Sprite Battle_Sprite;
     public Sprite miner_Sprite;
     public GameObject Upgrade_Prefab;
@@ -60,7 +61,9 @@ public class InterfaceManager : MonoBehaviour
 
     public string typeOfAction;
     public string typeOfButtonAction;
+    #endregion
 
+    #region Init
     private void Start()
     {
         InitializeComponents();
@@ -121,7 +124,7 @@ public class InterfaceManager : MonoBehaviour
         UnitLocked1_Text = GameObject.Find("Unit1Locked(lbl)").GetComponent<Text>();
         UnitLocked2_Text = GameObject.Find("Unit2Locked(lbl)").GetComponent<Text>();
     }
-
+    #endregion
     public void CheckRebirth()
     {
         if (unitManager.isAbleToBirth())
@@ -148,7 +151,7 @@ public class InterfaceManager : MonoBehaviour
         if (setCountOpened) { CloseSetCount(); }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// MAIN INTERFACE
+    #region MAIN INTERFACE
     public bool mainInterfaceOpened;
     public void SwitchBattleInterface(int mode)
     {
@@ -194,7 +197,9 @@ public class InterfaceManager : MonoBehaviour
                 break;
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Agree menu
+    #endregion
+
+    #region Agree menu
     public bool agreeWindowOpened;
     public void SwitchConfirmation(int mode)
     {
@@ -305,7 +310,9 @@ public class InterfaceManager : MonoBehaviour
         typeOfButtonAction = s;
         SwitchConfirmation(1);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Settings
+    #endregion
+
+    #region Settings
     public bool settingsOpened;
     public void SwitchSettings(int mode)
     {
@@ -327,7 +334,9 @@ public class InterfaceManager : MonoBehaviour
                 break;
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Washing Mashine
+    #endregion
+
+    #region Washing Mashine
     public bool minerOpened;
     public void SwitchMiner(int mode)
     {
@@ -354,7 +363,9 @@ public class InterfaceManager : MonoBehaviour
                 break;
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Upgrade Menu
+    #endregion
+
+    #region Upgrade Menu
     public bool upgradeOpened;
     public void SwitchUpgradesMenu(int mode)
     {
@@ -397,8 +408,9 @@ public class InterfaceManager : MonoBehaviour
             upgradeForXpTemp.AddGraphics();
         }
     }
+    #endregion
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Unit Menu
+    #region Unit Menu
     public bool unitsInterfaceOpened;
     public void SwitchUnitsInterface(int mode)
     {
@@ -441,7 +453,9 @@ public class InterfaceManager : MonoBehaviour
                 break;
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Unit List
+    #endregion
+
+    #region Unit List
     public bool unitsListOpened;
     public void OpenUnitsSelect(int slot)
     {
@@ -463,7 +477,9 @@ public class InterfaceManager : MonoBehaviour
         UnitSelectInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
         SwitchUnitsInterface(1);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Inventory
+    #endregion
+
+    #region Inventory
     public bool inventoryOpened;
     public void SwitchInventory(int mode)
     {
@@ -490,7 +506,9 @@ public class InterfaceManager : MonoBehaviour
                 break;
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Sale Window
+    #endregion
+
+    #region Sale Window
     public bool saleOpened;
     public void SwitchSale(int mode)
     {
@@ -525,7 +543,9 @@ public class InterfaceManager : MonoBehaviour
                 break;
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Item Info
+    #endregion
+
+    #region Item Info
     public bool itemInfoOpened;
     public void SwitchItemInfo(int mode)
     {
@@ -559,7 +579,9 @@ public class InterfaceManager : MonoBehaviour
                 break;
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Set Count Menu
+    #endregion
+
+    #region Set Count Menu
     public bool setCountOpened;
     public void OnCountSliderValChange()
     {
@@ -644,4 +666,5 @@ public class InterfaceManager : MonoBehaviour
         setCountOpened = false;
         SetCountWindow_OM.MoveTo(new Vector2(-720, 110), 0.3f, 1, false);
     }
+    #endregion
 }

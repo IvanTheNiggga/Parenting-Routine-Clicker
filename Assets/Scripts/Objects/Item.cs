@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class Item : MonoBehaviour, IPointerClickHandler
 {
+    #region Local
     private Clicker clicker;
     private RewardManager giveReward;
     private Inventory inventory;
@@ -35,8 +36,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public bool clickable;
 
     bool Loaded;
+    #endregion
 
-
+    #region Base
     public void Start()
     {
         SaleDescription_Text = GameObject.Find("Sale(lbl)").GetComponent<Text>();
@@ -67,6 +69,36 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    private void DestroyOnEmpty()
+    {
+        if (count <= 0 && Loaded)
+        {
+            if (name == investItemName)
+            {
+                inventory.investItems.Remove(this);
+            }
+            else
+            {
+                string keyName = $"{itemName}Count";
+                PlayerPrefs.DeleteKey(keyName);
+                inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
+                inventory.SelectedItem = null;
+                inventory.items.Remove(this);
+            }
+            Destroy(gameObject);
+            inventory.SortInventory();
+        }
+    }
+    private void OnBecameInvisible()
+    {
+        clickable = false;
+        GetComponent<Image>().raycastTarget = false;
+    }
+    private void OnBecameVisible()
+    {
+        clickable = true;
+        GetComponent<Image>().raycastTarget = true;
+    }
     void CheckName()
     {
         if (name == itemName)
@@ -80,7 +112,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
             gameObject.transform.SetParent(SaleGrid.transform);
         }
     }
+    #endregion
 
+    #region UI/Data
     public void AddGraphics()
     {
         if (!Loaded)
@@ -115,11 +149,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
     }
 
 
-    public void Use()
-    {
-        inventory.Invoke(useMethodName, 0f);
-    }
-
     public void MultiSellAddgraphics()
     {
         SaleForCurrencyPrice_Text = GameObject.Find("SaleForCurrency(txt)").GetComponent<Text>();
@@ -148,7 +177,13 @@ public class Item : MonoBehaviour, IPointerClickHandler
             SaleDescription_Text.text = $"Sell {NumFormat.FormatNumF0(itemsCount)} items ?";
         }
     }
+    #endregion
 
+    #region Item Manipulations
+    public void Use()
+    {
+        inventory.Invoke(useMethodName, 0f);
+    }
     public void AddToInvestGrid()
     {
         taps++;
@@ -170,42 +205,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
         AddGraphics();
         inventory.SortInventory();
     }
-
-    public void TapEquals0()
-    {
-        taps = 0;
-    }
-
-    private void DestroyOnEmpty()
-    {
-        if (count <= 0 && Loaded)
-        {
-            if (name == investItemName)
-            {
-                inventory.investItems.Remove(this);
-            }
-            else
-            {
-                string keyName = $"{itemName}Count";
-                PlayerPrefs.DeleteKey(keyName);
-                inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
-                inventory.SelectedItem = null;
-                inventory.items.Remove(this);
-            }
-            Destroy(gameObject);
-            inventory.SortInventory();
-        }
-    }
-    private void OnBecameInvisible()
-    {
-        clickable = false;
-        GetComponent<Image>().raycastTarget = false;
-    }
-    private void OnBecameVisible()
-    {
-        clickable = true;
-        GetComponent<Image>().raycastTarget = true;
-    }
-
+    public void TapEquals0() => taps = 0;
+    #endregion
 }
 

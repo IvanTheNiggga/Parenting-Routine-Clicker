@@ -17,7 +17,24 @@ public class Miner : MonoBehaviour
     private Text minerLootText;
     private Text minerLevelText;
 
-    private double incomeMultiplier = 1;
+    private GameObject startButton;
+
+    private double _incomeMultiplier = 1;
+    public double incomeMultiplier
+    {
+        get { return _incomeMultiplier; }
+        set
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                _incomeMultiplier = double.MaxValue / 100;
+            }
+            else
+            {
+                _incomeMultiplier = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
+            }
+        }
+    }
 
     public DateTime LastEntranceTime;
     #endregion
@@ -35,6 +52,8 @@ public class Miner : MonoBehaviour
 
     private void InitializeReferences()
     {
+        startButton = GameObject.Find("Start(btn)");
+
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
         rewardManager = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
         interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
@@ -50,7 +69,7 @@ public class Miner : MonoBehaviour
     #region UI
     private void UpdateLootText()
     {
-        if (interfaceManager.minerOpened)
+        if (interfaceManager.minerOpened && clicker.MinerLvl > 0)
         {
             LastEntranceTime = Utils.GetDataTime("LastEntranceTime", DateTime.UtcNow);
             TimeSpan timePassed = DateTime.UtcNow - LastEntranceTime;
@@ -71,7 +90,6 @@ public class Miner : MonoBehaviour
 
             clicker.Currency -= 5000;
             Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
-            Destroy(GameObject.Find("Start(btn)"));
         }
         else
         {
@@ -80,11 +98,37 @@ public class Miner : MonoBehaviour
         }
     }
 
+    public void ResetMiner()
+    {
+        Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
+        ResetMinerLoot();
+
+        clicker.MinerLvl = 0;
+        incomeMultiplier = 0;
+        minerLevelText.text = $"Level {clicker.MinerLvl}";
+
+        startButton.SetActive(true);
+    }
+
+    public void RebirthMiner()
+    {
+        Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
+        ResetMinerLoot();
+
+        clicker.MinerLvl = 1 + clicker.betterMineAfterRebirthUpgradeLvl;
+        if (clicker.MinerLvl > 0) incomeMultiplier = Math.Pow(50, clicker.MinerLvl - 1);
+        minerLevelText.text = $"Level {clicker.MinerLvl}";
+
+        startButton.SetActive(true);
+    }
+
     public void UpgradeMiner()
     {
         LootMiner();
         clicker.MinerLvl++;
+        clicker.MaxMinerLvl = Math.Max(clicker.MinerLvl, clicker.MaxMinerLvl);
         UpdateLevel();
+        clicker.Save();
     }
 
     public void LootMiner()
@@ -113,11 +157,6 @@ public class Miner : MonoBehaviour
     {
         LastEntranceTime = DateTime.UtcNow;
         Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
-
-        TimeSpan timePassed = DateTime.UtcNow - LastEntranceTime;
-        int secondsPassed = (int)timePassed.TotalSeconds;
-
-        textManager.CurrencyTextUpdate();
         UpdateLootText();
     }
 
@@ -125,11 +164,11 @@ public class Miner : MonoBehaviour
     {
         if (clicker.MinerLvl > 0)
         {
-            Destroy(GameObject.Find("Start(btn)"));
+            startButton.SetActive(false);
         }
 
         minerLevelText.text = $"Level {clicker.MinerLvl}";
-        if (clicker.MinerLvl > 0) incomeMultiplier = Math.Pow(5, clicker.MinerLvl - 1);
+        if (clicker.MinerLvl > 0) incomeMultiplier = Math.Pow(50, clicker.MinerLvl - 1);
     }
     #endregion
 }

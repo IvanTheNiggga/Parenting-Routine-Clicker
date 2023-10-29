@@ -26,11 +26,10 @@ public class Inventory : MonoBehaviour
     private GameObject SaleGrid;
     public GameObject SelectedItem;
 
-    private Slider Count_Slider;
+    private InputField Count_Input;
 
     private Text Currency_Text;
     private Text Experience_Text;
-    private Text SaleDescription_Text;
     private Text SaleForCurrency_Text;
     private Text SaleForXp_Text;
 
@@ -49,9 +48,8 @@ public class Inventory : MonoBehaviour
 
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 
-        Count_Slider = GameObject.Find("SetCount(sld)").GetComponent<Slider>();
+        Count_Input = GameObject.Find("InputField").GetComponent<InputField>();
 
-        SaleDescription_Text = GameObject.Find("Sale(lbl)").GetComponent<Text>();
         Currency_Text = GameObject.Find("Currency(txt)").GetComponent<Text>();
         Experience_Text = GameObject.Find("Experience(txt)").GetComponent<Text>();
 
@@ -184,9 +182,8 @@ public class Inventory : MonoBehaviour
             investItems[i].count = 0;
             investItems[i].AddGraphics();
 
-            SaleDescription_Text.text = "Select items, you want to sell";
-            SaleForCurrency_Text.text = "";
-            SaleForXp_Text.text = "";
+            SaleForCurrency_Text.text = "0";
+            SaleForXp_Text.text = "0";
         }
         SortInventory();
         soundManager.PlayBuySound();
@@ -201,9 +198,8 @@ public class Inventory : MonoBehaviour
             investItems[i].count = 0;
             investItems[i].AddGraphics();
 
-            SaleDescription_Text.text = "Select items, you want to sell";
-            SaleForCurrency_Text.text = "";
-            SaleForXp_Text.text = "";
+            SaleForCurrency_Text.text = "0";
+            SaleForXp_Text.text = "0";
         }
         SortInventory();
         soundManager.PlayBuySound();
@@ -213,34 +209,23 @@ public class Inventory : MonoBehaviour
         if (SelectedItem != null)
         {
             Item item = SelectedItem.GetComponent<Item>();
-            if (interfaceManager.typeOfAction == "Buy")
+            int input = 1;
+            if (Count_Input.text.Length > 0)
             {
-                clicker.Experience -= (int)Count_Slider.value * item.xpPrice;
-                Experience_Text.text = NumFormat.FormatNumF1(clicker.Experience);
-                AddItem(item.stage, item.index, (int)Count_Slider.value);
-                item.AddGraphics();
-                Count_Slider.maxValue = Mathf.FloorToInt(clicker.Experience / item.xpPrice);
-
-                if (clicker.Experience < item.xpPrice)
-                {
-                    interfaceManager.SwitchInventory(1);
-                }
-                return;
+                input = int.Parse(Count_Input.text);
+                input = input > item.count ? item.count : input;
             }
-            if (interfaceManager.typeOfAction == "Sell")
+
+            if (SelectedItem == null)
             {
-                if (SelectedItem == null)
-                {
-                    interfaceManager.SwitchInventory(1);
-                }
-                else
-                {
-                    clicker.Experience += (int)Count_Slider.value * item.xpPrice;
-                    Experience_Text.text = NumFormat.FormatNumF1(clicker.Experience);
-                    item.count -= (int)Count_Slider.value;
-                    item.AddGraphics();
-                    Count_Slider.maxValue = item.count;
-                }
+                interfaceManager.SwitchInventory(1);
+            }
+            else
+            {
+                clicker.Experience += input * item.xpPrice;
+                Experience_Text.text = NumFormat.FormatNumF1(clicker.Experience);
+                item.count -= input;
+                item.AddGraphics();
             }
             soundManager.PlayBuySound();
         }
@@ -254,11 +239,17 @@ public class Inventory : MonoBehaviour
         if (SelectedItem != null)
         {
             Item item = SelectedItem.GetComponent<Item>();
-            clicker.Currency += (int)Count_Slider.value * item.currencyPrice;
+            int input = 1;
+            if (Count_Input.text.Length > 0)
+            {
+                input = int.Parse(Count_Input.text);
+                input = input > item.count ? item.count : input;
+            }
+
+            clicker.Currency += input * item.currencyPrice;
             Currency_Text.text = NumFormat.FormatNumF1(clicker.Currency);
-            item.count -= (int)Count_Slider.value;
+            item.count -= input;
             item.AddGraphics();
-            Count_Slider.maxValue = item.count;
             soundManager.PlayBuySound();
         }
         if (SelectedItem == null)
@@ -270,24 +261,21 @@ public class Inventory : MonoBehaviour
     {
         if (SelectedItem != null)
         {
-            int ii = (int)Count_Slider.value;
             Item item = SelectedItem.GetComponent<Item>();
-            for (int i = 0; i < ii; i++)
+            int input = 1;
+            if (Count_Input.text.Length > 0)
+            {
+                input = int.Parse(Count_Input.text);
+                input = input > item.count ? item.count : input;
+            }
+
+            for (int i = 0; i < input; i++)
             {
                 item.Use();
             }
 
-            item.count -= ii;
+            item.count -= input;
             item.AddGraphics();
-
-            if (item.count > 1000)
-            {
-                Count_Slider.maxValue = 1000;
-            }
-            else
-            {
-                Count_Slider.maxValue = item.count;
-            }
         }
         if (SelectedItem == null)
         {
@@ -324,7 +312,7 @@ public class Inventory : MonoBehaviour
 
             it.AddGraphics();
         }
-        SortInventory(); 
+        SortInventory();
     }
     public void SpawnItem(int stage, int index, int count)
     {
@@ -351,6 +339,9 @@ public class Inventory : MonoBehaviour
                     int count = PlayerPrefs.GetInt(keyName);
 
                     AddItem(i, ii, count);
-    }   }   }   }
+                }
+            }
+        }
+    }
     #endregion
 }

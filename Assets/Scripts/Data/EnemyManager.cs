@@ -12,7 +12,22 @@ public class EnemyManager : MonoBehaviour
     public GameObject[] EnemyList;
     public GameObject Panel;
     public GameObject MoneyItem;
-    public double EnemyHPMultiplier;
+    private double _enemyHPMultiplier;
+    public double EnemyHPMultiplier
+    {
+        get { return _enemyHPMultiplier; }
+        set
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                _enemyHPMultiplier = double.MaxValue / 100;
+            }
+            else
+            {
+                _enemyHPMultiplier = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
+            }
+        }
+    }
 
     private GameObject EnemyParent;
     private GameObject CurrencyParent;
@@ -36,7 +51,7 @@ public class EnemyManager : MonoBehaviour
     {
         InitializeComponents();
         HideEnemyInf();
-        Invoke(nameof(EnemySpawn), 1);
+        EnemySpawn();
     }
 
     private void InitializeComponents()
@@ -63,9 +78,10 @@ public class EnemyManager : MonoBehaviour
     #region Enemy Management
     public void EnemySpawn()
     {
-        if (!able) return;
+        if (!able) Invoke(nameof(EnemySpawn), enemySpawnInvoke);
+        if (!clickable) Invoke(nameof(EnemySpawn), enemySpawnInvoke);
 
-        if (EnemyParent.transform.childCount == 2)
+        if (EnemyParent.transform.childCount < 3)
         {
             HideEnemyInf();
 
@@ -85,8 +101,6 @@ public class EnemyManager : MonoBehaviour
             enemyObj.gameObject.name = "EnemyObj";
             enemyObj.HP *= EnemyHPMultiplier;
         }
-
-        if (!clickable) Invoke(nameof(EnemySpawn), enemySpawnInvoke);
     }
 
     public void EnemyDown()

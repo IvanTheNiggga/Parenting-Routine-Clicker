@@ -17,7 +17,17 @@ public class RewardManager : MonoBehaviour
     public double KillReward
     {
         get { return killReward; }
-        set { killReward = Mathf.Min(float.MaxValue, (float)value); }
+        set
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                killReward = double.MaxValue / 100;
+            }
+            else
+            {
+                killReward = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
+            }
+        }
     }
     #endregion
 
@@ -82,6 +92,12 @@ public class RewardManager : MonoBehaviour
     }
 
     public void GiveMeReward(int count)
+    {
+        GiveCurrency(KillReward * count);
+        tm.CurrencyTextUpdate();
+        tm.ExperienceTextUpdate();
+    }
+    public void GiveMeReward(int count, double KillReward)
     {
         GiveCurrency(KillReward * count);
         tm.CurrencyTextUpdate();

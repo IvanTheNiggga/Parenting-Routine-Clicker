@@ -15,7 +15,7 @@ public class Message : MonoBehaviour
     {
         CancelInvoke();
         text.text = message;
-        objectMovement.MoveTo(new Vector2(0, 530), 0.1f, 0.1f, false);
+        objectMovement.MoveTo(new Vector2(0, 475), 0.1f, 0.1f, false);
         Invoke(nameof(GoBack), secondsToRead);
     }
 

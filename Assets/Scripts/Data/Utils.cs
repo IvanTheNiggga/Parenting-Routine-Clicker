@@ -27,10 +27,30 @@ public static class Utils
 
     public static double Progression(double num, float multiplier, int times)
     {
-        for (int i = 0; times > i; i++)
+        if (double.IsNaN(num) || double.IsInfinity(num))
         {
-            num *= multiplier;
+            num = double.MaxValue / 100;
         }
+        else
+        {
+            num = (num > double.MaxValue / 100) ? double.MaxValue / 100 : num;
+
+            for (int i = 0; i < times; i++)
+            {
+                num *= multiplier;
+
+                if (double.IsNaN(num) || double.IsInfinity(num))
+                {
+                    num = double.MaxValue / 100;
+                    break; // Выход из цикла при обнаружении NaN или Infinity.
+                }
+                else
+                {
+                    num = (num > double.MaxValue / 100) ? double.MaxValue / 100 : num;
+                }
+            }
+        }
+
         return num;
     }
 }

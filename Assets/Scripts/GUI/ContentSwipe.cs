@@ -2,15 +2,19 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ContentSwipe : MonoBehaviour, IDragHandler
+public class ContentSwipe : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     public GameObject content;
     public float swipeCoef;
+    public float decelerateCoef = 1;
     public int visibleRows;
     public GameObject itemGrid;
 
     private float ceil;
     private float floor;
+    private Vector2 delta;
+    private bool decelerate;
+    [SerializeField] private float decelerateSpeed;
 
     private GridLayoutGroup gridLayout;
 
@@ -22,18 +26,12 @@ public class ContentSwipe : MonoBehaviour, IDragHandler
 
     void AdjustSwipeCoef()
     {
-        if (Screen.height < 1000)
-        {
-            swipeCoef *= 4; // You can adjust this value based on your needs.
-        }
-        else if (Screen.height < 1920)
-        {
-            swipeCoef *= 2;
-        }
+        swipeCoef = swipeCoef * 2000 / Screen.height;
     }
 
     public void GetCeilValue()
     {
+        SetBack();
         if (itemGrid != null)
         {
             gridLayout = itemGrid.GetComponent<GridLayoutGroup>();
@@ -48,12 +46,42 @@ public class ContentSwipe : MonoBehaviour, IDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
-        float newY = content.transform.localPosition.y + (eventData.delta.y * swipeCoef);
+        delta = eventData.delta;
+        decelerateSpeed = delta.y;
+        float newY = content.transform.localPosition.y + (delta.y * swipeCoef);
         content.transform.localPosition = new Vector2(content.transform.localPosition.x, Mathf.Clamp(newY, ceil, floor));
     }
 
     public void SetBack()
     {
         content.transform.localPosition = new Vector2(content.transform.localPosition.x, ceil);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        decelerate = true;
+    }
+    private void Update()
+    {
+        if (decelerate)
+        {
+            if (decelerateSpeed > 0)
+            {
+                decelerateSpeed -= Time.deltaTime * decelerateCoef;
+            }
+            else
+            {
+                decelerateSpeed += Time.deltaTime * decelerateCoef;
+            }
+
+            float newY = content.transform.localPosition.y + (decelerateSpeed * swipeCoef);
+            content.transform.localPosition = new Vector2(content.transform.localPosition.x, Mathf.Clamp(newY, ceil, floor));
+
+            if (Mathf.Abs(decelerateSpeed) < 1f)
+            {
+                decelerate = false;
+                decelerateSpeed = 0;
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class StagesManager : MonoBehaviour
 {
@@ -11,6 +11,7 @@ public class StagesManager : MonoBehaviour
     public AudioClip Ambience;
     public AudioClip WMAmbience;
 
+    private Clicker clicker;
     private EnemyManager enemyManager;
     private RewardManager giveReward;
     private GameObject upgradesGrid;
@@ -22,6 +23,7 @@ public class StagesManager : MonoBehaviour
     public Sprite WMBG;
 
     public int StageIndex;
+    public int maxStage;
     public int CurrentStage;
 
     private bool started;
@@ -33,6 +35,7 @@ public class StagesManager : MonoBehaviour
 
     private void InitializeComponents()
     {
+        clicker = GetComponent<Clicker>();
         enemyManager = GetComponent<EnemyManager>();
         giveReward = GetComponent<RewardManager>();
         interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
@@ -55,7 +58,7 @@ public class StagesManager : MonoBehaviour
 
         if (newStage)
         {
-            StageIndex = Random.Range(0, StagesDataBase.Count);
+            StageIndex = UnityEngine.Random.Range(0, StagesDataBase.Count);
         }
 
         Stage currentStage = StagesDataBase[StageIndex];
@@ -67,16 +70,12 @@ public class StagesManager : MonoBehaviour
         AmbienceSource.clip = Ambience;
         enemyManager.enemySpawnSound = currentStage.EnemySpawn;
 
-        giveReward.KillReward = 1;
-        enemyManager.EnemyHPMultiplier = 1;
-        for (int i = 1; CurrentStage > i; i++)
-        {
-            giveReward.KillReward *= 5;
-            enemyManager.EnemyHPMultiplier *= 5.1;
-        }
+        giveReward.KillReward = Utils.Progression(1, 5, CurrentStage - 1);
+        enemyManager.EnemyHPMultiplier = Utils.Progression(1, 5, CurrentStage - 1);
         CheckUpgrades();
 
         enemyManager.enemySpawnSound = currentStage.EnemySpawn;
+        maxStage = Math.Max(CurrentStage, maxStage);
 
         interfaceManager.UpdateUpgrades();
         AmbienceSource.Play();

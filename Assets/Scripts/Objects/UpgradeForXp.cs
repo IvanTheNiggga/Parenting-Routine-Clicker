@@ -20,8 +20,6 @@ public class UpgradeForXp : MonoBehaviour
     public string upgradeName;
     public string methodName;
 
-    private int[] reqStages;
-
     public Text upgradeDescriptionText;
     public Text lvlText;
     public Text priceText;
@@ -52,13 +50,24 @@ public class UpgradeForXp : MonoBehaviour
             name = upgradeName;
             stepCoef = upgrades.upgradesDataBase[index].stepCoef;
             maxLvl = upgrades.upgradesDataBase[index].maxLvl;
+            if(methodName == "BetterStartUpgrade")
+            {
+                maxLvl = PlayerPrefs.GetInt("maxStage");
+            }
             upgradeDescriptionText.text = upgrades.upgradesDataBase[index].upgradeDescription;
-
-            reqStages = upgrades.upgradesDataBase[index].reqStages;
-
         }
-        if (stepCoef <= 1)
+        if (methodName == "BetterStartUpgrade")
+        {
+            maxLvl = stagesManager.maxStage - 20;
+        }
+        else if (methodName == "BetterMineAfterRebirthUpgrade")
+        {
+            maxLvl = stagesManager.maxStage - 10;
+        }
+        if (stepCoef == 1)
         { lvlPrice = upgrades.upgradesDataBase[index].lvlPrice + (currentLvl * upgrades.upgradesDataBase[index].lvlPrice); }
+        if (stepCoef == 0)
+        { lvlPrice = upgrades.upgradesDataBase[index].lvlPrice; }
         else
         {
             lvlPrice = upgrades.upgradesDataBase[index].lvlPrice;
@@ -67,8 +76,8 @@ public class UpgradeForXp : MonoBehaviour
         }
 
         if (currentLvl >= maxLvl)
-        { 
-            priceText.text = "Max level."; lvlPrice = 0; 
+        {
+            priceText.text = "Max level."; lvlPrice = 0;
         }
         else
         {
@@ -77,16 +86,13 @@ public class UpgradeForXp : MonoBehaviour
 
         lvlText.text = "Lv." + currentLvl.ToString();
         upgradeIco.sprite = upgrades.upgradesDataBase[index].upgradeIco;
-        
-        if(reqStages.Length != 0)
-        { OnLvlBlock(); }
     }
 
     public void Upgrade()
     {
         if (clicker.Experience >= lvlPrice && currentLvl < maxLvl)
         {
-            if(name == "DoubleDamageUpgrade")
+            if (name == "DoubleDamageUpgrade")
             {
                 clicker.CalculateDmg();
             }
@@ -94,9 +100,7 @@ public class UpgradeForXp : MonoBehaviour
             clicker.Experience -= lvlPrice;
             textManager.ExperienceTextUpdate();
             currentLvl++;
-            if (reqStages.Length != 0)
-            { OnLvlBlock(); }
-            
+
             PlayerPrefs.SetInt(upgradeName, currentLvl);
             Use();
 
@@ -106,8 +110,8 @@ public class UpgradeForXp : MonoBehaviour
         }
         else
         {
-            message.SendMessage($"You need more XP", 2); 
-            soundManager.PlayBruhSound(); 
+            message.SendMessage($"You need more XP", 2);
+            soundManager.PlayBruhSound();
         }
     }
     public void Use()
@@ -118,27 +122,5 @@ public class UpgradeForXp : MonoBehaviour
         currentLvl = 0;
         PlayerPrefs.SetInt(upgradeName, currentLvl);
         AddGraphics();
-    }
-
-    void OnLvlBlock()
-    {
-        if (currentLvl >= maxLvl)
-        {
-            GetComponent<Button>().interactable = false;
-            transform.SetAsLastSibling();
-            priceText.text = "Max level."; lvlPrice = 0;
-            return;
-        }
-        if (reqStages[currentLvl] > stagesManager.CurrentStage)
-        {
-            GetComponent<Button>().interactable = false;
-            transform.SetAsLastSibling();
-            priceText.text = reqStages[currentLvl] + " stage required"; lvlPrice = 0;
-            return;
-        }
-        else
-        {
-            GetComponent<Button>().interactable = true;
-        }
     }
 }

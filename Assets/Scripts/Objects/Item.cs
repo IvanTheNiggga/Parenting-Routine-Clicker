@@ -9,10 +9,11 @@ public class Item : MonoBehaviour, IPointerClickHandler
     private RewardManager giveReward;
     private Inventory inventory;
     private StagesManager stagesManager;
+    private SoundManager soundManager;
+    private InterfaceManager interfaceManager;
     public Text text;
     public Image ico;
 
-    private Text SaleDescription_Text;
     private Text SaleForCurrencyPrice_Text;
     private Text SaleForXpPrice_Text;
 
@@ -41,8 +42,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
     #region Base
     public void Start()
     {
-        SaleDescription_Text = GameObject.Find("Sale(lbl)").GetComponent<Text>();
-
+        interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         transform.localScale = new Vector3(1, 1, 1);
         taps = 0;
         clickable = true;
@@ -52,7 +53,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
     {
         if (clickable == true)
         {
-            InterfaceManager interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
 
             if (interfaceManager.saleOpened)
             {
@@ -61,11 +61,35 @@ public class Item : MonoBehaviour, IPointerClickHandler
             }
             else
             {
-                inventory.SelectedItem = gameObject;
-
-                interfaceManager.SwitchItemInfo(1);
-                interfaceManager.SwitchBattleInterface(0);
+                if (inventory.SelectedItem == gameObject)
+                {
+                    interfaceManager.SwitchItemInfo(0);
+                    inventory.SelectedItem = null;
+                }
+                else if (interfaceManager.setCountOpened)
+                {
+                    if (interfaceManager.typeOfAction == "Sell")
+                    {
+                        inventory.SelectedItem = gameObject;
+                        interfaceManager.OpenItemSellPanel();
+                    }
+                    if (interfaceManager.typeOfAction == "Use")
+                    {
+                        if(useMethodName != "")
+                        {
+                            inventory.SelectedItem = gameObject;
+                            interfaceManager.OpenItemUsePanel();
+                        }
+                    }
+                }
+                else
+                {
+                    inventory.SelectedItem = gameObject;
+                    interfaceManager.SwitchItemInfo(1);
+                    interfaceManager.SwitchBattleInterface(0);
+                }
             }
+            soundManager.PlayClickSound();
         }
     }
 
@@ -166,15 +190,13 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
         if (itemsCount == 0)
         {
-            SaleForCurrencyPrice_Text.text = "";
-            SaleForXpPrice_Text.text = "";
-            SaleDescription_Text.text = "Select items, you want to sell";
+            SaleForCurrencyPrice_Text.text = "0";
+            SaleForXpPrice_Text.text = "0";
         }
         else
         {
             SaleForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(pcPrice);
             SaleForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(esPrice);
-            SaleDescription_Text.text = $"Sell {NumFormat.FormatNumF0(itemsCount)} items ?";
         }
     }
     #endregion

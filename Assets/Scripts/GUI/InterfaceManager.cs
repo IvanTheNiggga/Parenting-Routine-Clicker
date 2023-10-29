@@ -22,6 +22,7 @@ public class InterfaceManager : MonoBehaviour
 
     private Image ItemInfo_Image;
     private Image Location_Image;
+    private Image SetCount_Image;
 
     private GameObject InventoryGrid;
     private GameObject UpgradesGrid;
@@ -45,13 +46,11 @@ public class InterfaceManager : MonoBehaviour
     private ObjectMovement MinerInterface_OM;
     private ObjectMovement BirthButton_OM;
 
-    private Slider Count_Slider;
+    private InputField Count_Input;
 
     private Text SellForCurrencyPrice_Text;
     private Text SellForXpPrice_Text;
     private Text AgreeDescription_Text;
-    private Text ItemPrices_Text;
-    private Text SaleDescription_Text;
     private Text ItemInfoCount_Text;
     private Text ItemInfoDescription_Text;
     private Text SaleForCurrencyPrice_Text;
@@ -87,6 +86,7 @@ public class InterfaceManager : MonoBehaviour
 
         Location_Image = GameObject.Find("Location(img)").GetComponent<Image>();
         ItemInfo_Image = GameObject.Find("ItemInfo(img)").GetComponent<Image>();
+        SetCount_Image = GameObject.Find("SetCount(img)").GetComponent<Image>();
 
         InventoryGrid = GameObject.Find("InventoryGrid");
         UpgradesGrid = GameObject.Find("UpgradesGrid");
@@ -110,13 +110,11 @@ public class InterfaceManager : MonoBehaviour
         UpgradeInterface_OM = GameObject.Find("Upgrades Interface").GetComponent<ObjectMovement>();
         MinerInterface_OM = GameObject.Find("Miner Interface").GetComponent<ObjectMovement>();
 
-        Count_Slider = GameObject.Find("SetCount(sld)").GetComponent<Slider>();
+        Count_Input = GameObject.Find("InputField").GetComponent<InputField>();
 
         AgreeDescription_Text = GameObject.Find("Agree(txt)").GetComponent<Text>();
         SellForCurrencyPrice_Text = GameObject.Find("SetCountCurrency(txt)").GetComponent<Text>();
         SellForXpPrice_Text = GameObject.Find("SetCountXp(txt)").GetComponent<Text>();
-        ItemPrices_Text = GameObject.Find("SetCount(txt)").GetComponent<Text>();
-        SaleDescription_Text = GameObject.Find("Sale(lbl)").GetComponent<Text>();
         ItemInfoCount_Text = GameObject.Find("ItemCount(txt)").GetComponent<Text>();
         ItemInfoDescription_Text = GameObject.Find("ItemInfo(txt)").GetComponent<Text>();
         SaleForCurrencyPrice_Text = GameObject.Find("SaleForCurrency(txt)").GetComponent<Text>();
@@ -143,12 +141,12 @@ public class InterfaceManager : MonoBehaviour
         if (settingsOpened) { SwitchSettings(0); }
         if (minerOpened) { MinerInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false); }
         if (upgradeOpened) { SwitchUpgradesMenu(0); }
-        if (unitsInterfaceOpened) { SwitchUnitsInterface(0); }
         if (unitsListOpened) { CloseUnitsSelect(); }
+        if (unitsInterfaceOpened) { SwitchUnitsInterface(0); }
         if (inventoryOpened) { SwitchInventory(0); }
         if (saleOpened) { SwitchSale(0); }
-        if (itemInfoOpened) { SwitchItemInfo(0); }
         if (setCountOpened) { CloseSetCount(); }
+        if (itemInfoOpened) { SwitchItemInfo(0); }
     }
 
     #region MAIN INTERFACE
@@ -160,7 +158,7 @@ public class InterfaceManager : MonoBehaviour
             case 1:
                 if (minerOpened)
                 {
-                    MinerInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false); 
+                    MinerInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                 }
                 else
                 {
@@ -249,7 +247,7 @@ public class InterfaceManager : MonoBehaviour
                             soundManager.PlayBruhSound();
                             return;
                         }
-                        else if(clicker.Births < 2)
+                        else if (clicker.Births < 2)
                         {
                             message.SendMessage($"You need at least two children", 2);
                             soundManager.PlayBruhSound();
@@ -490,7 +488,7 @@ public class InterfaceManager : MonoBehaviour
                 SwitchBattleInterface(0);
                 inventoryOpened = true;
                 inventory.SortInventory();
-                InventoryWindow_OM.MoveTo(new Vector2(0, 290), 0.3f, 1, false);
+                InventoryWindow_OM.MoveTo(new Vector2(0, 270), 0.3f, 1, false);
                 break;
             case 0:
                 if (saleOpened) { SwitchSale(0); }
@@ -520,14 +518,13 @@ public class InterfaceManager : MonoBehaviour
                     message.SendMessage($"You need at least one item", 2);
                     soundManager.PlayBruhSound();
                 }
-                else 
-                { 
+                else
+                {
                     saleOpened = true;
-                    SaleWindow_OM.MoveTo(new Vector2(0, -305f), 0.3f, 1, false);
+                    SaleWindow_OM.MoveTo(new Vector2(0, -300f), 0.3f, 1, false);
 
-                    SaleForCurrencyPrice_Text.text = "";
-                    SaleForXpPrice_Text.text = "";
-                    SaleDescription_Text.text = "Select items, you want to sell";
+                    SaleForCurrencyPrice_Text.text = "0";
+                    SaleForXpPrice_Text.text = "0";
 
                     inventory.ableToInvest = true;
                 }
@@ -552,9 +549,8 @@ public class InterfaceManager : MonoBehaviour
         switch (mode)
         {
             case 1:
-                CloseAll();
                 itemInfoOpened = true;
-                ItemInfoWindow_OM.MoveTo(new Vector2(0, 110), 0.3f, 1, false);
+                ItemInfoWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
 
                 Item item = inventory.SelectedItem.GetComponent<Item>();
 
@@ -567,12 +563,12 @@ public class InterfaceManager : MonoBehaviour
                     ItemOptionsUse.SetActive(false);
                 }
                 ItemInfo_Image.sprite = item.ico.sprite;
-                ItemInfoDescription_Text.text = "Type : " + item.type + " \n Name: " + item.nameObject + " \n Price: " + NumFormat.FormatNumF1(item.xpPrice);
+                ItemInfoDescription_Text.text = "Type : " + item.type + " \n Name: " + item.nameObject;
                 ItemInfoCount_Text.text = NumFormat.FormatNumF0F1(item.count);
                 break;
             case 0:
                 itemInfoOpened = false;
-                ItemInfoWindow_OM.MoveTo(new Vector2(720, 110), 0.3f, 1, false);
+                ItemInfoWindow_OM.MoveTo(new Vector2(720, -200), 0.3f, 1, false);
                 break;
             default:
                 SwitchItemInfo(!itemInfoOpened ? 1 : 0);
@@ -583,45 +579,51 @@ public class InterfaceManager : MonoBehaviour
 
     #region Set Count Menu
     public bool setCountOpened;
-    public void OnCountSliderValChange()
+    public void SetCountUpdate()
     {
         if (inventory.SelectedItem != null)
         {
             Item item = inventory.SelectedItem.GetComponent<Item>();
-
-            if (typeOfAction == "Use")
+            int input = 1;
+            if (Count_Input.text.Length > 0)
             {
-                ItemPrices_Text.text = $" Do you wanna use your {NumFormat.FormatNumF0F1(Count_Slider.value)}\n\"{item.nameObject}\" ?";
-                return;
+                input = int.Parse(Count_Input.text);
+                input = input > item.count ? item.count : input;
             }
+
             if (typeOfAction == "Sell")
             {
-                ItemPrices_Text.text = " Do you wanna sell your " + NumFormat.FormatNumF0F1(Count_Slider.value) +
-                                      $"\n\"{item.nameObject}\" ?" +
-                                       "\nfor " + NumFormat.FormatNumF1(Count_Slider.value * item.xpPrice) + " experience ?" +
-                                       "\n or $" + NumFormat.FormatNumF1(Count_Slider.value * item.currencyPrice) + " ?";
-                SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(Count_Slider.value * item.currencyPrice);
-                SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(Count_Slider.value * item.xpPrice);
+                SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(input * item.currencyPrice);
+                SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(input * item.xpPrice);
                 return;
             }
         }
     }
+    public void SetCountMax()
+    {
+        if (inventory.SelectedItem != null)
+        {
+            Item item = inventory.SelectedItem.GetComponent<Item>();
+            Count_Input.text = item.count.ToString();
+            return;
+        }
+    }
     public void OpenItemUsePanel()
     {
-        CloseAll();
         setCountOpened = true;
         Item item = inventory.SelectedItem.GetComponent<Item>();
         if (item.type == "Toy")
         {
-            SwitchItemInfo(0); SwitchInventory(0); SwitchUnitsInterface(1);
+            SwitchUnitsInterface(1);
             return;
         }
         if (item.type == "Cloth")
         {
-            SwitchItemInfo(0); SwitchInventory(0); SwitchMiner(1);
+            SwitchMiner(1);
             return;
         }
-        SetCountWindow_OM.MoveTo(new Vector2(0, 110), 0.3f, 1, false);
+        SwitchItemInfo(0);
+        SetCountWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
 
         typeOfAction = "Use";
 
@@ -629,24 +631,14 @@ public class InterfaceManager : MonoBehaviour
         SellForCurrency.SetActive(false);
         SellForXp.SetActive(false);
 
-
-        Count_Slider.maxValue = item.count;
-        if (item.count > 1000)
-        {
-            Count_Slider.maxValue = 1000;
-        }
-        Count_Slider.value = 1;
-        OnCountSliderValChange();
+        SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
+        SetCountUpdate();
     }
     public void OpenItemSellPanel()
     {
-        CloseAll();
         setCountOpened = true;
-        ItemInfoWindow_OM.MoveTo(new Vector2(720, 110), 0.3f, 1, false);
-        SetCountWindow_OM.MoveTo(new Vector2(0, 110), 0.3f, 1, false);
-        InventoryWindow_OM.MoveTo(new Vector2(0, 1480), 0.3f, 1, false);
-
-        Item item = inventory.SelectedItem.GetComponent<Item>();
+        SwitchItemInfo(0);
+        SetCountWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
 
         typeOfAction = "Sell";
 
@@ -654,17 +646,16 @@ public class InterfaceManager : MonoBehaviour
         SellForCurrency.SetActive(true);
         SellForXp.SetActive(true);
 
-        SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(Count_Slider.value * item.currencyPrice);
-        SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(Count_Slider.value * item.xpPrice);
-
-        Count_Slider.maxValue = item.count;
-        Count_Slider.value = 1;
-        OnCountSliderValChange();
+        SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
+        SetCountUpdate();
     }
     public void CloseSetCount()
     {
         setCountOpened = false;
-        SetCountWindow_OM.MoveTo(new Vector2(-720, 110), 0.3f, 1, false);
+        typeOfAction = "";
+        SetCountWindow_OM.MoveTo(new Vector2(-720, -200), 0.3f, 1, false);
     }
+    public void ResetSelectedItem()
+    { inventory.SelectedItem = null; }
     #endregion
 }

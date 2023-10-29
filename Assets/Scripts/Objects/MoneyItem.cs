@@ -13,6 +13,7 @@ public class MoneyItem : MonoBehaviour
     
     public float timeStart = 0;
     public string objectName;
+    public double reward;
     public int count;
 
     private float yRot;
@@ -21,6 +22,7 @@ public class MoneyItem : MonoBehaviour
     {
         pcAudiosource = GameObject.Find("PickupCurrencySource").GetComponent<AudioSource>();
         giveReward = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
+        reward = giveReward.KillReward;
 
         transform.position = new Vector2(Random.Range(-115f, 115f), 300f);
         if (Random.Range(0, 2) <= 0)
@@ -47,7 +49,7 @@ public class MoneyItem : MonoBehaviour
     {
         Destroy(gameObject);
         PlaySound();
-        giveReward.GiveMeReward(count);
+        giveReward.GiveMeReward(count, reward);
     }
 
     public void OnMouseOver()

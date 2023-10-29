@@ -73,7 +73,4 @@ public class Upgrade
     public float stepCoef;
     public string upgradeName;
     public string upgradeDescription;
-
-    public int[] reqStages;
-
 }

@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     #region Variables
     public double startHp;
     public double HP;
+
     private bool isBoss;
     #endregion
 
@@ -50,6 +51,9 @@ public class Enemy : MonoBehaviour
         var clickable = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
         clickable.EnemyGetComponent(name);
 
+        unit1 = GameObject.Find("Unit1(obj)").GetComponent<Unit>();
+        unit2 = GameObject.Find("Unit2(obj)").GetComponent<Unit>();
+
         text = GameObject.Find("HP(txt)").GetComponent<Text>();
         text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
 
@@ -76,12 +80,13 @@ public class Enemy : MonoBehaviour
     #region Enemy Control
     public void AbleToAttack()
     {
-        AssignUnits();
         enemyManager.clickable = true;
+        AssignUnits();
     }
     public void BossAbleToAttack()
     {
         enemyManager.clickable = true;
+        AssignUnits();
         timer.StartTimer(isBoss ? 20 : 0);
     }
     #endregion
@@ -89,7 +94,20 @@ public class Enemy : MonoBehaviour
     #region Damaging Behaviour
     public void UnitKick(double damage)
     {
-        HandleDamageDealt(damage);
+        clicker.CurrDealedDamage = damage;
+        HP -= damage;
+        hpSlider.value = (float)(HP / startHp);
+
+        if (HP <= damage) HandleDeath();
+        else
+        {
+            sprSwap.Kicked();
+            DamagePart part = Instantiate(DmgPart_Prefab, ClickParent.transform).GetComponent<DamagePart>();
+
+            part.big = false;
+            Vector2 v = transform.position;
+            part.transform.position = new Vector2(v.x + 25, v.y);
+        }
 
         text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
         CheckHP();
@@ -114,7 +132,7 @@ public class Enemy : MonoBehaviour
         HandleDamageDealt(damage);
 
         text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
-        clicker.Experience += 0.05f;
+        clicker.Experience += 0.05f * (1 + clicker.moreXPUpgradeLvl);
         CheckHP();
     }
     #endregion

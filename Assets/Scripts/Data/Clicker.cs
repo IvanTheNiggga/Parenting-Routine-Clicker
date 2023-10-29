@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Globalization;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Clicker : MonoBehaviour
 {
     #region Local
+    private Miner miner;
+    private RewardManager rewardManager;
     private EnemyManager enemyManager;
     private Inventory inventory;
     private UnitManager unitManager;
@@ -21,6 +24,7 @@ public class Clicker : MonoBehaviour
     public int Births;
     public float Experience;
     public int MinerLvl;
+    public int MaxMinerLvl;
     public int CritMultiplier;
 
     private double currDealedDamage; public double CurrDealedDamage
@@ -28,9 +32,14 @@ public class Clicker : MonoBehaviour
         get { return currDealedDamage; }
         set
         {
-            if (value > double.MaxValue || double.IsNaN(value) == true || double.IsInfinity(value) == true)
-            { currDealedDamage = double.MaxValue * 0.9; return; }
-            currDealedDamage = value;
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                currDealedDamage = double.MaxValue / 100;
+            }
+            else
+            {
+                currDealedDamage = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
+            }
         }
     }
     private double dmgCost; public double DmgCost
@@ -38,9 +47,14 @@ public class Clicker : MonoBehaviour
         get { return dmgCost; }
         set
         {
-            if (value > double.MaxValue || double.IsNaN(value) == true || double.IsInfinity(value) == true)
-            { dmgCost = double.MaxValue * 0.9; return; }
-            dmgCost = value;
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                dmgCost = double.MaxValue / 100;
+            }
+            else
+            {
+                dmgCost = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
+            }
         }
     }
     private double critCost; public double CritCost
@@ -48,9 +62,14 @@ public class Clicker : MonoBehaviour
         get { return critCost; }
         set
         {
-            if (value > double.MaxValue || double.IsNaN(value) == true || double.IsInfinity(value) == true)
-            { critCost = double.MaxValue * 0.9; return; }
-            critCost = value;
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                critCost = double.MaxValue / 100;
+            }
+            else
+            {
+                critCost = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
+            }
         }
     }
     private double currency; public double Currency
@@ -58,9 +77,14 @@ public class Clicker : MonoBehaviour
         get { return currency; }
         set
         {
-            if (value > double.MaxValue || double.IsNaN(value) == true || double.IsInfinity(value) == true)
-            { currency = double.MaxValue * 0.9; return; }
-            currency = value;
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                currency = double.MaxValue / 100;
+            }
+            else
+            {
+                currency = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
+            }
         }
     }
 
@@ -69,9 +93,14 @@ public class Clicker : MonoBehaviour
         get { return damage; }
         set
         {
-            if (value > double.MaxValue || double.IsNaN(value) == true || double.IsInfinity(value) == true)
-            { damage = double.MaxValue * 0.9; return; }
-            damage = value;
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                damage = double.MaxValue / 100;
+            }
+            else
+            {
+                damage = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
+            }
         }
     }
 
@@ -80,9 +109,7 @@ public class Clicker : MonoBehaviour
         get { return critChance; }
         set
         {
-            if (value > 100)
-            { critChance = 100; return; }
-            critChance = value;
+            critChance = (value < 0) ? 0 : (value > 100) ? 100 : value;
         }
     }
 
@@ -101,6 +128,8 @@ public class Clicker : MonoBehaviour
     #region Per-Frame Methods
     private void Start()
     {
+        miner = GameObject.Find("Miner").GetComponent<Miner>();
+        rewardManager = GetComponent<RewardManager>();
         enemyManager = GetComponent<EnemyManager>();
         inventory = GetComponent<Inventory>();
         unitManager = GetComponent<UnitManager>();
@@ -135,15 +164,21 @@ public class Clicker : MonoBehaviour
 
         stagesManager.CurrentStage = PlayerPrefs.GetInt("CurrentStage");
         stagesManager.StageIndex = PlayerPrefs.GetInt("StageIndex");
+        stagesManager.maxStage = PlayerPrefs.GetInt("maxStage");
         Currency = LoadBig("Currency");
         Experience = PlayerPrefs.GetFloat("Experience");
         Births = PlayerPrefs.GetInt("Births");
 
         MinerLvl = PlayerPrefs.GetInt("MinerLvl");
+        MaxMinerLvl = PlayerPrefs.GetInt("MaxMinerLvl");
 
         upgrades.DamageLvl = PlayerPrefs.GetInt("DamageLvl");
         upgrades.CritLvl = PlayerPrefs.GetInt("CritLvl");
 
+        moreXPUpgradeLvl = PlayerPrefs.GetInt("doubleXPUpgradeLvl");
+        betterMineAfterRebirthUpgradeLvl = PlayerPrefs.GetInt("betterMineAfterRebirthUpgradeLvl");
+        moreBirthChanceUpgradeLvl = PlayerPrefs.GetInt("moreBirthChanceUpgradeLvl");
+        betterStartUpgradeLvl = PlayerPrefs.GetInt("betterStartUpgradeLvl");
         doubleDamageUpgradeLvl = PlayerPrefs.GetInt("doubleDamageUpgradeLvl");
         critMultiplierUpgradeLvl = PlayerPrefs.GetInt("critMultiplierUpgradeLvl");
         crateDropChanceUpgradeLvl = PlayerPrefs.GetInt("crateDropChanceUpgradeLvl");
@@ -172,15 +207,21 @@ public class Clicker : MonoBehaviour
         PlayerPrefs.SetInt("CritMultiplier", CritMultiplier);
         PlayerPrefs.SetInt("CurrentStage", stagesManager.CurrentStage);
         PlayerPrefs.SetInt("StageIndex", stagesManager.StageIndex);
+        PlayerPrefs.SetInt("maxStage", stagesManager.maxStage);
         SaveBig("Currency", Currency);
         PlayerPrefs.SetFloat("Experience", Experience);
         PlayerPrefs.SetInt("Births", Births);
 
+        PlayerPrefs.SetInt("betterMineAfterRebirthUpgradeLvl", betterMineAfterRebirthUpgradeLvl);
+        PlayerPrefs.SetInt("MaxMinerLvl", MaxMinerLvl);
         PlayerPrefs.SetInt("MinerLvl", MinerLvl);
         PlayerPrefs.SetInt("DamageLvl", upgrades.DamageLvl);
         PlayerPrefs.SetInt("CritLvl", upgrades.CritLvl);
 
 
+        PlayerPrefs.SetInt("doubleXPUpgradeLvl", moreXPUpgradeLvl);
+        PlayerPrefs.SetInt("moreBirthChanceUpgradeLvl", moreBirthChanceUpgradeLvl);
+        PlayerPrefs.SetInt("betterStartUpgradeLvl", betterStartUpgradeLvl);
         PlayerPrefs.SetInt("doubleDamageUpgradeLvl", doubleDamageUpgradeLvl);
         PlayerPrefs.SetInt("critMultiplierUpgradeLvl", critMultiplierUpgradeLvl);
         PlayerPrefs.SetInt("crateDropChanceUpgradeLvl", crateDropChanceUpgradeLvl);
@@ -208,17 +249,19 @@ public class Clicker : MonoBehaviour
         CritMultiplier = 3;
 
         stagesManager.CurrentStage = 1;
+        stagesManager.maxStage = 1;
         Currency = 0;
         Births = 0;
-        Experience = 0;
 
-        MinerLvl = 0;
+        miner.ResetMiner();
 
         enemyManager.EnemyHPMultiplier = 1;
 
         upgrades.DamageLvl = 1;
         upgrades.CritLvl = 1;
 
+        moreBirthChanceUpgradeLvl = 0;
+        betterStartUpgradeLvl = 0;
         doubleDamageUpgradeLvl = 0;
         critMultiplierUpgradeLvl = 0;
         crateDropChanceUpgradeLvl = 0;
@@ -253,11 +296,11 @@ public class Clicker : MonoBehaviour
 
         CritMultiplier = 3;
 
-        stagesManager.CurrentStage = 1;
+        stagesManager.CurrentStage = 1 + betterStartUpgradeLvl;
         Currency = 0;
-        Experience = 0;
+        rewardManager.GiveMeReward(5);
 
-        MinerLvl = 1;
+        miner.RebirthMiner();
 
         enemyManager.EnemyHPMultiplier = 1;
 
@@ -275,13 +318,15 @@ public class Clicker : MonoBehaviour
         RebirthData();
 
         Births = births + 1;
-        unitManager.AddRandomUnit();
-
-        for (int i = 2; i < upgradesGrid.transform.childCount; i++)
+        if (Random.Range(0, 100f / (moreBirthChanceUpgradeLvl * 2.5f)) < 1f)
         {
-            UpgradeForXp upgradeForXpTemp = upgradesGrid.transform.GetChild(i).GetComponent<UpgradeForXp>();
-            upgradeForXpTemp.ResetLvl();
+            unitManager.AddRandomUnit();
         }
+        if (Random.Range(0, 100f / (moreBirthChanceUpgradeLvl * 1.25f)) < 1f)
+        {
+            unitManager.AddRandomUnit();
+        }
+        unitManager.AddRandomUnit();
 
         Save();
 
@@ -298,6 +343,12 @@ public class Clicker : MonoBehaviour
         Damage = Utils.Progression(1, 1.6f, upgrades.DamageLvl);
         Damage = Utils.Progression(Damage, 2, doubleDamageUpgradeLvl);
         DmgCost = Utils.Progression(10, 1.6f, upgrades.DamageLvl);
+
+        if (stagesManager.CurrentStage > (Births + 1) * 5)
+        {
+            int a = stagesManager.CurrentStage - (Births + 1) * 5;
+            DmgCost = Utils.Progression(DmgCost, 1.2f, a);
+        }
     }
     public void CalculateCrit()
     {
@@ -321,6 +372,14 @@ public class Clicker : MonoBehaviour
     { betterLootChanceUpgradeLvl++; }
     public int doubleDamageUpgradeLvl; public void DoubleDamageUpgrade()
     { doubleDamageUpgradeLvl++; }
+    public int betterStartUpgradeLvl; public void BetterStartUpgrade()
+    { betterStartUpgradeLvl++; }
+    public int moreBirthChanceUpgradeLvl; public void MoreBirthChanceUpgrade()
+    { moreBirthChanceUpgradeLvl++; }
+    public int betterMineAfterRebirthUpgradeLvl; public void BetterMineAfterRebirthUpgrade()
+    { betterMineAfterRebirthUpgradeLvl++; }
+    public int moreXPUpgradeLvl; public void DoubleXPUpgrade()
+    { moreXPUpgradeLvl++; }
     #endregion
 
     public void OnApplicationQuit()

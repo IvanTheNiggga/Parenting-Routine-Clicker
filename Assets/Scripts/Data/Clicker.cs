@@ -13,8 +13,9 @@ public class Clicker : MonoBehaviour
     private UnitManager unitManager;
     private Settings optionsMenu;
     private StagesManager stagesManager;
+    private InterfaceManager interfaceManager;
     private TextManager tm;
-    private UpgradesManager upgrades;
+    private UpgradesManager upgradesManager;
 
     public GameObject timerObject;
     private GameObject upgradesGrid;
@@ -39,36 +40,6 @@ public class Clicker : MonoBehaviour
             else
             {
                 currDealedDamage = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
-            }
-        }
-    }
-    private double dmgCost; public double DmgCost
-    {
-        get { return dmgCost; }
-        set
-        {
-            if (double.IsNaN(value) || double.IsInfinity(value))
-            {
-                dmgCost = double.MaxValue / 100;
-            }
-            else
-            {
-                dmgCost = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
-            }
-        }
-    }
-    private double critCost; public double CritCost
-    {
-        get { return critCost; }
-        set
-        {
-            if (double.IsNaN(value) || double.IsInfinity(value))
-            {
-                critCost = double.MaxValue / 100;
-            }
-            else
-            {
-                critCost = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
             }
         }
     }
@@ -135,8 +106,9 @@ public class Clicker : MonoBehaviour
         unitManager = GetComponent<UnitManager>();
         optionsMenu = GameObject.Find("Settings").GetComponent<Settings>();
         stagesManager = GetComponent<StagesManager>();
+        interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
         tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
-        upgrades = GetComponent<UpgradesManager>();
+        upgradesManager = GetComponent<UpgradesManager>();
 
         upgradesGrid = GameObject.Find("UpgradesGrid");
 
@@ -172,20 +144,20 @@ public class Clicker : MonoBehaviour
         MinerLvl = PlayerPrefs.GetInt("MinerLvl");
         MaxMinerLvl = PlayerPrefs.GetInt("MaxMinerLvl");
 
-        upgrades.DamageLvl = PlayerPrefs.GetInt("DamageLvl");
-        upgrades.CritLvl = PlayerPrefs.GetInt("CritLvl");
+        upgradesManager.DamageLvl = PlayerPrefs.GetInt("DamageUpgrade");
+        upgradesManager.CritLvl = PlayerPrefs.GetInt("CritUpgrade");
 
-        moreXPUpgradeLvl = PlayerPrefs.GetInt("doubleXPUpgradeLvl");
-        betterMineAfterRebirthUpgradeLvl = PlayerPrefs.GetInt("betterMineAfterRebirthUpgradeLvl");
-        moreBirthChanceUpgradeLvl = PlayerPrefs.GetInt("moreBirthChanceUpgradeLvl");
-        betterStartUpgradeLvl = PlayerPrefs.GetInt("betterStartUpgradeLvl");
-        doubleDamageUpgradeLvl = PlayerPrefs.GetInt("doubleDamageUpgradeLvl");
-        critMultiplierUpgradeLvl = PlayerPrefs.GetInt("critMultiplierUpgradeLvl");
-        crateDropChanceUpgradeLvl = PlayerPrefs.GetInt("crateDropChanceUpgradeLvl");
-        crateMultiplyUpgradeLvl = PlayerPrefs.GetInt("dropMultiplyUpgradeLvl");
-        multiplyCurrencyChanceUpgradeLvl = PlayerPrefs.GetInt("multiplyCurrencyChanceUpgradeLvl");
-        multiplyCurrencyUpgradeLvl = PlayerPrefs.GetInt("multiplyCurrencyUpgradeLvl");
-        betterLootChanceUpgradeLvl = PlayerPrefs.GetInt("betterLootChanceUpgradeLvl");
+        upgradesManager.doubleXPLvl = PlayerPrefs.GetInt("DoubleXPUpgrade");
+        upgradesManager.betterMineAfterRebirthLvl = PlayerPrefs.GetInt("BetterMineAfterRebirthUpgrade");
+        upgradesManager.moreBirthChanceLvl = PlayerPrefs.GetInt("MoreBirthChanceUpgrade");
+        upgradesManager.betterStartLvl = PlayerPrefs.GetInt("BetterStartUpgrade");
+        upgradesManager.doubleDamageLvl = PlayerPrefs.GetInt("DoubleDamageUpgrade");
+        upgradesManager.critDamageLvl = PlayerPrefs.GetInt("CritDamageUpgrade");
+        upgradesManager.dropRateLvl = PlayerPrefs.GetInt("DropRateUpgrade");
+        upgradesManager.packsCountLvl = PlayerPrefs.GetInt("PacksCountUpgrade");
+        upgradesManager.currencyChanceLvl = PlayerPrefs.GetInt("CurrencyChanceUpgrade");
+        upgradesManager.doubleCurrencyLvl = PlayerPrefs.GetInt("BoubleCurrencyUpgrade");
+        upgradesManager.betterPacksLvl = PlayerPrefs.GetInt("BetterPacksUpgrade");
 
         CalculateDamages();
 
@@ -212,23 +184,23 @@ public class Clicker : MonoBehaviour
         PlayerPrefs.SetFloat("Experience", Experience);
         PlayerPrefs.SetInt("Births", Births);
 
-        PlayerPrefs.SetInt("betterMineAfterRebirthUpgradeLvl", betterMineAfterRebirthUpgradeLvl);
+        PlayerPrefs.SetInt("BetterMineAfterRebirthUpgrade", upgradesManager.betterMineAfterRebirthLvl);
         PlayerPrefs.SetInt("MaxMinerLvl", MaxMinerLvl);
         PlayerPrefs.SetInt("MinerLvl", MinerLvl);
-        PlayerPrefs.SetInt("DamageLvl", upgrades.DamageLvl);
-        PlayerPrefs.SetInt("CritLvl", upgrades.CritLvl);
+        PlayerPrefs.SetInt("DamageUpgrade", upgradesManager.DamageLvl);
+        PlayerPrefs.SetInt("CritUpgrade", upgradesManager.CritLvl);
 
 
-        PlayerPrefs.SetInt("doubleXPUpgradeLvl", moreXPUpgradeLvl);
-        PlayerPrefs.SetInt("moreBirthChanceUpgradeLvl", moreBirthChanceUpgradeLvl);
-        PlayerPrefs.SetInt("betterStartUpgradeLvl", betterStartUpgradeLvl);
-        PlayerPrefs.SetInt("doubleDamageUpgradeLvl", doubleDamageUpgradeLvl);
-        PlayerPrefs.SetInt("critMultiplierUpgradeLvl", critMultiplierUpgradeLvl);
-        PlayerPrefs.SetInt("crateDropChanceUpgradeLvl", crateDropChanceUpgradeLvl);
-        PlayerPrefs.SetInt("crateMultiplyUpgradeLvl", crateMultiplyUpgradeLvl);
-        PlayerPrefs.SetInt("multiplyCurrencyChanceUpgradeLvl", multiplyCurrencyChanceUpgradeLvl);
-        PlayerPrefs.SetInt("multiplyCurrencyUpgradeLvl", multiplyCurrencyUpgradeLvl);
-        PlayerPrefs.SetInt("betterLootChanceUpgradeLvl", betterLootChanceUpgradeLvl);
+        PlayerPrefs.SetInt("DoubleXPUpgrade", upgradesManager.doubleXPLvl);
+        PlayerPrefs.SetInt("MoreBirthChanceUpgrade", upgradesManager.moreBirthChanceLvl);
+        PlayerPrefs.SetInt("BetterStartUpgrade", upgradesManager.betterStartLvl);
+        PlayerPrefs.SetInt("DoubleDamageUpgrade", upgradesManager.doubleDamageLvl);
+        PlayerPrefs.SetInt("CritDamageUpgrade", upgradesManager.critDamageLvl);
+        PlayerPrefs.SetInt("DropRateUpgrade", upgradesManager.dropRateLvl);
+        PlayerPrefs.SetInt("PacksCountUpgrade", upgradesManager.packsCountLvl);
+        PlayerPrefs.SetInt("CurrencyChanceUpgrade", upgradesManager.currencyChanceLvl);
+        PlayerPrefs.SetInt("DoubleCurrencyUpgrade", upgradesManager.doubleCurrencyLvl);
+        PlayerPrefs.SetInt("BetterPacksUpgrade", upgradesManager.betterPacksLvl);
 
         optionsMenu.SaveOptions();
     }
@@ -251,32 +223,41 @@ public class Clicker : MonoBehaviour
         stagesManager.CurrentStage = 1;
         stagesManager.maxStage = 1;
         Currency = 0;
+        Experience = 0;
         Births = 0;
 
+        MaxMinerLvl = 0;
         miner.ResetMiner();
 
         enemyManager.EnemyHPMultiplier = 1;
 
-        upgrades.DamageLvl = 1;
-        upgrades.CritLvl = 1;
+        upgradesManager.DamageLvl = 0;
+        upgradesManager.CritLvl = 0;
 
-        moreBirthChanceUpgradeLvl = 0;
-        betterStartUpgradeLvl = 0;
-        doubleDamageUpgradeLvl = 0;
-        critMultiplierUpgradeLvl = 0;
-        crateDropChanceUpgradeLvl = 0;
-        crateMultiplyUpgradeLvl = 0;
-        multiplyCurrencyChanceUpgradeLvl = 0;
-        multiplyCurrencyUpgradeLvl = 0;
-        betterLootChanceUpgradeLvl = 0;
+        upgradesManager.doubleXPLvl = 0;
+        upgradesManager.moreBirthChanceLvl = 0;
+        upgradesManager.betterStartLvl = 0;
+        upgradesManager.doubleDamageLvl = 0;
+        upgradesManager.critDamageLvl = 0;
+        upgradesManager.dropRateLvl = 0;
+        upgradesManager.packsCountLvl = 0;
+        upgradesManager.currencyChanceLvl = 0;
+        upgradesManager.doubleCurrencyLvl = 0;
+        upgradesManager.betterPacksLvl = 0;
 
+        int childCount = enemyManager.DropParent.transform.childCount;
+        for (int i = childCount - 1; i >= 0; i--)
+        {
+            Transform child = enemyManager.DropParent.transform.GetChild(i);
+            Destroy(child.gameObject);
+        }
         CalculateDamages();
         stagesManager.LoadStageData(true);
 
         for (int i = 2; i < upgradesGrid.transform.childCount; i++)
         {
-            UpgradeForXp upgradeForXpTemp = upgradesGrid.transform.GetChild(i).GetComponent<UpgradeForXp>();
-            upgradeForXpTemp.ResetLvl();
+            UpgradeObject UpgradeObjectTemp = upgradesGrid.transform.GetChild(i).GetComponent<UpgradeObject>();
+            UpgradeObjectTemp.ResetLvl();
         }
 
         optionsMenu.SetDefaultCap();
@@ -296,18 +277,27 @@ public class Clicker : MonoBehaviour
 
         CritMultiplier = 3;
 
-        stagesManager.CurrentStage = 1 + betterStartUpgradeLvl;
+        stagesManager.CurrentStage = 1 + upgradesManager.betterStartLvl;
         Currency = 0;
         rewardManager.GiveMeReward(5);
+        int childCount = enemyManager.DropParent.transform.childCount;
+        for (int i = childCount - 1; i >= 0; i--)
+        {
+            Transform child = enemyManager.DropParent.transform.GetChild(i);
+            Destroy(child.gameObject);
+        }
 
         miner.RebirthMiner();
 
         enemyManager.EnemyHPMultiplier = 1;
 
-        upgrades.DamageLvl = 1;
-        upgrades.CritLvl = 1;
+        upgradesManager.DamageLvl = 0;
+        upgradesManager.CritLvl = 0;
+        PlayerPrefs.SetInt("DamageUpgrade", upgradesManager.DamageLvl);
+        PlayerPrefs.SetInt("CritUpgrade", upgradesManager.CritLvl);
 
         stagesManager.LoadStageData(true);
+        interfaceManager.UpdateUpgrades();
         tm.UpdateAllText();
     }
 
@@ -318,11 +308,11 @@ public class Clicker : MonoBehaviour
         RebirthData();
 
         Births = births + 1;
-        if (Random.Range(0, 100f / (moreBirthChanceUpgradeLvl * 2.5f)) < 1f)
+        if (Random.Range(0, 100f / (upgradesManager.moreBirthChanceLvl * 2.5f)) < 1f)
         {
             unitManager.AddRandomUnit();
         }
-        if (Random.Range(0, 100f / (moreBirthChanceUpgradeLvl * 1.25f)) < 1f)
+        if (Random.Range(0, 100f / (upgradesManager.moreBirthChanceLvl * 1.25f)) < 1f)
         {
             unitManager.AddRandomUnit();
         }
@@ -340,46 +330,13 @@ public class Clicker : MonoBehaviour
 
     public void CalculateDmg()
     {
-        Damage = Utils.Progression(1, 1.6f, upgrades.DamageLvl);
-        Damage = Utils.Progression(Damage, 2, doubleDamageUpgradeLvl);
-        DmgCost = Utils.Progression(10, 1.6f, upgrades.DamageLvl);
-
-        if (stagesManager.CurrentStage > (Births + 1) * 5)
-        {
-            int a = stagesManager.CurrentStage - (Births + 1) * 5;
-            DmgCost = Utils.Progression(DmgCost, 1.2f, a);
-        }
+        Damage = Utils.Progression(1, 1.6f, upgradesManager.DamageLvl);
+        Damage = Utils.Progression(Damage, 2, upgradesManager.doubleDamageLvl);
     }
     public void CalculateCrit()
     {
-        CritChance = 5 + upgrades.CritLvl - 1;
-        CritCost = Utils.Progression(100, 100, upgrades.CritLvl);
+        CritChance = 5 + upgradesManager.CritLvl;
     }
-    #endregion
-
-    #region Upgrades
-    public int critMultiplierUpgradeLvl; public void CritMultiplierUpgrade()
-    { critMultiplierUpgradeLvl++; }
-    public int crateDropChanceUpgradeLvl; public void CrateDropChanceUpgrade()
-    { crateDropChanceUpgradeLvl++; }
-    public int crateMultiplyUpgradeLvl; public void CrateMultiplyUpgrade()
-    { crateMultiplyUpgradeLvl++; }
-    public int multiplyCurrencyChanceUpgradeLvl; public void MultiplyCurrencyChanceUpgrade()
-    { multiplyCurrencyChanceUpgradeLvl++; }
-    public int multiplyCurrencyUpgradeLvl; public void MultiplyCurrencyUpgrade()
-    { multiplyCurrencyUpgradeLvl++; }
-    public int betterLootChanceUpgradeLvl; public void BetterLootChanceUpgrade()
-    { betterLootChanceUpgradeLvl++; }
-    public int doubleDamageUpgradeLvl; public void DoubleDamageUpgrade()
-    { doubleDamageUpgradeLvl++; }
-    public int betterStartUpgradeLvl; public void BetterStartUpgrade()
-    { betterStartUpgradeLvl++; }
-    public int moreBirthChanceUpgradeLvl; public void MoreBirthChanceUpgrade()
-    { moreBirthChanceUpgradeLvl++; }
-    public int betterMineAfterRebirthUpgradeLvl; public void BetterMineAfterRebirthUpgrade()
-    { betterMineAfterRebirthUpgradeLvl++; }
-    public int moreXPUpgradeLvl; public void DoubleXPUpgrade()
-    { moreXPUpgradeLvl++; }
     #endregion
 
     public void OnApplicationQuit()

@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UpgradesManager : MonoBehaviour
 {
-    public List<Upgrade> upgradesDataBase = new List<Upgrade>();
+    public List<Upgrade> upgradesDataBase = new();
 
     private Clicker clicker;
-    private Message message;
-    private SoundManager soundManager;
     private TextManager tm;
 
     public int DamageLvl;
@@ -17,49 +14,50 @@ public class UpgradesManager : MonoBehaviour
     void Start()
     {
         clicker = GetComponent<Clicker>();
-        message = GameObject.Find("Message").GetComponent<Message>();
-        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
     }
 
-    public void Upgrade()
+    public void DamageUpgrade()
     {
-        if (clicker.Currency >= clicker.DmgCost && DamageLvl < 1501)
-        {
-            clicker.Currency -= clicker.DmgCost;
-            DamageLvl++;
+        DamageLvl++;
 
-            clicker.Save();
-            clicker.CalculateDmg();
-            tm.UpdateDamageUpgradeText();
-            tm.CurrencyTextUpdate();
-            soundManager.PlayBuySound();
-        }
-        else
-        {
-            message.SendMessage($"You need more money", 2);
-            soundManager.PlayBruhSound();
-        }
+        clicker.CalculateDmg();
+        tm.CurrencyTextUpdate();
     }
-    public void UpgradeCrit()
+    public void CritUpgrade()
     {
-        if (clicker.Currency >= clicker.CritCost && CritLvl < 25)
-        {
-            clicker.Currency -= clicker.CritCost;
-            CritLvl++;
+        CritLvl++;
 
-            clicker.Save();
-            clicker.CalculateCrit();
-            tm.UpdateCritUpgradeText();
-            tm.CurrencyTextUpdate();
-            soundManager.PlayBuySound();
-        }
-        else
-        {
-            message.SendMessage($"You need more money", 2);
-            soundManager.PlayBruhSound();
-        }
+        clicker.CalculateCrit();
+        tm.CurrencyTextUpdate();
     }
+
+    #region Upgrades
+    public int critDamageLvl; public void CritDamageUpgrade()
+    { critDamageLvl++; }
+    public int dropRateLvl; public void DropRateUpgrade()
+    { dropRateLvl++; }
+    public int packsCountLvl; public void PacksCountUpgrade()
+    { packsCountLvl++; }
+    public int currencyChanceLvl; public void CurrencyChanceUpgrade()
+    { currencyChanceLvl++; }
+    public int doubleCurrencyLvl; public void DoubleCurrencyUpgrade()
+    { doubleCurrencyLvl++; }
+    public int betterPacksLvl; public void BetterPacksUpgrade()
+    { betterPacksLvl++; }
+    public int doubleDamageLvl; public void DoubleDamageUpgrade()
+    { doubleDamageLvl++; }
+    public int betterStartLvl; public void BetterStartUpgrade()
+    { betterStartLvl++; }
+    public int moreBirthChanceLvl; public void MoreBirthChanceUpgrade()
+    { moreBirthChanceLvl++; }
+    public int betterMineAfterRebirthLvl; public void BetterMineAfterRebirthUpgrade()
+    { betterMineAfterRebirthLvl++; }
+    public int doubleXPLvl; public void DoubleXPUpgrade()
+    { doubleXPLvl++; }
+    public int mineLootLvl; public void MineLootUpgrade()
+    { mineLootLvl++; }
+    #endregion
 }
 
 [System.Serializable]
@@ -69,8 +67,13 @@ public class Upgrade
     public Sprite upgradeIco;
 
     public float lvlPrice;
+    public UpgradeTypes type;
     public int maxLvl;
     public float stepCoef;
     public string upgradeName;
     public string upgradeDescription;
+}
+public enum UpgradeTypes
+{
+    Money, Xp, Birth
 }

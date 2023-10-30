@@ -4,7 +4,9 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
     #region Local
+    private Panel clickable;
     private Clicker clicker;
+    private UpgradesManager upgradesManager;
     private EnemyManager enemyManager;
     private OnHurt sprSwap;
     private Timer timer;
@@ -44,12 +46,16 @@ public class Enemy : MonoBehaviour
     private void InitializeComponents()
     {
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
+        upgradesManager = GameObject.Find("ClickerManager").GetComponent<UpgradesManager>();
         enemyManager = GameObject.Find("ClickerManager").GetComponent<EnemyManager>();
         timer = GameObject.Find("Timer").GetComponent<Timer>();
-        addCrit = clicker.critMultiplierUpgradeLvl;
+        addCrit = upgradesManager.critDamageLvl;
 
-        var clickable = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
-        clickable.EnemyGetComponent(name);
+        if(GameObject.Find("Clickable(cdr)") != null)
+        {
+            clickable = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
+            clickable.EnemyGetComponent(name);
+        }
 
         unit1 = GameObject.Find("Unit1(obj)").GetComponent<Unit>();
         unit2 = GameObject.Find("Unit2(obj)").GetComponent<Unit>();
@@ -94,6 +100,12 @@ public class Enemy : MonoBehaviour
     #region Damaging Behaviour
     public void UnitKick(double damage)
     {
+        if (clickable == null)
+        {
+            clickable = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
+            clickable.EnemyGetComponent(name);
+        }
+
         clicker.CurrDealedDamage = damage;
         HP -= damage;
         hpSlider.value = (float)(HP / startHp);
@@ -125,14 +137,13 @@ public class Enemy : MonoBehaviour
     {
         if (cooldown < 0.02) return;
         cooldown = 0;
-
         double damage;
         if (Random.Range(0, 100 / clicker.CritChance) <= 0) damage = clicker.Damage * (clicker.CritMultiplier + addCrit);
         else damage = clicker.Damage;
         HandleDamageDealt(damage);
 
         text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
-        clicker.Experience += 0.05f * (1 + clicker.moreXPUpgradeLvl);
+        clicker.Experience += 0.05f * (1 + upgradesManager.doubleXPLvl);
         CheckHP();
     }
     #endregion

@@ -14,6 +14,8 @@ public class RewardManager : MonoBehaviour
     private int garbagecount;
 
     private double killReward;
+    private UpgradesManager upgradesManager;
+
     public double KillReward
     {
         get { return killReward; }
@@ -35,6 +37,7 @@ public class RewardManager : MonoBehaviour
     void Start()
     {
         clicker = GetComponent<Clicker>();
+        upgradesManager = GetComponent<UpgradesManager>();
         stagesManager = GetComponent<StagesManager>();
         inventory = GetComponent<Inventory>();
         tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
@@ -48,20 +51,20 @@ public class RewardManager : MonoBehaviour
 
         foreach (var itemData in stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase)
         {
-            string itemType = itemData.type;
+            ItemTypes itemType = itemData.type;
 
             switch (itemType)
             {
-                case "Toy":
+                case ItemTypes.Toy:
                     toyscount++;
                     break;
-                case "Cloth":
+                case ItemTypes.Cloth:
                     clothscount++;
                     break;
-                case "Item pack":
+                case ItemTypes.ItemPack:
                     randomitemcount++;
                     break;
-                case "Garbage":
+                case ItemTypes.Garbage:
                     garbagecount++;
                     break;
             }
@@ -72,8 +75,8 @@ public class RewardManager : MonoBehaviour
     #region GET CURRENCY
     public void GiveCurrency(double count)
     {
-        double reward = count * (clicker.multiplyCurrencyUpgradeLvl + 1);
-        if (Random.Range(0, 100f / clicker.multiplyCurrencyChanceUpgradeLvl) < 1f)
+        double reward = count * (upgradesManager.doubleCurrencyLvl + 1);
+        if (Random.Range(0, 100f / upgradesManager.currencyChanceLvl) < 1f)
         {
             reward *= 2;
         }
@@ -83,7 +86,7 @@ public class RewardManager : MonoBehaviour
     public double GetRewardInfo(double count)
     {
         clicker = GetComponent<Clicker>();
-        double reward = count * (clicker.multiplyCurrencyUpgradeLvl + 1);
+        double reward = count * (upgradesManager.doubleCurrencyLvl + 1);
         if (reward < double.MaxValue && !double.IsNaN(reward) && !double.IsInfinity(reward))
         {
             return reward;
@@ -109,19 +112,19 @@ public class RewardManager : MonoBehaviour
         int countToSpawn = 1;
         for (int i = 0; i < count; i++)
         {
-            if (Random.Range(0, 100f / (clicker.crateDropChanceUpgradeLvl + 5)) < 1f)
+            if (Random.Range(0, 100f / (upgradesManager.dropRateLvl + 5)) < 1f)
             {
                 countToSpawn++;
             }
         }
-        SpawnItemRandom(countToSpawn + clicker.crateMultiplyUpgradeLvl);
+        SpawnItemRandom(countToSpawn + upgradesManager.packsCountLvl);
     }
 
     public void GetEnemyLoot()
     {
-        if (Random.Range(0, 100f / (clicker.crateDropChanceUpgradeLvl + 1)) < 1f)
+        if (Random.Range(0, 100f / (upgradesManager.dropRateLvl + 1)) < 1f)
         {
-            SpawnItemRandom(1 + clicker.crateMultiplyUpgradeLvl);
+            SpawnItemRandom(1 + upgradesManager.packsCountLvl);
         }
     }
     #endregion
@@ -129,11 +132,11 @@ public class RewardManager : MonoBehaviour
     #region GET/SPAWN ITEMS
     public void GetRandomItem(int count)
     {
-        if (Random.Range(0, 100f / (clicker.betterLootChanceUpgradeLvl + 5f)) < 1f)
+        if (Random.Range(0, 100f / (upgradesManager.betterPacksLvl + 5f)) < 1f)
         {
             GetRandomCloth(count);
         }
-        else if (Random.Range(0, 100f / (clicker.betterLootChanceUpgradeLvl + 5f)) < 1f)
+        else if (Random.Range(0, 100f / (upgradesManager.betterPacksLvl + 5f)) < 1f)
         {
             GetRandomToy(count);
         }

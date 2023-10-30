@@ -249,7 +249,7 @@ GameObject:
   - component: {fileID: 3080333525177997779}
   - component: {fileID: 4718680081620735387}
   - component: {fileID: 5730340193745760937}
-  - component: {fileID: 824775781879703052}
+  - component: {fileID: 3101712100300912950}
   m_Layer: 5
   m_Name: Upgrade
   m_TagString: Untagged
@@ -363,8 +363,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 824775781879703052}
-        m_TargetAssemblyTypeName: UpgradeForXp, Assembly-CSharp
+      - m_Target: {fileID: 3101712100300912950}
+        m_TargetAssemblyTypeName: UpgradeObject, Assembly-CSharp
         m_MethodName: Upgrade
         m_Mode: 1
         m_Arguments:
@@ -375,7 +375,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &824775781879703052
+--- !u!114 &3101712100300912950
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -384,21 +384,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 4466329367944864032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96eb5304fd11ff5479d9b4db62d02c97, type: 3}
+  m_Script: {fileID: 11500000, guid: 5998abcd0b93b274da8ba2ba68dee3d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  currentLvl: 0
-  lvlPrice: 1000
-  maxLvl: 5
-  stepCoef: 2.5
-  upgradeName: CritMultiplierUpgrade
-  methodName: CritMultiplierUpgradeLvl
   upgradeDescriptionText: {fileID: 7813341523000435028}
   lvlText: {fileID: 7049134131129750811}
   priceText: {fileID: 7985277942399210006}
-  xpText: {fileID: 0}
   upgradeIco: {fileID: 7109959709942413869}
+  currencyIco: {fileID: 8913649119189770475}
+  moneyIco: {fileID: 21300000, guid: a50bfbfa3eb35884e841fdf162b8216b, type: 3}
+  xpIco: {fileID: 21300000, guid: 58077e7d7c1f69e448677d19dddcbc9c, type: 3}
+  birthIco: {fileID: 21300000, guid: 1ff6a3aa827ea234084ba4afa33e87e3, type: 3}
 --- !u!1 &6441637848213871605
 GameObject:
   m_ObjectHideFlags: 0

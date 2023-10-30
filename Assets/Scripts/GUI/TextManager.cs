@@ -6,19 +6,12 @@ public class TextManager : MonoBehaviour
     public StagesManager stagesManager;
     public Clicker clicker;
     public UpgradesManager upgrades;
+    public InterfaceManager interfaceManager;
 
     public Text currencyText;
     public Text experienceText;
 
     public Text stageText;
-
-    public Text critCostText;
-    public Text critDescText;
-    public Text critLvlText;
-
-    public Text dmgCostText;
-    public Text dmgDescText;
-    public Text dmgLvlText;
 
     private void Start()
     {
@@ -39,8 +32,7 @@ public class TextManager : MonoBehaviour
         StageTextUpdate();
         CurrencyTextUpdate();
         ExperienceTextUpdate();
-        UpdateCritUpgradeText();
-        UpdateDamageUpgradeText();
+        BirthTextUpdate();
     }
 
     public void StageTextUpdate()
@@ -58,17 +50,8 @@ public class TextManager : MonoBehaviour
         experienceText.text = NumFormat.FormatNumF1(clicker.Experience);
     }
 
-    public void UpdateCritUpgradeText()
+    public void BirthTextUpdate()
     {
-        critCostText.text = $"${NumFormat.FormatNumF0F1(clicker.CritCost)}";
-        critDescText.text = $"{clicker.CritChance}% + 1% to deal x{clicker.CritMultiplier} damage";
-        critLvlText.text = clicker.CritChance > 49 ? "max" : $"lv.{upgrades.CritLvl}";
-    }
-
-    public void UpdateDamageUpgradeText()
-    {
-        dmgCostText.text = $"${NumFormat.FormatNumF0F1(clicker.DmgCost)}";
-        dmgDescText.text = $"x1.6 your {NumFormat.FormatNumF0F1(clicker.Damage)} damage";
-        dmgLvlText.text = upgrades.DamageLvl > 1499 ? "max" : $"lv.{upgrades.DamageLvl}";
+        interfaceManager.UpdateUpgrades();
     }
 }

@@ -27,7 +27,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public string itemName;
     public string investItemName;
     public string slotItemName;
-    public string type;
+    public ItemTypes type;
     public double currencyPrice;
     public float xpPrice;
     public string useMethodName;

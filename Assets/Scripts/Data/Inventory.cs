@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,7 +72,7 @@ public class Inventory : MonoBehaviour
     #endregion
 
     #region Item manipulation
-    public Item ItemTypeFind(string itemtype)
+    public Item ItemTypeFind(ItemTypes itemtype)
     {
         for (int i = 0; i < items.Count; i++)
         {
@@ -96,7 +97,7 @@ public class Inventory : MonoBehaviour
         }
         return false;
     }
-    public bool ConsumeAnyItemOfType(string itemtype)
+    public bool ConsumeAnyItemOfType(ItemTypes itemtype)
     {
         for (int i = 0; i < items.Count; i++)
         {
@@ -344,4 +345,25 @@ public class Inventory : MonoBehaviour
         }
     }
     #endregion
+}
+
+[Serializable]
+public class Items
+{
+    public Sprite ico;
+
+    public string nameObject;
+
+    public ItemTypes type;
+
+    public string stage;
+    public float currencyPrice;
+
+    public float xpPrice;
+
+    public string useMethodName;
+}
+public enum ItemTypes
+{
+    Toy, Cloth, Garbage, ItemPack
 }

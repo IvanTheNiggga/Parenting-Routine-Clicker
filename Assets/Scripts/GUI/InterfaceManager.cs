@@ -123,18 +123,6 @@ public class InterfaceManager : MonoBehaviour
         UnitLocked2_Text = GameObject.Find("Unit2Locked(lbl)").GetComponent<Text>();
     }
     #endregion
-    public void CheckRebirth()
-    {
-        if (unitManager.isAbleToBirth())
-        {
-            BirthButton_OM.MoveTo(new Vector2(-298.5f, 170), 0.3f, 1, false);
-        }
-        else
-        {
-            BirthButton_OM.MoveTo(new Vector2(-498.5f, 170), 0.3f, 1, false);
-        }
-    }
-
     public void CloseAll()
     {
         if (agreeWindowOpened) { SwitchConfirmation(0); }
@@ -163,7 +151,7 @@ public class InterfaceManager : MonoBehaviour
                 else
                 {
                     mainInterfaceOpened = true;
-                    ClickPanel.SetActive(true);
+                    ClickPanel.GetComponent<Image>().raycastTarget = true;
 
                     MainInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                     EnemyParent_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
@@ -180,7 +168,7 @@ public class InterfaceManager : MonoBehaviour
                 else
                 {
                     mainInterfaceOpened = false;
-                    ClickPanel.SetActive(false);
+                    ClickPanel.GetComponent<Image>().raycastTarget = false;
 
                     MainInterface_OM.MoveTo(new Vector2(-720, 0), 0.3f, 1, false);
                     EnemyParent_OM.MoveTo(new Vector2(-360, 0), 0.3f, 1, false);
@@ -210,7 +198,7 @@ public class InterfaceManager : MonoBehaviour
                         AgreeDescription_Text.text = $"Make another one child for {NumFormat.FormatNumF1(unitManager.BirthCost())}$ ?";
                         break;
                     case "minerupgrade":
-                        if (inventory.ItemTypeFind("Cloth") == null)
+                        if (inventory.ItemTypeFind(ItemTypes.Cloth) == null)
                         {
                             message.SendMessage($"You need at least one cloth in inventory", 2);
                             soundManager.PlayBruhSound();
@@ -225,7 +213,7 @@ public class InterfaceManager : MonoBehaviour
                         AgreeDescription_Text.text = $"Upgrade washing mashine for Cloth item?";
                         break;
                     case "unitupgrade1":
-                        if (inventory.ItemTypeFind("Toy") == null)
+                        if (inventory.ItemTypeFind(ItemTypes.Toy) == null)
                         {
                             message.SendMessage($"You need at least one toy in inventory", 2);
                             soundManager.PlayBruhSound();
@@ -241,7 +229,7 @@ public class InterfaceManager : MonoBehaviour
                         SwitchUnitsInterface(0);
                         break;
                     case "unitupgrade2":
-                        if (inventory.ItemTypeFind("Toy") == null)
+                        if (inventory.ItemTypeFind(ItemTypes.Toy) == null)
                         {
                             message.SendMessage($"You need at least one toy in inventory", 2);
                             soundManager.PlayBruhSound();
@@ -289,15 +277,15 @@ public class InterfaceManager : MonoBehaviour
                 break;
             case "minerupgrade":
                 miner.UpgradeMiner();
-                inventory.ConsumeAnyItemOfType("Cloth");
+                inventory.ConsumeAnyItemOfType(ItemTypes.Cloth);
                 break;
             case "unitupgrade1":
                 unitManager.UpgradeUnit(1);
-                inventory.ConsumeAnyItemOfType("Toy");
+                inventory.ConsumeAnyItemOfType(ItemTypes.Toy);
                 break;
             case "unitupgrade2":
                 unitManager.UpgradeUnit(2);
-                inventory.ConsumeAnyItemOfType("Toy");
+                inventory.ConsumeAnyItemOfType(ItemTypes.Toy);
                 break;
         }
         SwitchBattleInterface(1);
@@ -372,7 +360,6 @@ public class InterfaceManager : MonoBehaviour
             case 1:
                 CloseAll();
                 upgradeOpened = true;
-                UpdateUpgrades();
                 UpgradeInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                 SwitchBattleInterface(0);
                 break;
@@ -390,7 +377,7 @@ public class InterfaceManager : MonoBehaviour
     {
         for (int i = 0; i < upgradesManager.upgradesDataBase.Count; i++)
         {
-            UpgradeForXp upgrade = Instantiate(Upgrade_Prefab, UpgradesGrid.transform).GetComponent<UpgradeForXp>();
+            UpgradeObject upgrade = Instantiate(Upgrade_Prefab, UpgradesGrid.transform).GetComponent<UpgradeObject>();
             upgrade.index = i;
             upgrade.AddGraphics();
         }
@@ -402,8 +389,8 @@ public class InterfaceManager : MonoBehaviour
 
         for (int i = 0; i < upgradesManager.upgradesDataBase.Count; i++)
         {
-            UpgradeForXp upgradeForXpTemp = GameObject.Find(upgradesManager.upgradesDataBase[i].upgradeName).GetComponent<UpgradeForXp>();
-            upgradeForXpTemp.AddGraphics();
+            UpgradeObject UpgradeObjectTemp = GameObject.Find(upgradesManager.upgradesDataBase[i].upgradeName).GetComponent<UpgradeObject>();
+            UpgradeObjectTemp.AddGraphics();
         }
     }
     #endregion
@@ -567,6 +554,7 @@ public class InterfaceManager : MonoBehaviour
                 ItemInfoCount_Text.text = NumFormat.FormatNumF0F1(item.count);
                 break;
             case 0:
+                ResetSelectedItem();
                 itemInfoOpened = false;
                 ItemInfoWindow_OM.MoveTo(new Vector2(720, -200), 0.3f, 1, false);
                 break;
@@ -612,12 +600,12 @@ public class InterfaceManager : MonoBehaviour
     {
         setCountOpened = true;
         Item item = inventory.SelectedItem.GetComponent<Item>();
-        if (item.type == "Toy")
+        if (item.type == ItemTypes.Toy)
         {
             SwitchUnitsInterface(1);
             return;
         }
-        if (item.type == "Cloth")
+        if (item.type == ItemTypes.Cloth)
         {
             SwitchMiner(1);
             return;

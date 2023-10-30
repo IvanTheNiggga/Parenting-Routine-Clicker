@@ -54,8 +54,6 @@ public class StagesManager : MonoBehaviour
             tm.UpdateAllText();
         }
 
-        interfaceManager.CheckRebirth();
-
         if (newStage)
         {
             StageIndex = UnityEngine.Random.Range(0, StagesDataBase.Count);
@@ -86,7 +84,7 @@ public class StagesManager : MonoBehaviour
         int childCount = upgradesGrid.transform.childCount;
         for (int i = 2; i < childCount; i++)
         {
-            upgradesGrid.transform.GetChild(i).GetComponent<UpgradeForXp>().AddGraphics();
+            upgradesGrid.transform.GetChild(i).GetComponent<UpgradeObject>().AddGraphics();
         }
     }
 
@@ -131,21 +129,4 @@ public class Stage
 
     [Header("Item List")]
     public List<Items> itemsDataBase = new();
-}
-
-[System.Serializable]
-public class Items
-{
-    public Sprite ico;
-
-    public string nameObject;
-
-    public string type;
-
-    public string stage;
-    public float currencyPrice;
-
-    public float xpPrice;
-
-    public string useMethodName;
 }

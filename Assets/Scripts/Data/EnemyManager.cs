@@ -30,7 +30,7 @@ public class EnemyManager : MonoBehaviour
     }
 
     private GameObject EnemyParent;
-    private GameObject CurrencyParent;
+    public GameObject DropParent;
     private StagesManager stagesManager;
     private RewardManager giveReward;
     private Inventory inventory;
@@ -63,7 +63,7 @@ public class EnemyManager : MonoBehaviour
         stagesManager = GetComponent <StagesManager>();
 
         EnemyParent = GameObject.Find("Enemy Parent");
-        CurrencyParent = GameObject.Find("Drop Parent");
+        DropParent = GameObject.Find("Drop Parent");
 
         clickable = false;
         able = true;
@@ -107,7 +107,7 @@ public class EnemyManager : MonoBehaviour
     {
         HideEnemyInf();
         Destroy(GameObject.Find("EnemyObj"));
-        MoneyItem mi = Instantiate(MoneyItem, CurrencyParent.transform).GetComponent<MoneyItem>();
+        MoneyItem mi = Instantiate(MoneyItem, DropParent.transform).GetComponent<MoneyItem>();
         mi.objectName = "Enemy";
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
         giveReward.GetEnemyLoot();
@@ -163,7 +163,7 @@ public class EnemyManager : MonoBehaviour
         stagesManager.NextStage();
         clicker.Save();
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
-        MoneyItem mi = Instantiate(MoneyItem, CurrencyParent.transform).GetComponent<MoneyItem>();
+        MoneyItem mi = Instantiate(MoneyItem, DropParent.transform).GetComponent<MoneyItem>();
         mi.count = 5;
         mi.objectName = "Boss";
         giveReward.GetBossLoot(20);

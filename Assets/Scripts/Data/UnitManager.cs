@@ -13,7 +13,6 @@ public class UnitManager : MonoBehaviour
     public Sprite None;
 
     private Clicker clicker;
-    private StagesManager stagesManager;
 
     public int unit1id;
     public int unit2id;
@@ -23,18 +22,12 @@ public class UnitManager : MonoBehaviour
 
     private void Start()
     {
+        clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
         unitsGrid = GameObject.Find("UnitsGrid").GetComponent<Transform>();
         GetUnitsList();
         Invoke(nameof(CheckUnfair), 1f);
     }
     /////////////////////////////////////////////////////////////////////////////////////////////// Returners
-    public bool isAbleToBirth()
-    {
-        clicker = GetComponent<Clicker>();
-        stagesManager = GetComponent<StagesManager>();
-
-        return stagesManager.CurrentStage > 9;
-    }
     public bool isAbleToBuy()
     {
         return clicker.Currency >= BirthCost();
@@ -42,7 +35,7 @@ public class UnitManager : MonoBehaviour
     public double BirthCost()
     {
         double cost = 1;
-        for (int i = 1; (clicker.Births + 1) * 5 > i; i++)
+        for (int i = 1; (clicker.Births + 1) * 4 > i; i++)
         {
             cost *= 5;
         }

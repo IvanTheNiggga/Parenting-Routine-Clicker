@@ -6,6 +6,7 @@ public class Miner : MonoBehaviour
 {
     #region Local
     private Clicker clicker;
+    private UpgradesManager upgradesManager;
     private RewardManager rewardManager;
     private InterfaceManager interfaceManager;
     private Inventory inventory;
@@ -45,7 +46,6 @@ public class Miner : MonoBehaviour
         InitializeReferences();
 
         LastEntranceTime = Utils.GetDataTime("LastEntranceTime", DateTime.UtcNow);
-        UpdateLootText();
         InvokeRepeating(nameof(UpdateLootText), 0f, 1f);
         Invoke(nameof(UpdateLevel), 0.2f);
     }
@@ -55,6 +55,7 @@ public class Miner : MonoBehaviour
         startButton = GameObject.Find("Start(btn)");
 
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
+        upgradesManager = GameObject.Find("ClickerManager").GetComponent<UpgradesManager>();
         rewardManager = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
         interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
         message = GameObject.Find("Message").GetComponent<Message>();
@@ -115,9 +116,8 @@ public class Miner : MonoBehaviour
         Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
         ResetMinerLoot();
 
-        clicker.MinerLvl = 1 + clicker.betterMineAfterRebirthUpgradeLvl;
-        if (clicker.MinerLvl > 0) incomeMultiplier = Math.Pow(50, clicker.MinerLvl - 1);
-        minerLevelText.text = $"Level {clicker.MinerLvl}";
+        clicker.MinerLvl = 1 + upgradesManager.betterMineAfterRebirthLvl;
+        UpdateLevel();
 
         startButton.SetActive(true);
     }
@@ -168,7 +168,7 @@ public class Miner : MonoBehaviour
         }
 
         minerLevelText.text = $"Level {clicker.MinerLvl}";
-        if (clicker.MinerLvl > 0) incomeMultiplier = Math.Pow(50, clicker.MinerLvl - 1);
+        if (clicker.MinerLvl > 0) incomeMultiplier = Math.Pow(50, clicker.MinerLvl - 1) * (upgradesManager.mineLootLvl + 1);
     }
     #endregion
 }

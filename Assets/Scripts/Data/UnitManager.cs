@@ -75,9 +75,8 @@ public class UnitManager : MonoBehaviour
         if (!instockUnits.Contains(random))
         {
             instockUnits.Add(random);
+            UpdateUnitsList(random);
         }
-
-        GetUnitsList();
     }
 
     public void EquipUnit(int slot, int id)
@@ -95,6 +94,7 @@ public class UnitManager : MonoBehaviour
 
         }
     }
+
     public void UnequipUnit(int slot)
     {
         switch (slot)
@@ -142,7 +142,7 @@ public class UnitManager : MonoBehaviour
     }
     public void CheckUnfair()
     {
-        if(unit1.id != -1 && unit2.id != -1)
+        if (unit1.id != -1 && unit2.id != -1)
         {
             if (unit2.CurrentLevel > unit1.CurrentLevel + 1)
             {
@@ -166,6 +166,7 @@ public class UnitManager : MonoBehaviour
             }
         }
     }
+
 }
 
 [System.Serializable]

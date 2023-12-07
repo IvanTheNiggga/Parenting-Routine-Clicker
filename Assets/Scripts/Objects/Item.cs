@@ -155,7 +155,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
             ico.sprite = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].ico;
             nameObject = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].nameObject;
             type = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].type;
-            currencyPrice = giveReward.KillReward * stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].currencyPrice;
+            UpdatePrice();
             xpPrice = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].xpPrice;
             useMethodName = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].useMethodName;
 
@@ -172,6 +172,10 @@ public class Item : MonoBehaviour, IPointerClickHandler
         text.text = NumFormat.FormatNumF0F1(count);
     }
 
+    public void UpdatePrice()
+    {
+        currencyPrice = giveReward.KillReward * stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].currencyPrice;
+    }
 
     public void MultiSellAddgraphics()
     {

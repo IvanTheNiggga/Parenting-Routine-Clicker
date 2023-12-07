@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class Clicker : MonoBehaviour
@@ -43,7 +44,7 @@ public class Clicker : MonoBehaviour
             }
         }
     }
-    private double currency; public double Currency
+    [SerializeField] private double currency; public double Currency
     {
         get { return currency; }
         set
@@ -118,7 +119,7 @@ public class Clicker : MonoBehaviour
         }
         else
         {
-            ResetData();
+            StartData();
         }
     }
 
@@ -215,61 +216,23 @@ public class Clicker : MonoBehaviour
     {
         unitManager.UnequipUnit(1);
         unitManager.UnequipUnit(2);
-        PlayerPrefs.SetInt("Unit1ID", -1);
-        PlayerPrefs.SetInt("Unit2ID", -1);
+        PlayerPrefs.SetInt("Unit1(obj)ID", -1);
+        PlayerPrefs.SetInt("Unit2(obj)ID", -1);
 
         CritMultiplier = 3;
-
         stagesManager.CurrentStage = 1;
         stagesManager.maxStage = 1;
-        Currency = 0;
-        Experience = 0;
-        Births = 0;
-
-        MaxMinerLvl = 0;
-        miner.ResetMiner();
-
         enemyManager.EnemyHPMultiplier = 1;
 
-        upgradesManager.DamageLvl = 0;
-        upgradesManager.CritLvl = 0;
-
-        upgradesManager.doubleXPLvl = 0;
-        upgradesManager.moreBirthChanceLvl = 0;
-        upgradesManager.betterStartLvl = 0;
-        upgradesManager.doubleDamageLvl = 0;
-        upgradesManager.critDamageLvl = 0;
-        upgradesManager.dropRateLvl = 0;
-        upgradesManager.packsCountLvl = 0;
-        upgradesManager.currencyChanceLvl = 0;
-        upgradesManager.doubleCurrencyLvl = 0;
-        upgradesManager.betterPacksLvl = 0;
-
-        int childCount = enemyManager.DropParent.transform.childCount;
-        for (int i = childCount - 1; i >= 0; i--)
-        {
-            Transform child = enemyManager.DropParent.transform.GetChild(i);
-            Destroy(child.gameObject);
-        }
         CalculateDamages();
         stagesManager.LoadStageData(true);
-
-        for (int i = 2; i < upgradesGrid.transform.childCount; i++)
-        {
-            UpgradeObject UpgradeObjectTemp = upgradesGrid.transform.GetChild(i).GetComponent<UpgradeObject>();
-            UpgradeObjectTemp.ResetLvl();
-        }
-
         optionsMenu.SetDefaultCap();
-        enemyManager.RespawnEnemy();
-        tm.UpdateAllText();
     }
+
     public void ResetData()
     {
-        inventory.DeleteItems();
         PlayerPrefs.DeleteAll();
-        StartData();
-        Save();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void RebirthData()
     {
@@ -279,7 +242,6 @@ public class Clicker : MonoBehaviour
 
         stagesManager.CurrentStage = 1 + upgradesManager.betterStartLvl;
         Currency = 0;
-        rewardManager.GiveMeReward(5);
         int childCount = enemyManager.DropParent.transform.childCount;
         for (int i = childCount - 1; i >= 0; i--)
         {

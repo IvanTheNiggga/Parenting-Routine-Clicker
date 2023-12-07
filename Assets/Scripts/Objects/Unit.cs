@@ -46,6 +46,16 @@ public class Unit : MonoBehaviour
 
     public void UpdateUnitData()
     {
+        switch (name)
+        {
+            case "Unit1(obj)":
+                if(!PlayerPrefs.HasKey("Unit1ID")) return;
+                break;
+            case "Unit2(obj)":
+                if (!PlayerPrefs.HasKey("Unit2ID")) return;
+                break;
+        }
+
         unitManager = GameObject.Find("ClickerManager").GetComponent<UnitManager>();
         text1 = GameObject.Find("Unit1(txt)").GetComponent<Text>();
         text2 = GameObject.Find("Unit2(txt)").GetComponent<Text>();

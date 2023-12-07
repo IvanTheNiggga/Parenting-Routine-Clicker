@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1155369570067097615}
   - component: {fileID: 1155369570067097612}
   - component: {fileID: 1155369570067097613}
+  - component: {fileID: 7610314383120898458}
   m_Layer: 5
   m_Name: ItemIMAGE
   m_TagString: Untagged
@@ -76,6 +77,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7610314383120898458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1155369570067097600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1155369570405136949
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,7 +126,7 @@ RectTransform:
   - {fileID: 1155369570067097615}
   - {fileID: 1155369570423435893}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -138,18 +154,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1155369570423435891}
-  item: {fileID: 1155369570405136949}
-  investMenuGrid: {fileID: 0}
-  ShopSlotGrid: {fileID: 0}
-  inventoryGrid: {fileID: 0}
   ico: {fileID: 1155369570067097613}
+  item: {fileID: 1155369570405136949}
+  SaleGrid: {fileID: 0}
+  InventoryGrid: {fileID: 0}
   stage: 0
   index: 0
   nameObject: 
   itemName: 
   investItemName: 
   slotItemName: 
-  type: 
+  type: 0
   currencyPrice: 0
   xpPrice: 0
   useMethodName: 
@@ -253,7 +268,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: da9a51ce28f0d7443a5bcbdbe04c4f4b, type: 3}
     m_FontSize: 0
     m_FontStyle: 1
     m_BestFit: 1

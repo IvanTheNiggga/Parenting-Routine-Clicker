@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class Settings : MonoBehaviour
 {
     public AudioMixerGroup mixer;
-    public GameObject fpsCounter;
-    public Toggle fpsToggle;
     public Dropdown fpsCapOption;
     public Dropdown attackOption;
     public Slider volumeSlider;
@@ -74,11 +72,6 @@ public class Settings : MonoBehaviour
         g.SetActive(false);
     }
 
-    public void ToggleFPSCounter()
-    {
-        fpsCounter.SetActive(fpsToggle.isOn);
-    }
-
     public void SetDefaultCap()
     {
         fpsCapOption.value = 1;
@@ -123,16 +116,12 @@ public class Settings : MonoBehaviour
     public void SaveOptions()
     {
         PlayerPrefs.SetInt("fpsCapOption", fpsCapOption.value);
-        PlayerPrefs.SetInt("fpsToggle", fpsToggle.isOn ? 1 : 0);
         PlayerPrefs.SetInt("attackOption", attackOption.value);
         PlayerPrefs.SetFloat("volumeSlider", volumeSlider.value);
     }
 
     public void LoadOptions()
     {
-        fpsToggle.isOn = PlayerPrefs.GetInt("fpsToggle") == 1;
-        ToggleFPSCounter();
-
         fpsCapOption.value = PlayerPrefs.GetInt("fpsCapOption");
         SetFpsCap();
 

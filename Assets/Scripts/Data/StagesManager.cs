@@ -11,6 +11,7 @@ public class StagesManager : MonoBehaviour
     public AudioClip Ambience;
     public AudioClip WMAmbience;
 
+    private Inventory inventory;
     private Clicker clicker;
     private EnemyManager enemyManager;
     private RewardManager giveReward;
@@ -35,6 +36,7 @@ public class StagesManager : MonoBehaviour
 
     private void InitializeComponents()
     {
+        inventory = GetComponent<Inventory>();
         clicker = GetComponent<Clicker>();
         enemyManager = GetComponent<EnemyManager>();
         giveReward = GetComponent<RewardManager>();
@@ -70,6 +72,7 @@ public class StagesManager : MonoBehaviour
 
         giveReward.KillReward = Utils.Progression(1, 5, CurrentStage - 1);
         enemyManager.EnemyHPMultiplier = Utils.Progression(1, 5, CurrentStage - 1);
+        inventory.UpdateItemPrices();
         CheckUpgrades();
 
         enemyManager.enemySpawnSound = currentStage.EnemySpawn;

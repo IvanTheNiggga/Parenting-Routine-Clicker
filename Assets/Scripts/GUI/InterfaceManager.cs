@@ -44,7 +44,6 @@ public class InterfaceManager : MonoBehaviour
     private ObjectMovement SettingsWindow_OM;
     private ObjectMovement SetCountWindow_OM;
     private ObjectMovement MinerInterface_OM;
-    private ObjectMovement BirthButton_OM;
 
     private InputField Count_Input;
 
@@ -106,7 +105,6 @@ public class InterfaceManager : MonoBehaviour
         UnitInterface_OM = GameObject.Find("Units Interface").GetComponent<ObjectMovement>();
         SetCountWindow_OM = GameObject.Find("SetCount").GetComponent<ObjectMovement>();
         SettingsWindow_OM = GameObject.Find("Settings").GetComponent<ObjectMovement>();
-        BirthButton_OM = GameObject.Find("Birth(btn)").GetComponent<ObjectMovement>();
         UpgradeInterface_OM = GameObject.Find("Upgrades Interface").GetComponent<ObjectMovement>();
         MinerInterface_OM = GameObject.Find("Miner Interface").GetComponent<ObjectMovement>();
 
@@ -135,6 +133,7 @@ public class InterfaceManager : MonoBehaviour
         if (saleOpened) { SwitchSale(0); }
         if (setCountOpened) { CloseSetCount(); }
         if (itemInfoOpened) { SwitchItemInfo(0); }
+        ResetSelectedItem();
     }
 
     #region MAIN INTERFACE
@@ -221,7 +220,7 @@ public class InterfaceManager : MonoBehaviour
                         }
                         else if (clicker.Births < 1)
                         {
-                            message.SendMessage($"You need at least one children", 2);
+                            message.SendMessage($"You need at least one birth", 2);
                             soundManager.PlayBruhSound();
                             return;
                         }
@@ -237,7 +236,7 @@ public class InterfaceManager : MonoBehaviour
                         }
                         else if (clicker.Births < 2)
                         {
-                            message.SendMessage($"You need at least two children", 2);
+                            message.SendMessage($"You need at least two births", 2);
                             soundManager.PlayBruhSound();
                             return;
                         }
@@ -402,12 +401,6 @@ public class InterfaceManager : MonoBehaviour
         switch (mode)
         {
             case 1:
-                if (clicker.Births < 1)
-                {
-                    message.SendMessage($"You need at least one child", 2);
-                    soundManager.PlayBruhSound();
-                    return;
-                }
                 CloseAll();
                 unitsInterfaceOpened = true;
                 UnitInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
@@ -446,7 +439,7 @@ public class InterfaceManager : MonoBehaviour
     {
         if (slot > clicker.Births)
         {
-            message.SendMessage($"You need {slot - clicker.Births} births", 2);
+            message.SendMessage($"You need {slot - clicker.Births} more births", 2);
             soundManager.PlayBruhSound();
             return;
         }
@@ -554,7 +547,6 @@ public class InterfaceManager : MonoBehaviour
                 ItemInfoCount_Text.text = NumFormat.FormatNumF0F1(item.count);
                 break;
             case 0:
-                ResetSelectedItem();
                 itemInfoOpened = false;
                 ItemInfoWindow_OM.MoveTo(new Vector2(720, -200), 0.3f, 1, false);
                 break;
@@ -619,12 +611,14 @@ public class InterfaceManager : MonoBehaviour
         SellForCurrency.SetActive(false);
         SellForXp.SetActive(false);
 
+        Count_Input.text = "1";
         SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
         SetCountUpdate();
     }
     public void OpenItemSellPanel()
     {
         setCountOpened = true;
+        Item item = inventory.SelectedItem.GetComponent<Item>();
         SwitchItemInfo(0);
         SetCountWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
 
@@ -634,6 +628,9 @@ public class InterfaceManager : MonoBehaviour
         SellForCurrency.SetActive(true);
         SellForXp.SetActive(true);
 
+        Count_Input.text = "1";
+        SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(item.currencyPrice);
+        SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(item.xpPrice);
         SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
         SetCountUpdate();
     }

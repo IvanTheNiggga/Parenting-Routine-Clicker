@@ -170,6 +170,14 @@ public class Inventory : MonoBehaviour
 
         Invoke(nameof(CheckFloors), 0.01f);
     }
+    
+    public void UpdateItemPrices()
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            items[i].GetComponent<Item>().UpdatePrice();
+        }
+    }
     #endregion
 
     #region Item sell/use

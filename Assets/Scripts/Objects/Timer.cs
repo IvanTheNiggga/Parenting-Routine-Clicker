@@ -5,14 +5,14 @@ public class Timer : MonoBehaviour
 {
     private EnemyManager enemyManager;
 
-    private Slider slider;
+    private Text text;
     public float time;
     public bool timerRunning;
 
     private void Start()
     {
         enemyManager = GameObject.Find("ClickerManager").GetComponent<EnemyManager>();
-        slider = GameObject.Find("Timer(sld)").GetComponent<Slider>();
+        text = GameObject.Find("Boss(txt)").GetComponent<Text>();
     }
 
     void FixedUpdate()
@@ -20,7 +20,7 @@ public class Timer : MonoBehaviour
         if (timerRunning == true)
         {
             if (enemyManager.clickable)
-            { time -= Time.deltaTime; slider.value = time; }
+            { time -= Time.deltaTime; text.text = time.ToString("F1") + "s."; }
             if (time <= 0)
             { enemyManager.BossFailed();
                 PauseTimer();
@@ -29,7 +29,7 @@ public class Timer : MonoBehaviour
 
     public void ClearTimer()
     {
-        slider.value = slider.maxValue;
+        text.text = $"To boss.";
     }
 
     public void PauseTimer()
@@ -40,8 +40,7 @@ public class Timer : MonoBehaviour
     public void StartTimer(int i)
     {
         time = i;
-        slider.value = time;
-        slider.maxValue = time;
+        text.text = $"{i}s.";
         timerRunning = true;
     }
 }

@@ -1,95 +1,99 @@
-﻿using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradeObject : MonoBehaviour
 {
+    #region Appointed through the inspector
+    [SerializeField] private Text upgradeDescriptionText;
+    [SerializeField] private Text lvlText;
+    [SerializeField] private Text priceText;
+
+    [SerializeField] private Image upgradeIco;
+    [SerializeField] private Image currencyIco;
+    [SerializeField] private Sprite moneyIco;
+    [SerializeField] private Sprite xpIco;
+    [SerializeField] private Sprite birthIco;
+    #endregion
+
+    #region Appointed on start
     private Clicker clicker;
     private UpgradesManager upgradesManager;
     private Message message;
     private SoundManager soundManager;
     private StagesManager stagesManager;
-    private TextManager textManager;
+    private InterfaceManager interfaceManager;
+    #endregion
 
-    public int index;
+    #region Variables
+    public int Index;
     private int currentLvl;
-
     private UpgradeTypes type;
     private double lvlPrice;
     private int maxLvl;
     private float stepCoef;
     private string upgradeName;
+    #endregion
 
-    [SerializeField] private Text upgradeDescriptionText;
-    [SerializeField] private Text lvlText;
-    [SerializeField] private Text priceText;
-
-    [SerializeField]private Image upgradeIco;
-    [SerializeField] private Image currencyIco;
-    [SerializeField] private Sprite moneyIco;
-    [SerializeField] private Sprite xpIco;
-    [SerializeField] private Sprite birthIco;
 
     private bool loaded;
-
     public void AddGraphics()
     {
-        if (loaded == false)
+        if (!loaded)
         {
             clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
             upgradesManager = GameObject.Find("ClickerManager").GetComponent<UpgradesManager>();
-            textManager = GameObject.Find("INTERFACE").GetComponent<TextManager>();
+            interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
             message = GameObject.Find("Message").GetComponent<Message>();
-            name = GameObject.Find("ClickerManager").GetComponent<UpgradesManager>().upgradesDataBase[index].upgradeName;
+            name = GameObject.Find("ClickerManager").GetComponent<UpgradesManager>().UpgradesDataBase[Index].upgradeName;
             stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
             soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
 
             loaded = true;
 
-            upgradeName = upgradesManager.upgradesDataBase[index].upgradeName;
-
+            upgradeName = upgradesManager.UpgradesDataBase[Index].upgradeName;
             name = upgradeName;
-            type = upgradesManager.upgradesDataBase[index].type;
-            upgradeIco.sprite = upgradesManager.upgradesDataBase[index].upgradeIco;
-            if (type == UpgradeTypes.Xp)
+            type = upgradesManager.UpgradesDataBase[Index].type;
+            switch (type)
             {
-                currencyIco.sprite = xpIco;
-            }
-            else if (type == UpgradeTypes.Birth)
-            {
-                currencyIco.sprite = birthIco;
-            }
-            else
-            {
-                currencyIco.sprite = moneyIco;
+                case UpgradeTypes.Xp:
+                    currencyIco.sprite = xpIco;
+                    break;
+                case UpgradeTypes.Birth:
+                    currencyIco.sprite = birthIco;
+                    break;
+                case UpgradeTypes.Money:
+                    currencyIco.sprite = moneyIco;
+                    break;
             }
 
-            stepCoef = upgradesManager.upgradesDataBase[index].stepCoef;
-            maxLvl = upgradesManager.upgradesDataBase[index].maxLvl;
-            if (upgradeName == "BetterStartUpgrade")
-            {
-                maxLvl = PlayerPrefs.GetInt("maxStage");
-            }
-            upgradeDescriptionText.text = upgradesManager.upgradesDataBase[index].upgradeDescription;
+            currentLvl = PlayerPrefs.GetInt(upgradeName);
+            maxLvl = upgradesManager.UpgradesDataBase[Index].maxLvl;
+            stepCoef = upgradesManager.UpgradesDataBase[Index].stepCoef;
+
+            upgradeIco.sprite = upgradesManager.UpgradesDataBase[Index].upgradeIco;
+            upgradeDescriptionText.text = upgradesManager.UpgradesDataBase[Index].upgradeDescription;
         }
 
-
-        currentLvl = PlayerPrefs.GetInt(upgradeName);
-        if (upgradeName == "BetterStartUpgrade")
+        switch (upgradeName)
         {
-            maxLvl = stagesManager.maxStage - 20;
+            case "BetterStartUpgrade":
+                maxLvl = stagesManager.maxStage - 20;
+                break;
+            case "BetterMineAfterRebirthUpgrade":
+                maxLvl = clicker.MaxMinerLvl - 10;
+                break;
         }
-        else if (upgradeName == "BetterMineAfterRebirthUpgrade")
+        switch (stepCoef)
         {
-            maxLvl = stagesManager.maxStage - 10;
-        }
-        if (stepCoef == 1)
-        { lvlPrice = upgradesManager.upgradesDataBase[index].lvlPrice + (currentLvl * upgradesManager.upgradesDataBase[index].lvlPrice); }
-        if (stepCoef == 0)
-        { lvlPrice = upgradesManager.upgradesDataBase[index].lvlPrice; }
-        else
-        {
-            lvlPrice = Utils.Progression(upgradesManager.upgradesDataBase[index].lvlPrice, stepCoef, currentLvl);
+            case 1:
+                lvlPrice = upgradesManager.UpgradesDataBase[Index].lvlPrice + (currentLvl * upgradesManager.UpgradesDataBase[Index].lvlPrice);
+                break;
+            case 0:
+                lvlPrice = upgradesManager.UpgradesDataBase[Index].lvlPrice;
+                break;
+            default:
+                lvlPrice = Utils.Progression(upgradesManager.UpgradesDataBase[Index].lvlPrice, stepCoef, currentLvl);
+                break;
         }
 
         if (currentLvl >= maxLvl)
@@ -113,89 +117,79 @@ public class UpgradeObject : MonoBehaviour
 
     public void Upgrade()
     {
-        if (type == UpgradeTypes.Xp)
+        switch (type)
         {
-            if (currentLvl >= maxLvl)
-            {
-                message.SendMessage($"Max level. Sometimes it is getting higher after birth", 3);
-                soundManager.PlayBruhSound();
-                return;
-            }
-            else if (clicker.Experience < lvlPrice)
-            {
-                message.SendMessage($"You need more XP", 2);
-                soundManager.PlayBruhSound();
-                return;
-            }
-            else
-            {
-                clicker.Experience -= (float)lvlPrice;
-                textManager.ExperienceTextUpdate();
-                soundManager.PlayApplauseSound();
-            }
-        }
-        else if (type == UpgradeTypes.Birth)
-        {
-            if (currentLvl >= maxLvl)
-            {
-                message.SendMessage($"Max level. Sometimes it is getting higher after birth", 3);
-                soundManager.PlayBruhSound();
-                return;
-            }
-            else if (clicker.Births < lvlPrice)
-            {
-                message.SendMessage($"You need more birth points", 2);
-                soundManager.PlayBruhSound();
-                return;
-            }
-            else
-            {
-                clicker.Births -= (int)lvlPrice;
-                textManager.ExperienceTextUpdate();
-                soundManager.PlayApplauseSound();
-            }
-        }
-        else
-        {
-            if (currentLvl >= maxLvl)
-            {
-                message.SendMessage($"Max level. Sometimes it is getting higher after birth", 3);
-                soundManager.PlayBruhSound();
-                return;
-            }
-            else if (clicker.Currency < lvlPrice)
-            {
-                message.SendMessage($"You need more money", 2);
-                soundManager.PlayBruhSound();
-                return;
-            }
-            else
-            {
-                clicker.Currency -= lvlPrice;
-                textManager.CurrencyTextUpdate();
-                soundManager.PlayBuySound();
-            }
-        }
-
-        if (name == "DoubleDamageUpgrade" || name == "DamageUpgrade")
-        {
-            clicker.CalculateDmg();
-        }
-        if (name == "CritUpgrade")
-        {
-            clicker.CalculateCrit();
+            case UpgradeTypes.Xp:
+                if (currentLvl >= maxLvl)
+                {
+                    message.SendMessage($"Max level. Sometimes it is getting higher after birth", 3);
+                    soundManager.PlayBruhSound();
+                    return;
+                }
+                else if (clicker.Experience < lvlPrice)
+                {
+                    message.SendMessage($"You need more XP", 2);
+                    soundManager.PlayBruhSound();
+                    return;
+                }
+                else
+                {
+                    clicker.Experience -= (float)lvlPrice;
+                    interfaceManager.ExperienceTextUpdate();
+                    soundManager.PlayApplauseSound();
+                }
+                break;
+            case UpgradeTypes.Birth:
+                if (currentLvl >= maxLvl)
+                {
+                    message.SendMessage($"Max level. Sometimes it is getting higher after birth", 3);
+                    soundManager.PlayBruhSound();
+                    return;
+                }
+                else if (clicker.Births < lvlPrice)
+                {
+                    message.SendMessage($"You need more birth points", 2);
+                    soundManager.PlayBruhSound();
+                    return;
+                }
+                else
+                {
+                    clicker.Births -= (int)lvlPrice;
+                    interfaceManager.ExperienceTextUpdate();
+                    soundManager.PlayApplauseSound();
+                }
+                break;
+            case UpgradeTypes.Money:
+                if (currentLvl >= maxLvl)
+                {
+                    message.SendMessage($"Max level. Sometimes it is getting higher after birth", 3);
+                    soundManager.PlayBruhSound();
+                    return;
+                }
+                else if (clicker.Currency < lvlPrice)
+                {
+                    message.SendMessage($"You need more money", 2);
+                    soundManager.PlayBruhSound();
+                    return;
+                }
+                else
+                {
+                    clicker.Currency -= lvlPrice;
+                    interfaceManager.CurrencyTextUpdate();
+                    soundManager.PlayBuySound();
+                }
+                break;
         }
 
         currentLvl++;
         PlayerPrefs.SetInt(upgradeName, currentLvl);
         AddGraphics();
 
-        textManager.UpdateAllText();
-        Use();
+        interfaceManager.UpdateAllText();
+        upgradesManager.Invoke(upgradeName, 0f);
         clicker.Save();
+        clicker.CalculateDamages();
     }
-    public void Use()
-    { upgradesManager.Invoke(upgradeName, 0f); }
 
     public void ResetLvl()
     {

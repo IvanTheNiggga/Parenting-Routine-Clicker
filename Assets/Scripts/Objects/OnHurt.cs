@@ -3,7 +3,8 @@
 public class OnHurt : MonoBehaviour
 {
     #region Settings
-    private const float MinPitch = 0.9f;
+    public float hitVolume = 1f;
+    private const float MinPitch = 0.95f;
     private const float MaxPitch = 1.15f;
 
     private const int KnockbackAmount = 5;
@@ -39,11 +40,11 @@ public class OnHurt : MonoBehaviour
     }
     #endregion
 
-    public void Kicked()
+    public void Kicked(bool onlySound)
     {
         hitSource.pitch = Random.Range(MinPitch, MaxPitch);
-        hitSource.PlayOneShot(hit, 3f);
-
+        hitSource.PlayOneShot(hit, hitVolume);
+        if (onlySound) return;
         objectMovement.MoveTo(
             new Vector2(transform.localPosition.x + Random.Range(-KnockbackAmount, KnockbackAmount), transform.localPosition.y + Random.Range(-KnockbackAmount, KnockbackAmount)), 
             1, 

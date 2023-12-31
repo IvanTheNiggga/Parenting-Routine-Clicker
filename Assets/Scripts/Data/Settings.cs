@@ -5,23 +5,25 @@ using UnityEngine.UI;
 
 public class Settings : MonoBehaviour
 {
-    public AudioMixerGroup mixer;
-    public Dropdown fpsCapOption;
-    public Dropdown attackOption;
-    public Slider volumeSlider;
-    public Text resetDataText;
+    #region Appointed through the inspector
+    [SerializeField] private AudioMixerGroup mixer;
+    [SerializeField] private Dropdown fpsCapOption;
+    [SerializeField] private Dropdown attackOption;
+    [SerializeField] private Slider volumeSlider;
+    [SerializeField] private Text resetDataText;
 
-    private Panel panel;
-    private Clicker clicker;
+    [SerializeField] private Panel panel;
+    [SerializeField] private Clicker clicker;
+    #endregion
 
+    #region Variables
     private int confirmInt;
     private float volume;
+    #endregion
 
-    void Start()
+    private void Start()
     {
         confirmInt = 0;
-        panel = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
-        clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
         LoadOptions();
     }
 
@@ -60,16 +62,6 @@ public class Settings : MonoBehaviour
     {
         resetDataText.text = "Delete data";
         confirmInt = 0;
-    }
-
-    public void ShowElement(GameObject g)
-    {
-        g.SetActive(true);
-    }
-
-    public void HideElement(GameObject g)
-    {
-        g.SetActive(false);
     }
 
     public void SetDefaultCap()

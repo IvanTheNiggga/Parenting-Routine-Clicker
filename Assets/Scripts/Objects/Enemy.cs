@@ -3,44 +3,42 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
+    #region Appointed through the inspector
+    public AudioClip spawnAudioClip;
+    public GameObject DmgPart_Prefab;
+    #endregion
+
     #region Local
     private Panel clickable;
     private Clicker clicker;
     private UpgradesManager upgradesManager;
     private EnemyManager enemyManager;
-    private OnHurt sprSwap;
+    private OnHurt onHurt;
     private Timer timer;
 
-    public GameObject DmgPart_Prefab;
-    public GameObject ClickParent;
-    public Text text;
-    public Slider hpSlider;
-    public Unit unit1;
-    public Unit unit2;
+    private GameObject ClickParent;
+    private Text text;
+    private Slider hpSlider;
+    private Unit unit1;
+    private Unit unit2;
     private int addCrit;
+    private double startHp;
 
     private float cooldown;
     #endregion
 
     #region Variables
-    public double startHp;
     public double HP;
-
-    private bool isBoss;
+    public bool isBoss;
     #endregion
 
     #region Init
     private void Start()
     {
-        isBoss = name == "BossObj";
-        startHp = HP;
-
+        AudioSource enemySpawnSource = GameObject.Find("EnemySpawnSource").GetComponent<AudioSource>();
+        enemySpawnSource.pitch = Random.Range(0.9f, 1.15f);
+        enemySpawnSource.PlayOneShot(spawnAudioClip);
         InitializeComponents();
-
-        if (isBoss)
-            Invoke(nameof(BossAbleToAttack), 1f);
-        else
-            Invoke(nameof(AbleToAttack), 0.4f);
     }
 
     private void InitializeComponents()
@@ -51,10 +49,22 @@ public class Enemy : MonoBehaviour
         timer = GameObject.Find("Timer").GetComponent<Timer>();
         addCrit = upgradesManager.critDamageLvl;
 
-        if(GameObject.Find("Clickable(cdr)") != null)
+        if (isBoss)
+        {
+            HP = 400 * enemyManager.EnemyHPMultiplier;
+            Invoke(nameof(BossAbleToAttack), 1f);
+        }
+        else
+        {
+            HP = 15 * enemyManager.EnemyHPMultiplier;
+            Invoke(nameof(AbleToAttack), 0.4f);
+        }
+        startHp = HP;
+
+        if (GameObject.Find("Clickable(cdr)") != null)
         {
             clickable = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
-            clickable.EnemyGetComponent(name);
+            clickable.EnemyGetComponent();
         }
 
         unit1 = GameObject.Find("Unit1(obj)").GetComponent<Unit>();
@@ -67,7 +77,7 @@ public class Enemy : MonoBehaviour
         hpSlider.maxValue = 1;
         hpSlider.value = (float)(HP / startHp);
 
-        sprSwap = GetComponent<OnHurt>();
+        onHurt = GetComponent<OnHurt>();
         ClickParent = GameObject.Find("Clickable(cdr)");
     }
 
@@ -103,23 +113,24 @@ public class Enemy : MonoBehaviour
         if (clickable == null)
         {
             clickable = GameObject.Find("Clickable(cdr)").GetComponent<Panel>();
-            clickable.EnemyGetComponent(name);
+            clickable.EnemyGetComponent();
         }
 
         clicker.CurrDealedDamage = damage;
         HP -= damage;
         hpSlider.value = (float)(HP / startHp);
 
-        if (HP <= damage) HandleDeath();
-        else
-        {
-            sprSwap.Kicked();
-            DamagePart part = Instantiate(DmgPart_Prefab, ClickParent.transform).GetComponent<DamagePart>();
+        DamagePart part = Instantiate(DmgPart_Prefab, ClickParent.transform).GetComponent<DamagePart>();
+        part.big = false;
+        Vector2 v = transform.position;
+        part.transform.position = new Vector2(v.x + 25, v.y);
 
-            part.big = false;
-            Vector2 v = transform.position;
-            part.transform.position = new Vector2(v.x + 25, v.y);
+        if (HP <= damage)
+        {
+            onHurt.Kicked(true);
+            HandleDeath();
         }
+        else onHurt.Kicked(false);
 
         text.text = NumFormat.FormatNumF1(HP) + " / " + NumFormat.FormatNumF1(startHp);
         CheckHP();
@@ -135,7 +146,7 @@ public class Enemy : MonoBehaviour
     private void FixedUpdate()=> cooldown += Time.deltaTime;
     public void Kick()
     {
-        if (cooldown < 0.02) return;
+        if (cooldown < 0.03) return;
         cooldown = 0;
         double damage;
         if (Random.Range(0, 100 / clicker.CritChance) <= 0) damage = clicker.Damage * (clicker.CritMultiplier + addCrit);
@@ -153,19 +164,22 @@ public class Enemy : MonoBehaviour
     private void HandleDamageDealt(double damage)
     {
         clicker.CurrDealedDamage = damage;
+
+        if (HP <= damage)
+        {
+            clicker.CurrDealedDamage = HP;
+            onHurt.Kicked(true);
+            HandleDeath(); 
+        }
+        else onHurt.Kicked(false);
+
         HP -= damage;
         hpSlider.value = (float)(HP / startHp);
 
-        if (HP <= damage) HandleDeath();
-        else
-        {
-            sprSwap.Kicked();
-            DamagePart part = Instantiate(DmgPart_Prefab, ClickParent.transform).GetComponent<DamagePart>();
-
-            part.big = clicker.Damage < damage;
-            Vector2 v = transform.position;
-            part.transform.position = new Vector2(v.x + 25, v.y);
-        }
+        DamagePart part = Instantiate(DmgPart_Prefab, ClickParent.transform).GetComponent<DamagePart>();
+        part.big = clicker.Damage < damage;
+        Vector2 v = transform.position;
+        part.transform.position = new Vector2(v.x + 25, v.y);
     }
 
     private void HandleDeath()

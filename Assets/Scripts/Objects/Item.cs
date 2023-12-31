@@ -4,13 +4,14 @@ using UnityEngine.UI;
 
 public class Item : MonoBehaviour, IPointerClickHandler
 {
-    #region Local
+    #region Appointed on start
     private Clicker clicker;
     private RewardManager giveReward;
     private Inventory inventory;
     private StagesManager stagesManager;
     private SoundManager soundManager;
     private InterfaceManager interfaceManager;
+
     public Text text;
     public Image ico;
 
@@ -31,11 +32,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public double currencyPrice;
     public float xpPrice;
     public string useMethodName;
-    public int count;
+    #endregion
 
+    #region Variables
+    public int count;
     private int taps;
     public bool clickable;
-
     bool Loaded;
     #endregion
 
@@ -68,12 +70,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
                 }
                 else if (interfaceManager.setCountOpened)
                 {
-                    if (interfaceManager.typeOfAction == "Sell")
+                    if (interfaceManager.CurrentItemEventName == "Sell")
                     {
                         inventory.SelectedItem = gameObject;
                         interfaceManager.OpenItemSellPanel();
                     }
-                    if (interfaceManager.typeOfAction == "Use")
+                    if (interfaceManager.CurrentItemEventName == "Use")
                     {
                         if(useMethodName != "")
                         {

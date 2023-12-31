@@ -5,10 +5,12 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    #region Local
-    public List<Item> items = new();
-    public List<Item> investItems = new();
+    #region Appointed through the inspector
+    [SerializeField] private GameObject DroppedItem_Prefab;
+    [SerializeField] private GameObject Item_Prefab;
+    #endregion
 
+    #region Appointed on start
     private Clicker clicker;
     private RewardManager giveReward;
     private InterfaceManager interfaceManager;
@@ -19,13 +21,9 @@ public class Inventory : MonoBehaviour
     private ContentSwipe InventoryGridPanel_CSwipe;
     private ContentSwipe SaleGridPanel_CSwipe;
 
-    public GameObject DroppedItem_Prefab;
-    public GameObject Item_Prefab;
-
     private GameObject CurrencyParent;
     private GameObject InventoryGrid;
     private GameObject SaleGrid;
-    public GameObject SelectedItem;
 
     private InputField Count_Input;
 
@@ -33,7 +31,12 @@ public class Inventory : MonoBehaviour
     private Text Experience_Text;
     private Text SaleForCurrency_Text;
     private Text SaleForXp_Text;
+    #endregion
 
+    #region Variables
+    public List<Item> items = new();
+    public List<Item> investItems = new();
+    public GameObject SelectedItem;
     public bool ableToInvest;
     #endregion
 

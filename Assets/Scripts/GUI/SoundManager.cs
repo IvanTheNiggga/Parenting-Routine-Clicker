@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 
 [System.Serializable]
 public class SoundManager : MonoBehaviour
 {
     public AudioSource interfaceSource;
-    public AudioClip bruh;
+    public AudioClip[] Warn;
     public AudioClip buy;
     public AudioClip xpUpgrade;
     public AudioClip openinv;
@@ -12,7 +13,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip click;
     public void PlayBruhSound()
     {
-        interfaceSource.PlayOneShot(bruh, 1);
+        interfaceSource.PlayOneShot(Warn[UnityEngine.Random.Range(0, Warn.Length)], 1);
     }
     public void PlayBuySound()
     {

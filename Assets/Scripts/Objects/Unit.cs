@@ -3,31 +3,30 @@ using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
-    public Clicker clicker;
-    private Enemy enemy;
-    public EnemyManager enemyManager;
-    public UnitManager unitManager;
-    public ObjectMovement objectMovement;
+    #region Appointed through the inspector
+    public int id;
+    [SerializeField] private Clicker clicker;
+    [SerializeField] private Enemy enemy;
+    [SerializeField] private EnemyManager enemyManager;
+    [SerializeField] private UnitManager unitManager;
+    [SerializeField] private ObjectMovement objectMovement;
+    [SerializeField] private SpriteRenderer thisSprite;
+    [SerializeField] private Image UnitInfoImage;
+    public Text UnitInfoText;
+    #endregion
 
+    #region Variables
+    public int CurrentLevel;
+    public int unfairLvl;
     private Sprite idleSprite;
     private Sprite attackSprite;
-    public SpriteRenderer thisSprite;
-
-    private Image imageUnit1;
-    private Image imageUnit2;
-
-    public Text text1;
-    public Text text2;
-
-    public int id;
-    public int CurrentLevel;
     public double DamageCoef;
     public string nameobj;
-    public int unfairLvl;
-
     private bool loaded;
     private bool able;
+    #endregion
 
+    #region Unity Lifecycle and Initialization
     private void Start()
     {
         id = PlayerPrefs.GetInt(name + "ID");
@@ -43,83 +42,6 @@ public class Unit : MonoBehaviour
                 break;
         }
     }
-
-    public void UpdateUnitData()
-    {
-        switch (name)
-        {
-            case "Unit1(obj)":
-                if(!PlayerPrefs.HasKey("Unit1ID")) return;
-                break;
-            case "Unit2(obj)":
-                if (!PlayerPrefs.HasKey("Unit2ID")) return;
-                break;
-        }
-
-        unitManager = GameObject.Find("ClickerManager").GetComponent<UnitManager>();
-        text1 = GameObject.Find("Unit1(txt)").GetComponent<Text>();
-        text2 = GameObject.Find("Unit2(txt)").GetComponent<Text>();
-        imageUnit1 = GameObject.Find("Unit1(img)").GetComponent<Image>();
-        imageUnit2 = GameObject.Find("Unit2(img)").GetComponent<Image>();
-        CurrentLevel = PlayerPrefs.GetInt(name + "CL");
-
-        if (id != -1)
-        {
-            PlayerPrefs.SetInt($"has_{id}", id);
-            PlayerPrefs.SetInt(name + "ID", id);
-            idleSprite = unitManager.unitsDataBase[id].Idle;
-            attackSprite = unitManager.unitsDataBase[id].Attack;
-            thisSprite.sprite = idleSprite;
-            double d = CurrentLevel > 0 ? (unitManager.unitsDataBase[id].DamageCoef * (0.2 * CurrentLevel)) : 0;
-            DamageCoef = unitManager.unitsDataBase[id].DamageCoef + d;
-            nameobj = unitManager.unitsDataBase[id].name;
-            switch (name)
-            {
-                case "Unit1(obj)":
-                    imageUnit1.sprite = unitManager.unitsDataBase[id].Preview;
-                    text1.text = $"{nameobj} (Lv. {CurrentLevel})\n\nx{DamageCoef} from your damage.";
-                break;
-                case "Unit2(obj)":
-                    imageUnit2.sprite = unitManager.unitsDataBase[id].Preview; 
-                    text2.text = $"{nameobj} (Lv. {CurrentLevel})\n\nx{DamageCoef} from your damage.";
-                break;
-            }
-            if (loaded)
-            {
-                unitManager.CheckUnfair();
-            }
-            loaded = true;
-        }
-        else
-        {
-            switch (name)
-            {
-                case "Unit1(obj)":
-                    imageUnit1.sprite = unitManager.None;
-                    text1.text = "";
-                    break;
-                case "Unit2(obj)":
-                    imageUnit2.sprite = unitManager.None;
-                    text2.text = "";
-                    break;
-            }
-            PlayerPrefs.SetInt(name + "ID", id);
-            idleSprite = null;
-            attackSprite = null;
-            thisSprite.sprite = null;
-            DamageCoef = 0;
-        }
-    }
-
-    
-
-    public void Upgrade()
-    {
-        CurrentLevel++;
-        PlayerPrefs.SetInt(name + "CL", CurrentLevel);
-        UpdateUnitData();
-    }
-
     public void GetEnemyComponent(Enemy enemyObj)
     {
         if (enemyObj != null)
@@ -133,7 +55,58 @@ public class Unit : MonoBehaviour
             able = false;
         }
     }
+    #endregion
 
+    #region Update/Upgrade
+    public void UpdateUnitData()
+    {
+        CurrentLevel = PlayerPrefs.GetInt(name + "CL");
+
+        if (id != -1)
+        {
+            PlayerPrefs.SetInt($"has_{id}", id);
+            PlayerPrefs.SetInt(name + "ID", id);
+
+            idleSprite = unitManager.unitsDataBase[id].Idle;
+            attackSprite = unitManager.unitsDataBase[id].Attack;
+            thisSprite.sprite = idleSprite;
+
+            double d = CurrentLevel > 0 ? (unitManager.unitsDataBase[id].DamageCoef * (0.2 * CurrentLevel)) : 0;
+            DamageCoef = unitManager.unitsDataBase[id].DamageCoef + d;
+
+            nameobj = unitManager.unitsDataBase[id].name;
+
+            UnitInfoImage.sprite = unitManager.unitsDataBase[id].Preview;
+            UnitInfoText.text = $"{nameobj} (Lv. {CurrentLevel})\n\nx{DamageCoef} from your damage.";
+
+            if (loaded)
+            {
+                unitManager.CheckUnfair();
+            }
+            loaded = true;
+        }
+        else
+        {
+            UnitInfoImage.sprite = unitManager.None;
+            UnitInfoText.text = "";
+
+            PlayerPrefs.SetInt(name + "ID", id);
+            idleSprite = null;
+            attackSprite = null;
+            thisSprite.sprite = null;
+            DamageCoef = 0;
+        }
+    }
+
+    public void Upgrade()
+    {
+        CurrentLevel++;
+        PlayerPrefs.SetInt(name + "CL", CurrentLevel);
+        UpdateUnitData();
+    }
+    #endregion
+
+    #region Combat
     private void MoveToEnemy()
     {
         if (able == true && id >= 0 && enemyManager.clickable == true)
@@ -171,4 +144,5 @@ public class Unit : MonoBehaviour
             }
         }
     }
+    #endregion
 }

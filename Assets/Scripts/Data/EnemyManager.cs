@@ -8,7 +8,7 @@ public class EnemyManager : MonoBehaviour
     #endregion
 
     #region Local
-    public GameObject Boss;
+    public GameObject[] BossList;
     public GameObject[] EnemyList;
     public GameObject Panel;
     public GameObject MoneyItem;
@@ -39,9 +39,6 @@ public class EnemyManager : MonoBehaviour
     private Clicker clicker;
     private Text text;
 
-    public AudioClip enemySpawnSound;
-    private AudioSource enemySpawnSource;
-
     public bool clickable;
     public bool able;
     #endregion
@@ -71,7 +68,6 @@ public class EnemyManager : MonoBehaviour
 
         hpSlider = GameObject.Find("HP(sld)").GetComponent<Slider>();
         text = GameObject.Find("HP(txt)").GetComponent<Text>();
-        enemySpawnSource = GameObject.Find("EnemySpawnSource").GetComponent<AudioSource>();
     }
     #endregion
 
@@ -83,10 +79,6 @@ public class EnemyManager : MonoBehaviour
 
         if (EnemyParent.transform.childCount < 3)
         {
-            HideEnemyInf();
-
-            enemySpawnSource.pitch = Random.Range(0.9f, 1.15f);
-            enemySpawnSource.PlayOneShot(enemySpawnSound);
 
             int rnd = Random.Range(0, EnemyList.Length);
             Enemy enemyObj = Instantiate(EnemyList[rnd], EnemyParent.transform).GetComponent<Enemy>();
@@ -97,25 +89,20 @@ public class EnemyManager : MonoBehaviour
             int xStart = Random.Range(0, 2) == 1 ? 200 : -200;
             enemyObj.transform.localPosition = new Vector2(xStart, 35);
             enemy_OM.MoveTo(new Vector2(0, 35), 0.2f, 1, false);
-
-            enemyObj.gameObject.name = "EnemyObj";
-            enemyObj.HP *= EnemyHPMultiplier;
         }
     }
 
     public void EnemyDown()
     {
-        HideEnemyInf();
-        Destroy(GameObject.Find("EnemyObj"));
-        MoneyItem mi = Instantiate(MoneyItem, DropParent.transform).GetComponent<MoneyItem>();
-        mi.objectName = "Enemy";
+        Destroy(FindObjectOfType<Enemy>().gameObject);
+        Instantiate(MoneyItem, DropParent.transform);
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
         giveReward.GetEnemyLoot();
     }
 
     public void RespawnEnemy()
     {
-        Destroy(GameObject.Find("EnemyObj"));
+        Destroy(FindObjectOfType<Enemy>().gameObject);
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
     }
     #endregion
@@ -124,11 +111,10 @@ public class EnemyManager : MonoBehaviour
     public void BossSpawnInv()
     {
         if (interfaceManager.minerOpened) interfaceManager.SwitchMiner(0);
-        if (GameObject.Find("BossObj") == null)
+        if (FindObjectOfType<Enemy>() == null)
         {
-            HideEnemyInf();
             CancelInvoke();
-            Destroy(GameObject.Find("EnemyObj"));
+            Destroy(FindObjectOfType<Enemy>().gameObject);
             interfaceManager.SwitchUpgradesMenu(0);
             Invoke(nameof(BossSpawn), 1f);
         }
@@ -137,11 +123,9 @@ public class EnemyManager : MonoBehaviour
     public void BossSpawn()
     {
         interfaceManager.SwitchBattleInterface(1);
-        HideEnemyInf();
 
-        enemySpawnSource.pitch = Random.Range(0.9f, 1.15f);
-        enemySpawnSource.PlayOneShot(enemySpawnSound);
-
+        int rnd = Random.Range(0, BossList.Length);
+        GameObject Boss = BossList[rnd];
         Enemy enemyObj = Instantiate(Boss, EnemyParent.transform).GetComponent<Enemy>();
         enemyObj.transform.localPosition = Boss.transform.localPosition;
 
@@ -151,29 +135,22 @@ public class EnemyManager : MonoBehaviour
         int xStart = Random.Range(0, 2) == 1 ? 250 : -250;
         enemyObj.transform.localPosition = new Vector2(xStart, 35);
         enemy_OM.MoveTo(new Vector2(0, 35), 0.2f, 1, false);
-
-        enemyObj.gameObject.name = "BossObj";
-        enemyObj.HP = 400 * EnemyHPMultiplier;
+        enemyObj.isBoss = true;
     }
 
     public void BossDown()
     {
-        HideEnemyInf();
-        Destroy(GameObject.Find("BossObj"));
+        Destroy(FindObjectOfType<Enemy>().gameObject);
         stagesManager.NextStage();
         clicker.Save();
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
-        MoneyItem mi = Instantiate(MoneyItem, DropParent.transform).GetComponent<MoneyItem>();
-        mi.count = 5;
-        mi.objectName = "Boss";
         giveReward.GetBossLoot(20);
     }
 
     public void BossFailed()
     {
-        Destroy(GameObject.Find("BossObj"));
+        Destroy(FindObjectOfType<Enemy>().gameObject);
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
-        HideEnemyInf();
     }
     #endregion
     public void HideEnemyInf()
@@ -182,5 +159,13 @@ public class EnemyManager : MonoBehaviour
         hpSlider.maxValue = 1;
         text.text = ("");
     }
-
+    public void DestroyLoot()
+    {
+        int childCount = DropParent.transform.childCount;
+        for (int i = childCount - 1; i >= 0; i--)
+        {
+            Transform child = DropParent.transform.GetChild(i);
+            Destroy(child.gameObject);
+        }
+    }
 }

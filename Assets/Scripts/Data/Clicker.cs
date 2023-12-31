@@ -8,18 +8,15 @@ public class Clicker : MonoBehaviour
 {
     #region Local
     private Miner miner;
-    private RewardManager rewardManager;
     private EnemyManager enemyManager;
     private Inventory inventory;
     private UnitManager unitManager;
     private Settings optionsMenu;
     private StagesManager stagesManager;
     private InterfaceManager interfaceManager;
-    private TextManager tm;
     private UpgradesManager upgradesManager;
 
     public GameObject timerObject;
-    private GameObject upgradesGrid;
     #endregion
 
     #region Variables
@@ -97,21 +94,17 @@ public class Clicker : MonoBehaviour
     }
     #endregion
 
-    #region Per-Frame Methods
+    #region Unity Lifecycle
     private void Start()
     {
         miner = GameObject.Find("Miner").GetComponent<Miner>();
-        rewardManager = GetComponent<RewardManager>();
         enemyManager = GetComponent<EnemyManager>();
         inventory = GetComponent<Inventory>();
         unitManager = GetComponent<UnitManager>();
         optionsMenu = GameObject.Find("Settings").GetComponent<Settings>();
         stagesManager = GetComponent<StagesManager>();
         interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
-        tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
         upgradesManager = GetComponent<UpgradesManager>();
-
-        upgradesGrid = GameObject.Find("UpgradesGrid");
 
         if (PlayerPrefs.HasKey("Currency"))
         {
@@ -137,6 +130,7 @@ public class Clicker : MonoBehaviour
 
         stagesManager.CurrentStage = PlayerPrefs.GetInt("CurrentStage");
         stagesManager.StageIndex = PlayerPrefs.GetInt("StageIndex");
+        stagesManager.BGIndex = PlayerPrefs.GetInt("BGIndex");
         stagesManager.maxStage = PlayerPrefs.GetInt("maxStage");
         Currency = LoadBig("Currency");
         Experience = PlayerPrefs.GetFloat("Experience");
@@ -180,6 +174,7 @@ public class Clicker : MonoBehaviour
         PlayerPrefs.SetInt("CritMultiplier", CritMultiplier);
         PlayerPrefs.SetInt("CurrentStage", stagesManager.CurrentStage);
         PlayerPrefs.SetInt("StageIndex", stagesManager.StageIndex);
+        PlayerPrefs.SetInt("BGIndex", stagesManager.BGIndex);
         PlayerPrefs.SetInt("maxStage", stagesManager.maxStage);
         SaveBig("Currency", Currency);
         PlayerPrefs.SetFloat("Experience", Experience);
@@ -242,15 +237,10 @@ public class Clicker : MonoBehaviour
 
         stagesManager.CurrentStage = 1 + upgradesManager.betterStartLvl;
         Currency = 0;
-        int childCount = enemyManager.DropParent.transform.childCount;
-        for (int i = childCount - 1; i >= 0; i--)
-        {
-            Transform child = enemyManager.DropParent.transform.GetChild(i);
-            Destroy(child.gameObject);
-        }
 
         miner.RebirthMiner();
 
+        enemyManager.DestroyLoot();
         enemyManager.EnemyHPMultiplier = 1;
 
         upgradesManager.DamageLvl = 0;
@@ -260,16 +250,15 @@ public class Clicker : MonoBehaviour
 
         stagesManager.LoadStageData(true);
         interfaceManager.UpdateUpgrades();
-        tm.UpdateAllText();
+        interfaceManager.UpdateAllText();
     }
 
     public void Birth()
     {
-        int births = Births;
+        Births += 1;
 
         RebirthData();
 
-        Births = births + 1;
         if (Random.Range(0, 100f / (upgradesManager.moreBirthChanceLvl * 2.5f)) < 1f)
         {
             unitManager.AddRandomUnit();

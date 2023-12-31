@@ -3,15 +3,18 @@ using UnityEngine.UI;
 
 public class UnitSlot : MonoBehaviour
 {
-    private UnitManager unitManager;
-    private InterfaceManager interfaceManager;
+    #region Appointed through the inspector
+    public int id;
     public Image image;
     public Text text;
-    
-    public int id;
+    #endregion
 
-    bool loaded;
+    #region Appointed on start
+    private UnitManager unitManager;
+    private InterfaceManager interfaceManager;
+    #endregion
 
+    private bool loaded;
     public void AddGraphics()
     {
         if (!loaded)

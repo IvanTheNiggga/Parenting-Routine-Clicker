@@ -12,7 +12,6 @@ public class MoneyItem : MonoBehaviour
     public Text countText;
     
     public float timeStart = 0;
-    public string objectName;
     public double reward;
     public int count;
 

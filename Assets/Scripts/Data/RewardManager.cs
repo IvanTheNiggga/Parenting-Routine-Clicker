@@ -2,20 +2,21 @@
 
 public class RewardManager : MonoBehaviour
 {
-    #region Local
+    #region Appointed on start
     private Clicker clicker;
     private Inventory inventory;
     private StagesManager stagesManager;
-    private TextManager tm;
+    private InterfaceManager interfaceManager;
+    private UpgradesManager upgradesManager;
+    #endregion
 
+    #region Variables
     private int toyscount;
     private int clothscount;
     private int randomitemcount;
     private int garbagecount;
 
     private double killReward;
-    private UpgradesManager upgradesManager;
-
     public double KillReward
     {
         get { return killReward; }
@@ -40,7 +41,7 @@ public class RewardManager : MonoBehaviour
         upgradesManager = GetComponent<UpgradesManager>();
         stagesManager = GetComponent<StagesManager>();
         inventory = GetComponent<Inventory>();
-        tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
+        interfaceManager = FindObjectOfType<InterfaceManager>().GetComponent<InterfaceManager>();
 
         GetItemsInfo();
     }
@@ -72,7 +73,7 @@ public class RewardManager : MonoBehaviour
     }
     #endregion
 
-    #region GET CURRENCY
+    #region Get currency
     public void GiveCurrency(double count)
     {
         double reward = count * (upgradesManager.doubleCurrencyLvl + 1);
@@ -97,14 +98,14 @@ public class RewardManager : MonoBehaviour
     public void GiveMeReward(int count)
     {
         GiveCurrency(KillReward * count);
-        tm.CurrencyTextUpdate();
-        tm.ExperienceTextUpdate();
+        interfaceManager.CurrencyTextUpdate();
+        interfaceManager.ExperienceTextUpdate();
     }
     public void GiveMeReward(int count, double KillReward)
     {
         GiveCurrency(KillReward * count);
-        tm.CurrencyTextUpdate();
-        tm.ExperienceTextUpdate();
+        interfaceManager.CurrencyTextUpdate();
+        interfaceManager.ExperienceTextUpdate();
     }
 
     public void GetBossLoot(int count)
@@ -129,7 +130,7 @@ public class RewardManager : MonoBehaviour
     }
     #endregion
 
-    #region GET/SPAWN ITEMS
+    #region Get items
     public void GetRandomItem(int count)
     {
         if (Random.Range(0, 100f / (upgradesManager.betterPacksLvl + 5f)) < 1f)

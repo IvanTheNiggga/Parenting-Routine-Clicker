@@ -3,49 +3,54 @@ using UnityEngine.UI;
 
 public class InterfaceManager : MonoBehaviour
 {
-    #region Local
-    public Sprite Battle_Sprite;
-    public Sprite miner_Sprite;
-    public GameObject Upgrade_Prefab;
+    #region Аppointed through the inspector
+    [SerializeField] private Sprite MainGameSprite;
+    [SerializeField] private Sprite MinerSprite;
+    [SerializeField] private GameObject Upgrade_Prefab;
 
+    [SerializeField] private Text currencyText;
+    [SerializeField] private Text experienceText;
+    [SerializeField] private Text stageText;
+    #endregion
+
+    #region Аppointed on start
+    private Inventory inventory;
     private Clicker clicker;
     private EnemyManager enemyManager;
-    private Inventory inventory;
     private Message message;
     private UnitManager unitManager;
-    private SoundManager soundManager;
     private StagesManager stagesManager;
     private UpgradesManager upgradesManager;
     private Miner miner;
 
-    private ContentSwipe InventorySwipe;
-
-    private Image ItemInfo_Image;
-    private Image Location_Image;
-    private Image SetCount_Image;
-
     private GameObject InventoryGrid;
-    private GameObject UpgradesGrid;
-    private GameObject SellForCurrency;
-    private GameObject SellForXp;
-    private GameObject UseAgree;
-    private GameObject ClickPanel;
-    private GameObject ItemOptionsUse;
+    private GameObject UpgradesShopGrid;
+    private GameObject SellItemForCurrency;
+    private GameObject SellItemForXp;
+    private GameObject UseItem;
+    private GameObject ItemInfoUse;
+    private GameObject ClickablePanel;
 
-    private ObjectMovement AgreeWindow_OM;
-    private ObjectMovement EnemyParent_OM;
     private ObjectMovement InventoryWindow_OM;
-    private ObjectMovement ItemInfoWindow_OM;
-    private ObjectMovement SaleWindow_OM;
     private ObjectMovement MainInterface_OM;
+    private ObjectMovement ConfrimationWindow_OM;
+    private ObjectMovement EnemyParent_OM;
+    private ObjectMovement SettingsWindow_OM;
+    private ObjectMovement ItemInfoWindow_OM;
+    private ObjectMovement MultiSellWindow_OM;
     private ObjectMovement UnitInterface_OM;
     private ObjectMovement UnitSelectInterface_OM;
-    private ObjectMovement UpgradeInterface_OM;
-    private ObjectMovement SettingsWindow_OM;
+    private ObjectMovement UpgradesShopInterface_OM;
     private ObjectMovement SetCountWindow_OM;
     private ObjectMovement MinerInterface_OM;
 
-    private InputField Count_Input;
+    private ContentSwipe InventoryContent;
+
+    private InputField ItemActionInputField;
+
+    private Image ItemInfoImage;
+    private Image Location_Image;
+    private Image SetCount_Image;
 
     private Text SellForCurrencyPrice_Text;
     private Text SellForXpPrice_Text;
@@ -54,11 +59,13 @@ public class InterfaceManager : MonoBehaviour
     private Text ItemInfoDescription_Text;
     private Text SaleForCurrencyPrice_Text;
     private Text SaleForXpPrice_Text;
-    private Text UnitLocked1_Text;
-    private Text UnitLocked2_Text;
+    private Text Unit1LockedText;
+    private Text Unit2LockedText;
+    #endregion
 
-    public string typeOfAction;
-    public string typeOfButtonAction;
+    #region Variables
+    public string CurrentItemEventName;
+    public string CurrentEventName;
     #endregion
 
     #region Init
@@ -66,38 +73,39 @@ public class InterfaceManager : MonoBehaviour
     {
         InitializeComponents();
         AddUpgrades();
+
+        AdjustTopInsideSafeArea();
+        Invoke(nameof(UpdateAllText), 0.5f);
     }
 
     private void InitializeComponents()
     {
-        GameObject cm = GameObject.Find("ClickerManager");
-        clicker = cm.GetComponent<Clicker>();
-        enemyManager = cm.GetComponent<EnemyManager>();
-        inventory = cm.GetComponent<Inventory>();
-        upgradesManager = cm.GetComponent<UpgradesManager>();
-        unitManager = cm.GetComponent<UnitManager>();
-        stagesManager = cm.GetComponent<StagesManager>();
-        message = GameObject.Find("Message").GetComponent<Message>();
-        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
-        miner = GameObject.Find("Miner").GetComponent<Miner>();
+        clicker = FindObjectOfType<Clicker>().GetComponent<Clicker>();
+        enemyManager = FindObjectOfType<EnemyManager>().GetComponent<EnemyManager>();
+        inventory = FindObjectOfType<Inventory>().GetComponent<Inventory>();
+        upgradesManager = FindObjectOfType<UpgradesManager>().GetComponent<UpgradesManager>();
+        unitManager = FindObjectOfType<UnitManager>().GetComponent<UnitManager>();
+        stagesManager = FindObjectOfType<StagesManager>().GetComponent<StagesManager>();
+        message = FindObjectOfType<Message>().GetComponent<Message>();
+        miner = FindObjectOfType<Miner>().GetComponent<Miner>();
 
-        InventorySwipe = GameObject.Find("InventoryGridPanel").GetComponent<ContentSwipe>();
+        InventoryContent = GameObject.Find("InventoryGridPanel").GetComponent<ContentSwipe>();
 
         Location_Image = GameObject.Find("Location(img)").GetComponent<Image>();
-        ItemInfo_Image = GameObject.Find("ItemInfo(img)").GetComponent<Image>();
+        ItemInfoImage = GameObject.Find("ItemInfo(img)").GetComponent<Image>();
         SetCount_Image = GameObject.Find("SetCount(img)").GetComponent<Image>();
 
         InventoryGrid = GameObject.Find("InventoryGrid");
-        UpgradesGrid = GameObject.Find("UpgradesGrid");
-        SellForCurrency = GameObject.Find("SetCountCurrency(btn)");
-        SellForXp = GameObject.Find("SetCountXp(btn)");
-        UseAgree = GameObject.Find("SetCountAgree(btn)");
-        ClickPanel = GameObject.Find("Clickable(cdr)");
-        ItemOptionsUse = GameObject.Find("ItemActionUse(btn)");
+        UpgradesShopGrid = GameObject.Find("UpgradesGrid");
+        SellItemForCurrency = GameObject.Find("SetCountCurrency(btn)");
+        SellItemForXp = GameObject.Find("SetCountXp(btn)");
+        UseItem = GameObject.Find("SetCountAgree(btn)");
+        ClickablePanel = GameObject.Find("Clickable(cdr)");
+        ItemInfoUse = GameObject.Find("ItemActionUse(btn)");
 
-        AgreeWindow_OM = GameObject.Find("ActionConfirmation").GetComponent<ObjectMovement>();
+        ConfrimationWindow_OM = GameObject.Find("ActionConfirmation").GetComponent<ObjectMovement>();
         EnemyParent_OM = GameObject.Find("Enemy Parent").GetComponent<ObjectMovement>();
-        SaleWindow_OM = GameObject.Find("Sale").GetComponent<ObjectMovement>();
+        MultiSellWindow_OM = GameObject.Find("Sale").GetComponent<ObjectMovement>();
         InventoryWindow_OM = GameObject.Find("Inventory").GetComponent<ObjectMovement>();
         ItemInfoWindow_OM = GameObject.Find("ItemInfo").GetComponent<ObjectMovement>();
         MainInterface_OM = GameObject.Find("Battle Interface").GetComponent<ObjectMovement>();
@@ -105,10 +113,10 @@ public class InterfaceManager : MonoBehaviour
         UnitInterface_OM = GameObject.Find("Units Interface").GetComponent<ObjectMovement>();
         SetCountWindow_OM = GameObject.Find("SetCount").GetComponent<ObjectMovement>();
         SettingsWindow_OM = GameObject.Find("Settings").GetComponent<ObjectMovement>();
-        UpgradeInterface_OM = GameObject.Find("Upgrades Interface").GetComponent<ObjectMovement>();
+        UpgradesShopInterface_OM = GameObject.Find("Upgrades Interface").GetComponent<ObjectMovement>();
         MinerInterface_OM = GameObject.Find("Miner Interface").GetComponent<ObjectMovement>();
 
-        Count_Input = GameObject.Find("InputField").GetComponent<InputField>();
+        ItemActionInputField = GameObject.Find("InputField").GetComponent<InputField>();
 
         AgreeDescription_Text = GameObject.Find("Agree(txt)").GetComponent<Text>();
         SellForCurrencyPrice_Text = GameObject.Find("SetCountCurrency(txt)").GetComponent<Text>();
@@ -117,8 +125,8 @@ public class InterfaceManager : MonoBehaviour
         ItemInfoDescription_Text = GameObject.Find("ItemInfo(txt)").GetComponent<Text>();
         SaleForCurrencyPrice_Text = GameObject.Find("SaleForCurrency(txt)").GetComponent<Text>();
         SaleForXpPrice_Text = GameObject.Find("SaleForXp(txt)").GetComponent<Text>();
-        UnitLocked1_Text = GameObject.Find("Unit1Locked(lbl)").GetComponent<Text>();
-        UnitLocked2_Text = GameObject.Find("Unit2Locked(lbl)").GetComponent<Text>();
+        Unit1LockedText = GameObject.Find("Unit1Locked(lbl)").GetComponent<Text>();
+        Unit2LockedText = GameObject.Find("Unit2Locked(lbl)").GetComponent<Text>();
     }
     #endregion
     public void CloseAll()
@@ -126,7 +134,7 @@ public class InterfaceManager : MonoBehaviour
         if (agreeWindowOpened) { SwitchConfirmation(0); }
         if (settingsOpened) { SwitchSettings(0); }
         if (minerOpened) { MinerInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false); }
-        if (upgradeOpened) { SwitchUpgradesMenu(0); }
+        if (upgradesOpened) { SwitchUpgradesMenu(0); }
         if (unitsListOpened) { CloseUnitsSelect(); }
         if (unitsInterfaceOpened) { SwitchUnitsInterface(0); }
         if (inventoryOpened) { SwitchInventory(0); }
@@ -150,14 +158,13 @@ public class InterfaceManager : MonoBehaviour
                 else
                 {
                     mainInterfaceOpened = true;
-                    ClickPanel.GetComponent<Image>().raycastTarget = true;
+                    enemyManager.clickable = true;
+                    enemyManager.able = true;
+                    ClickablePanel.GetComponent<Image>().raycastTarget = true;
 
                     MainInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                     EnemyParent_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
-
-                    enemyManager.clickable = true;
-                    enemyManager.able = true;
-                }
+                                    }
                 break;
             case 0:
                 if (minerOpened)
@@ -167,13 +174,13 @@ public class InterfaceManager : MonoBehaviour
                 else
                 {
                     mainInterfaceOpened = false;
-                    ClickPanel.GetComponent<Image>().raycastTarget = false;
+                    enemyManager.clickable = false;
+                    enemyManager.able = false;
+                    ClickablePanel.GetComponent<Image>().raycastTarget = false;
 
                     MainInterface_OM.MoveTo(new Vector2(-720, 0), 0.3f, 1, false);
                     EnemyParent_OM.MoveTo(new Vector2(-360, 0), 0.3f, 1, false);
 
-                    enemyManager.clickable = false;
-                    enemyManager.able = false;
                 }
                 break;
 
@@ -191,7 +198,7 @@ public class InterfaceManager : MonoBehaviour
         switch (mode)
         {
             case 1:
-                switch (typeOfButtonAction)
+                switch (CurrentEventName)
                 {
                     case "birth":
                         AgreeDescription_Text.text = $"Make another one child for {NumFormat.FormatNumF1(unitManager.BirthCost())}$ ?";
@@ -200,13 +207,11 @@ public class InterfaceManager : MonoBehaviour
                         if (inventory.ItemTypeFind(ItemTypes.Cloth) == null)
                         {
                             message.SendMessage($"You need at least one cloth in inventory", 2);
-                            soundManager.PlayBruhSound();
                             return;
                         }
                         else if (clicker.MinerLvl == 0)
                         {
                             message.SendMessage($"Fix washing mashine at first", 2);
-                            soundManager.PlayBruhSound();
                             return;
                         }
                         AgreeDescription_Text.text = $"Upgrade washing mashine for Cloth item?";
@@ -215,13 +220,11 @@ public class InterfaceManager : MonoBehaviour
                         if (inventory.ItemTypeFind(ItemTypes.Toy) == null)
                         {
                             message.SendMessage($"You need at least one toy in inventory", 2);
-                            soundManager.PlayBruhSound();
                             return;
                         }
                         else if (clicker.Births < 1)
                         {
                             message.SendMessage($"You need at least one birth", 2);
-                            soundManager.PlayBruhSound();
                             return;
                         }
                         AgreeDescription_Text.text = $"Upgrade fisrt child for one Toy item ?";
@@ -231,13 +234,11 @@ public class InterfaceManager : MonoBehaviour
                         if (inventory.ItemTypeFind(ItemTypes.Toy) == null)
                         {
                             message.SendMessage($"You need at least one toy in inventory", 2);
-                            soundManager.PlayBruhSound();
                             return;
                         }
                         else if (clicker.Births < 2)
                         {
                             message.SendMessage($"You need at least two births", 2);
-                            soundManager.PlayBruhSound();
                             return;
                         }
                         AgreeDescription_Text.text = $"Upgrade second child for one Toy item ?";
@@ -246,12 +247,12 @@ public class InterfaceManager : MonoBehaviour
                 }
                 CloseAll();
                 agreeWindowOpened = true;
-                AgreeWindow_OM.MoveTo(new Vector2(0, 90), 0.3f, 1, false);
+                ConfrimationWindow_OM.MoveTo(new Vector2(0, 90), 0.3f, 1, false);
                 SwitchBattleInterface(0);
                 break;
             case 0:
                 agreeWindowOpened = false;
-                AgreeWindow_OM.MoveTo(new Vector2(-720, 90), 0.3f, 1, false);
+                ConfrimationWindow_OM.MoveTo(new Vector2(-720, 90), 0.3f, 1, false);
                 SwitchBattleInterface(1);
                 break;
             default:
@@ -261,7 +262,7 @@ public class InterfaceManager : MonoBehaviour
     }
     public void Confirm()
     {
-        switch (typeOfButtonAction)
+        switch (CurrentEventName)
         {
             case "birth":
                 if (unitManager.isAbleToBuy())
@@ -271,7 +272,6 @@ public class InterfaceManager : MonoBehaviour
                 else
                 {
                     message.SendMessage($"You need more money", 2);
-                    soundManager.PlayBruhSound();
                 }
                 break;
             case "minerupgrade":
@@ -292,7 +292,7 @@ public class InterfaceManager : MonoBehaviour
 
     public void Action(string s)
     {
-        typeOfButtonAction = s;
+        CurrentEventName = s;
         SwitchConfirmation(1);
     }
     #endregion
@@ -331,17 +331,21 @@ public class InterfaceManager : MonoBehaviour
                 CloseAll();
                 SwitchBattleInterface(0);
                 minerOpened = true;
+
                 MinerInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+
                 stagesManager.ChangeAmbience(false);
-                Location_Image.sprite = Battle_Sprite;
+                Location_Image.sprite = MainGameSprite;
                 break;
             case 0:
                 CloseAll();
                 minerOpened = false;
                 SwitchBattleInterface(1);
+
                 MinerInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+
                 stagesManager.ChangeAmbience(true);
-                Location_Image.sprite = miner_Sprite;
+                Location_Image.sprite = MinerSprite;
                 break;
             default:
                 SwitchMiner(!minerOpened ? 1 : 0);
@@ -350,34 +354,34 @@ public class InterfaceManager : MonoBehaviour
     }
     #endregion
 
-    #region Upgrade Menu
-    public bool upgradeOpened;
+    #region Upgrades Menu
+    public bool upgradesOpened;
     public void SwitchUpgradesMenu(int mode)
     {
         switch (mode)
         {
             case 1:
                 CloseAll();
-                upgradeOpened = true;
-                UpgradeInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+                upgradesOpened = true;
+                UpgradesShopInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                 SwitchBattleInterface(0);
                 break;
             case 0:
-                upgradeOpened = false;
-                UpgradeInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+                upgradesOpened = false;
+                UpgradesShopInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
                 SwitchBattleInterface(1);
                 break;
             default:
-                SwitchUpgradesMenu(!upgradeOpened ? 1 : 0);
+                SwitchUpgradesMenu(!upgradesOpened ? 1 : 0);
                 break;
         }
     }
     private void AddUpgrades()
     {
-        for (int i = 0; i < upgradesManager.upgradesDataBase.Count; i++)
+        for (int i = 0; i < upgradesManager.UpgradesDataBase.Count; i++)
         {
-            UpgradeObject upgrade = Instantiate(Upgrade_Prefab, UpgradesGrid.transform).GetComponent<UpgradeObject>();
-            upgrade.index = i;
+            UpgradeObject upgrade = Instantiate(Upgrade_Prefab, UpgradesShopGrid.transform).GetComponent<UpgradeObject>();
+            upgrade.Index = i;
             upgrade.AddGraphics();
         }
     }
@@ -386,9 +390,9 @@ public class InterfaceManager : MonoBehaviour
     {
         upgradesManager = GameObject.Find("ClickerManager").GetComponent<UpgradesManager>();
 
-        for (int i = 0; i < upgradesManager.upgradesDataBase.Count; i++)
+        for (int i = 0; i < upgradesManager.UpgradesDataBase.Count; i++)
         {
-            UpgradeObject UpgradeObjectTemp = GameObject.Find(upgradesManager.upgradesDataBase[i].upgradeName).GetComponent<UpgradeObject>();
+            UpgradeObject UpgradeObjectTemp = GameObject.Find(upgradesManager.UpgradesDataBase[i].upgradeName).GetComponent<UpgradeObject>();
             UpgradeObjectTemp.AddGraphics();
         }
     }
@@ -402,23 +406,25 @@ public class InterfaceManager : MonoBehaviour
         {
             case 1:
                 CloseAll();
+
                 unitsInterfaceOpened = true;
-                UnitInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
                 switch (clicker.Births)
                 {
                     case 0:
-                        UnitLocked1_Text.text = "1 Birth required.";
-                        UnitLocked2_Text.text = "2 Birth required.";
+                        Unit1LockedText.text = "1 Birth required.";
+                        Unit2LockedText.text = "2 Birth required.";
                         break;
                     case 1:
-                        UnitLocked1_Text.text = "";
-                        UnitLocked2_Text.text = "2 Birth required.";
+                        Unit1LockedText.text = "";
+                        Unit2LockedText.text = "2 Birth required.";
                         break;
                     default:
-                        UnitLocked1_Text.text = "";
-                        UnitLocked2_Text.text = "";
+                        Unit1LockedText.text = "";
+                        Unit2LockedText.text = "";
                         break;
                 }
+                UnitInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+
                 SwitchBattleInterface(0);
                 break;
             case 0:
@@ -440,13 +446,14 @@ public class InterfaceManager : MonoBehaviour
         if (slot > clicker.Births)
         {
             message.SendMessage($"You need {slot - clicker.Births} more births", 2);
-            soundManager.PlayBruhSound();
             return;
         }
         CloseAll();
         SwitchBattleInterface(0);
+
         unitsListOpened = true;
         unitManager.slotid = slot;
+
         UnitSelectInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
     }
     public void CloseUnitsSelect()
@@ -467,16 +474,21 @@ public class InterfaceManager : MonoBehaviour
                 CloseAll();
                 SwitchBattleInterface(0);
                 inventoryOpened = true;
+
                 inventory.SortInventory();
                 InventoryWindow_OM.MoveTo(new Vector2(0, 270), 0.3f, 1, false);
                 break;
             case 0:
                 if (saleOpened) { SwitchSale(0); }
+                if (setCountOpened) { CloseSetCount(); }
                 SwitchBattleInterface(1);
                 inventoryOpened = false;
-                InventoryWindow_OM.MoveTo(new Vector2(0, 1480), 0.3f, 1, false);
-                InventorySwipe.SetBack();
+
+                InventoryContent.SetBack();
                 inventory.SetItemsBack();
+
+                InventoryWindow_OM.MoveTo(new Vector2(0, 1480), 0.3f, 1, false);
+
                 SwitchBattleInterface(1);
                 break;
             default:
@@ -496,24 +508,25 @@ public class InterfaceManager : MonoBehaviour
                 if (InventoryGrid.transform.childCount < 1)
                 {
                     message.SendMessage($"You need at least one item", 2);
-                    soundManager.PlayBruhSound();
                 }
                 else
                 {
+                    inventory.ableToInvest = true;
                     saleOpened = true;
-                    SaleWindow_OM.MoveTo(new Vector2(0, -300f), 0.3f, 1, false);
 
                     SaleForCurrencyPrice_Text.text = "0";
                     SaleForXpPrice_Text.text = "0";
 
-                    inventory.ableToInvest = true;
+                    MultiSellWindow_OM.MoveTo(new Vector2(0, -300f), 0.3f, 1, false);
                 }
                 break;
             case 0:
                 saleOpened = false;
-                inventory.SetItemsBack();
                 inventory.ableToInvest = false;
-                SaleWindow_OM.MoveTo(new Vector2(0, -1200), 0.3f, 1, false);
+
+                inventory.SetItemsBack();
+
+                MultiSellWindow_OM.MoveTo(new Vector2(0, -1200), 0.3f, 1, false);
                 break;
             default:
                 SwitchSale(!saleOpened ? 1 : 0);
@@ -529,22 +542,23 @@ public class InterfaceManager : MonoBehaviour
         switch (mode)
         {
             case 1:
-                itemInfoOpened = true;
-                ItemInfoWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
-
                 Item item = inventory.SelectedItem.GetComponent<Item>();
 
-                SellForCurrency.SetActive(true);
-                SellForXp.SetActive(true);
-                ItemOptionsUse.SetActive(true);
+                itemInfoOpened = true;
 
+                SellItemForCurrency.SetActive(true);
+                SellItemForXp.SetActive(true);
+                ItemInfoUse.SetActive(true);
                 if (item.useMethodName == "")
                 {
-                    ItemOptionsUse.SetActive(false);
+                    ItemInfoUse.SetActive(false);
                 }
-                ItemInfo_Image.sprite = item.ico.sprite;
+
+                ItemInfoImage.sprite = item.ico.sprite;
                 ItemInfoDescription_Text.text = "Type : " + item.type + " \n Name: " + item.nameObject;
                 ItemInfoCount_Text.text = NumFormat.FormatNumF0F1(item.count);
+
+                ItemInfoWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
                 break;
             case 0:
                 itemInfoOpened = false;
@@ -565,13 +579,13 @@ public class InterfaceManager : MonoBehaviour
         {
             Item item = inventory.SelectedItem.GetComponent<Item>();
             int input = 1;
-            if (Count_Input.text.Length > 0)
+            if (ItemActionInputField.text.Length > 0)
             {
-                input = int.Parse(Count_Input.text);
+                input = int.Parse(ItemActionInputField.text);
                 input = input > item.count ? item.count : input;
             }
 
-            if (typeOfAction == "Sell")
+            if (CurrentItemEventName == "Sell")
             {
                 SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(input * item.currencyPrice);
                 SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(input * item.xpPrice);
@@ -584,63 +598,112 @@ public class InterfaceManager : MonoBehaviour
         if (inventory.SelectedItem != null)
         {
             Item item = inventory.SelectedItem.GetComponent<Item>();
-            Count_Input.text = item.count.ToString();
+            ItemActionInputField.text = item.count.ToString();
             return;
         }
     }
     public void OpenItemUsePanel()
     {
-        setCountOpened = true;
         Item item = inventory.SelectedItem.GetComponent<Item>();
-        if (item.type == ItemTypes.Toy)
+
+
+        switch (item.type)
         {
-            SwitchUnitsInterface(1);
-            return;
+            case ItemTypes.Toy:
+                SwitchUnitsInterface(1);
+                break;
+            case ItemTypes.Cloth:
+                SwitchMiner(1);
+                break;
+            default:
+                setCountOpened = true;
+                UseItem.SetActive(true);
+                SellItemForCurrency.SetActive(false);
+                SellItemForXp.SetActive(false);
+                CurrentItemEventName = "Use";
+
+                SwitchItemInfo(0);
+                ItemActionInputField.text = "1";
+                SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
+                SetCountUpdate();
+
+                SetCountWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
+                break;
         }
-        if (item.type == ItemTypes.Cloth)
-        {
-            SwitchMiner(1);
-            return;
-        }
-        SwitchItemInfo(0);
-        SetCountWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
-
-        typeOfAction = "Use";
-
-        UseAgree.SetActive(true);
-        SellForCurrency.SetActive(false);
-        SellForXp.SetActive(false);
-
-        Count_Input.text = "1";
-        SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
-        SetCountUpdate();
     }
     public void OpenItemSellPanel()
     {
-        setCountOpened = true;
         Item item = inventory.SelectedItem.GetComponent<Item>();
+
         SwitchItemInfo(0);
-        SetCountWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
+        setCountOpened = true;
+        CurrentItemEventName = "Sell";
 
-        typeOfAction = "Sell";
+        UseItem.SetActive(false);
+        SellItemForCurrency.SetActive(true);
+        SellItemForXp.SetActive(true);
 
-        UseAgree.SetActive(false);
-        SellForCurrency.SetActive(true);
-        SellForXp.SetActive(true);
-
-        Count_Input.text = "1";
+        ItemActionInputField.text = "1";
         SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(item.currencyPrice);
         SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(item.xpPrice);
         SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
         SetCountUpdate();
+
+        SetCountWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
     }
     public void CloseSetCount()
     {
         setCountOpened = false;
-        typeOfAction = "";
+        CurrentItemEventName = "";
         SetCountWindow_OM.MoveTo(new Vector2(-720, -200), 0.3f, 1, false);
     }
     public void ResetSelectedItem()
     { inventory.SelectedItem = null; }
+    #endregion
+
+    #region Text Management
+    private void AdjustTopInsideSafeArea()
+    {
+        Rect safeArea = Screen.safeArea;
+
+        // Проверяем, находится ли объект вне безопасной зоны
+        if (!safeArea.Contains(currencyText.transform.position))
+        {
+            Vector3 panelOldPos = currencyText.transform.parent.position;
+            Vector3 oldPos = currencyText.transform.position;
+            float newY = Mathf.Clamp(oldPos.y, safeArea.yMin, safeArea.yMax);
+            float difference = Mathf.Abs(oldPos.y - newY) * 1.7f;
+
+            // Применяем новую позицию
+            currencyText.transform.parent.position = panelOldPos - (Vector3.up * difference);
+        }
+    }
+    public void UpdateAllText()
+    {
+        StageTextUpdate();
+        CurrencyTextUpdate();
+        ExperienceTextUpdate();
+        BirthTextUpdate();
+    }
+
+    public void StageTextUpdate()
+    {
+        stageText.text = $"Stage: {stagesManager.CurrentStage}";
+    }
+
+    public void CurrencyTextUpdate()
+    {
+        currencyText.text = NumFormat.FormatNumF1(clicker.Currency);
+    }
+
+    public void ExperienceTextUpdate()
+    {
+        experienceText.text = NumFormat.FormatNumF1(clicker.Experience);
+    }
+
+    public void BirthTextUpdate()
+    {
+        UpdateUpgrades();
+    }
     #endregion
 }

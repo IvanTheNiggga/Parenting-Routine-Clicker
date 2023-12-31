@@ -3,23 +3,28 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-    public List<UnitElement> unitsDataBase = new();
-    public List<int> instockUnits = new();
-
+    #region Appointed through the inspector
     public Unit unit1;
     public Unit unit2;
-
     public GameObject UnitButton;
     public Sprite None;
+    #endregion
 
+    #region Appointed on start
     private Clicker clicker;
+    private Transform unitsGrid;
+    #endregion
 
+    #region Variables
+    public List<UnitElement> unitsDataBase = new();
+    public List<int> instockUnits = new();
     public int unit1id;
     public int unit2id;
     public int slotid;
+    #endregion
 
-    private Transform unitsGrid;
 
+    #region Unity Lifecycle
     private void Start()
     {
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
@@ -27,7 +32,9 @@ public class UnitManager : MonoBehaviour
         GetUnitsList();
         Invoke(nameof(CheckUnfair), 1f);
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////// Returners
+    #endregion
+
+    #region Returners
     public bool isAbleToBuy()
     {
         return clicker.Currency >= BirthCost();
@@ -41,7 +48,9 @@ public class UnitManager : MonoBehaviour
         }
         return cost * 50;
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////// Lists
+    #endregion
+
+    #region Lists
     public void UpdateUnitsList(int i)
     {
         if (!GameObject.Find(i + "Unit"))
@@ -66,7 +75,9 @@ public class UnitManager : MonoBehaviour
         }
         return instockUnits;
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////// Units manipulations
+    #endregion
+
+    #region Units Manipulations
     public void AddRandomUnit()
     {
         int random = Random.Range(0, unitsDataBase.Count);
@@ -78,7 +89,6 @@ public class UnitManager : MonoBehaviour
             UpdateUnitsList(random);
         }
     }
-
     public void EquipUnit(int slot, int id)
     {
         switch (slot)
@@ -94,7 +104,6 @@ public class UnitManager : MonoBehaviour
 
         }
     }
-
     public void UnequipUnit(int slot)
     {
         switch (slot)
@@ -147,26 +156,26 @@ public class UnitManager : MonoBehaviour
             if (unit2.CurrentLevel > unit1.CurrentLevel + 1)
             {
                 unit1.unfairLvl = unit2.CurrentLevel - unit1.CurrentLevel;
-                unit1.text1.text = $"{unit1.nameobj} (Lv. {unit1.CurrentLevel})\n\nx{unit1.DamageCoef} from your damage.\nBut he`s mad, his brother have {unit1.unfairLvl} more toys.";
+                unit1.UnitInfoText.text = $"{unit1.nameobj} (Lv. {unit1.CurrentLevel})\n\nx{unit1.DamageCoef} from your damage.\nBut he`s mad, his brother have {unit1.unfairLvl} more toys.";
             }
             else
             {
                 unit1.unfairLvl = 0;
-                unit1.text1.text = $"{unit1.nameobj} (Lv. {unit1.CurrentLevel})\n\nx{unit1.DamageCoef} from your damage.";
+                unit1.UnitInfoText.text = $"{unit1.nameobj} (Lv. {unit1.CurrentLevel})\n\nx{unit1.DamageCoef} from your damage.";
             }
             if (unit1.CurrentLevel > unit2.CurrentLevel + 1)
             {
                 unit2.unfairLvl = unit1.CurrentLevel - unit2.CurrentLevel;
-                unit2.text2.text = $"{unit2.nameobj} (Lv. {unit2.CurrentLevel})\n\nx{unit2.DamageCoef} from your damage.\nBut he`s mad, his brother have {unit2.unfairLvl} more toys.";
+                unit2.UnitInfoText.text = $"{unit2.nameobj} (Lv. {unit2.CurrentLevel})\n\nx{unit2.DamageCoef} from your damage.\nBut he`s mad, his brother have {unit2.unfairLvl} more toys.";
             }
             else
             {
                 unit2.unfairLvl = 0;
-                unit2.text2.text = $"{unit2.nameobj} (Lv. {unit2.CurrentLevel})\n\nx{unit2.DamageCoef} from your damage.";
+                unit2.UnitInfoText.text = $"{unit2.nameobj} (Lv. {unit2.CurrentLevel})\n\nx{unit2.DamageCoef} from your damage.";
             }
         }
     }
-
+    #endregion
 }
 
 [System.Serializable]

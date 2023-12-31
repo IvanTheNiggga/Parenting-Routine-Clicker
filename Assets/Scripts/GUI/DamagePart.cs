@@ -18,7 +18,7 @@ public class DamagePart : MonoBehaviour
     private void Start()
     {
         clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
-        text.text = NumFormat.FormatNumF1(clicker.CurrDealedDamage);
+        text.text = "-" + NumFormat.FormatNumF1(clicker.CurrDealedDamage);
         if (big)
         {
             text.color = Color.red;

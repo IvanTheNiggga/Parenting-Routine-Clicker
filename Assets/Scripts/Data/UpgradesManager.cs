@@ -3,36 +3,40 @@ using UnityEngine;
 
 public class UpgradesManager : MonoBehaviour
 {
-    public List<Upgrade> upgradesDataBase = new();
-
+    #region Appointed on start
     private Clicker clicker;
-    private TextManager tm;
+    private InterfaceManager interfaceManager;
+    #endregion
 
+    #region Variables
+    public List<Upgrade> UpgradesDataBase = new();
     public int DamageLvl;
     public int CritLvl;
+    #endregion
 
-    void Start()
+    #region Unity Lifecycle
+    private void Start()
     {
         clicker = GetComponent<Clicker>();
-        tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
+        interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
     }
+    #endregion
 
+    #region Upgrades
     public void DamageUpgrade()
     {
         DamageLvl++;
 
         clicker.CalculateDmg();
-        tm.CurrencyTextUpdate();
+        interfaceManager.CurrencyTextUpdate();
     }
     public void CritUpgrade()
     {
         CritLvl++;
 
         clicker.CalculateCrit();
-        tm.CurrencyTextUpdate();
+        interfaceManager.CurrencyTextUpdate();
     }
-
-    #region Upgrades
     public int critDamageLvl; public void CritDamageUpgrade()
     { critDamageLvl++; }
     public int dropRateLvl; public void DropRateUpgrade()

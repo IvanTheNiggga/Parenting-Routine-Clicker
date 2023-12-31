@@ -4,32 +4,34 @@ using UnityEngine;
 
 public class StagesManager : MonoBehaviour
 {
+    #region Appoint through the inspector
     public List<Stage> StagesDataBase = new List<Stage>();
 
-    public AudioSource AmbienceSource;
-    public AudioSource WMAmbienceSource;
-    public AudioClip Ambience;
-    public AudioClip WMAmbience;
+    [SerializeField] private AudioSource AmbienceSource;
+    [SerializeField] private AudioSource WMAmbienceSource;
+    [SerializeField] private AudioClip WMAmbience;
 
-    private Inventory inventory;
-    private Clicker clicker;
-    private EnemyManager enemyManager;
-    private RewardManager giveReward;
-    private GameObject upgradesGrid;
-    private InterfaceManager interfaceManager;
-    private TextManager tm;
+    [SerializeField] private Inventory inventory;
+    [SerializeField] private EnemyManager enemyManager;
+    [SerializeField] private RewardManager giveReward;
+    [SerializeField] private InterfaceManager interfaceManager;
+    [SerializeField] private GameObject upgradesGrid;
+    [SerializeField] private SpriteRenderer BG;
+    [SerializeField] private Sprite WMBG;
+    #endregion
 
-    private SpriteRenderer BG;
-
-    public Sprite WMBG;
-
-    public int StageIndex;
-    public int maxStage;
+    #region Variables
+    private AudioClip Ambience;
+    public Stage currentStage;
     public int CurrentStage;
+    public int maxStage;
+    public int StageIndex;
+    public int BGIndex;
+    #endregion
 
+    #region Init
     private bool started;
-
-    private void Awake()
+    private void Start()
     {
         InitializeComponents();
     }
@@ -37,48 +39,45 @@ public class StagesManager : MonoBehaviour
     private void InitializeComponents()
     {
         inventory = GetComponent<Inventory>();
-        clicker = GetComponent<Clicker>();
         enemyManager = GetComponent<EnemyManager>();
         giveReward = GetComponent<RewardManager>();
-        interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
-        tm = GameObject.Find("INTERFACE").GetComponent<TextManager>();
+        interfaceManager = FindObjectOfType<InterfaceManager>().GetComponent<InterfaceManager>();
         upgradesGrid = GameObject.Find("UpgradesGrid");
-        AmbienceSource = GameObject.Find("AmbienceSource").GetComponent<AudioSource>();
-        WMAmbienceSource = GameObject.Find("WMAmbienceSource").GetComponent<AudioSource>();
-        BG = GameObject.Find("BG").GetComponent<SpriteRenderer>();
     }
+    #endregion
 
+    #region Stage management
     public void LoadStageData(bool newStage)
     {
         if (!started)
         {
             started = true;
-            tm.UpdateAllText();
+            interfaceManager.UpdateAllText();
         }
 
         if (newStage)
         {
             StageIndex = UnityEngine.Random.Range(0, StagesDataBase.Count);
+            BGIndex = UnityEngine.Random.Range(0, currentStage.BG.Length);
         }
 
-        Stage currentStage = StagesDataBase[StageIndex];
+        currentStage = StagesDataBase[StageIndex];
+        maxStage = Math.Max(CurrentStage, maxStage);
 
-        BG.sprite = currentStage.BG;
-        enemyManager.Boss = currentStage.Boss;
-        enemyManager.EnemyList = currentStage.EnemyList;
+        BG.sprite = currentStage.BG[BGIndex];
         Ambience = currentStage.Ambience;
         AmbienceSource.clip = Ambience;
-        enemyManager.enemySpawnSound = currentStage.EnemySpawn;
+
+        enemyManager.BossList = currentStage.Boss;
+        enemyManager.EnemyList = currentStage.EnemyList;
 
         giveReward.KillReward = Utils.Progression(1, 5, CurrentStage - 1);
         enemyManager.EnemyHPMultiplier = Utils.Progression(1, 5, CurrentStage - 1);
+
         inventory.UpdateItemPrices();
         CheckUpgrades();
-
-        enemyManager.enemySpawnSound = currentStage.EnemySpawn;
-        maxStage = Math.Max(CurrentStage, maxStage);
-
         interfaceManager.UpdateUpgrades();
+
         AmbienceSource.Play();
     }
 
@@ -95,7 +94,7 @@ public class StagesManager : MonoBehaviour
     {
         if (isGame)
         {
-            BG.sprite = StagesDataBase[StageIndex].BG;
+            BG.sprite = currentStage.BG[BGIndex];
             AmbienceSource.UnPause();
             WMAmbienceSource.Pause();
         }
@@ -112,23 +111,23 @@ public class StagesManager : MonoBehaviour
     {
         CurrentStage++;
         LoadStageData(true);
-        tm.StageTextUpdate();
+        interfaceManager.StageTextUpdate();
     }
+    #endregion
 }
 
 [System.Serializable]
 public class Stage
 {
     [Header("BackGround")]
-    public Sprite BG;
+    public Sprite[] BG;
 
     [Header("Enemies")]
-    public GameObject Boss;
+    public GameObject[] Boss;
     public GameObject[] EnemyList;
 
     [Header("Audio")]
     public AudioClip Ambience;
-    public AudioClip EnemySpawn;
 
     [Header("Item List")]
     public List<Items> itemsDataBase = new();

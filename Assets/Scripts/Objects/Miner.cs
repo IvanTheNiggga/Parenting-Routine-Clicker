@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Miner : MonoBehaviour
 {
-    #region Local
+    #region Appointed on start
     private Clicker clicker;
     private UpgradesManager upgradesManager;
     private RewardManager rewardManager;
@@ -13,15 +13,16 @@ public class Miner : MonoBehaviour
     private Message message;
 
     private SoundManager soundManager;
-    private TextManager textManager;
 
     private Text minerLootText;
     private Text minerLevelText;
 
     private GameObject startButton;
+    #endregion
 
+    #region Variables
     private double _incomeMultiplier = 1;
-    public double incomeMultiplier
+    public double IncomeMultiplier
     {
         get { return _incomeMultiplier; }
         set
@@ -61,7 +62,6 @@ public class Miner : MonoBehaviour
         message = GameObject.Find("Message").GetComponent<Message>();
         inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
-        textManager = GameObject.Find("INTERFACE").GetComponent<TextManager>();
         minerLevelText = GameObject.Find("MinerLvl(txt)").GetComponent<Text>();
         minerLootText = GameObject.Find("LootMiner(txt)").GetComponent<Text>();
     }
@@ -75,7 +75,7 @@ public class Miner : MonoBehaviour
             LastEntranceTime = Utils.GetDataTime("LastEntranceTime", DateTime.UtcNow);
             TimeSpan timePassed = DateTime.UtcNow - LastEntranceTime;
             int secondsPassed = (int)timePassed.TotalSeconds;
-            minerLootText.text = "$" + NumFormat.FormatNumF0F1(rewardManager.GetRewardInfo(secondsPassed * incomeMultiplier));
+            minerLootText.text = "$" + NumFormat.FormatNumF0F1(rewardManager.GetRewardInfo(secondsPassed * IncomeMultiplier));
         }
     }
     #endregion
@@ -105,7 +105,7 @@ public class Miner : MonoBehaviour
         ResetMinerLoot();
 
         clicker.MinerLvl = 0;
-        incomeMultiplier = 0;
+        IncomeMultiplier = 0;
         minerLevelText.text = $"Level {clicker.MinerLvl}";
 
         startButton.SetActive(true);
@@ -145,11 +145,11 @@ public class Miner : MonoBehaviour
         }
 
         soundManager.PlayBuySound();
-        rewardManager.GiveCurrency(secondsPassed * incomeMultiplier);
+        rewardManager.GiveCurrency(secondsPassed * IncomeMultiplier);
 
         Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
 
-        textManager.CurrencyTextUpdate();
+        interfaceManager.CurrencyTextUpdate();
         UpdateLootText();
     }
 
@@ -168,7 +168,7 @@ public class Miner : MonoBehaviour
         }
 
         minerLevelText.text = $"Level {clicker.MinerLvl}";
-        if (clicker.MinerLvl > 0) incomeMultiplier = Math.Pow(50, clicker.MinerLvl - 1) * (upgradesManager.mineLootLvl + 1);
+        if (clicker.MinerLvl > 0) IncomeMultiplier = Math.Pow(50, clicker.MinerLvl - 1) * (upgradesManager.mineLootLvl + 1);
     }
     #endregion
 }

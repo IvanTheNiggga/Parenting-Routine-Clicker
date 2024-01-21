@@ -13,26 +13,26 @@ public class SoundManager : MonoBehaviour
     public AudioClip click;
     public void PlayBruhSound()
     {
-        interfaceSource.PlayOneShot(Warn[UnityEngine.Random.Range(0, Warn.Length)], 1);
+        interfaceSource.PlayOneShot(Warn[UnityEngine.Random.Range(0, Warn.Length)]);
     }
     public void PlayBuySound()
     {
-        interfaceSource.PlayOneShot(buy, 1);
+        interfaceSource.PlayOneShot(buy);
     }
     public void PlayApplauseSound()
     {
-        interfaceSource.PlayOneShot(xpUpgrade, 3);
+        interfaceSource.PlayOneShot(xpUpgrade);
     }
     public void PlayCloseInventorySound()
     {
-        interfaceSource.PlayOneShot(closeinv, 2f);
+        interfaceSource.PlayOneShot(closeinv);
     }
     public void PlayOpenInventorySound()
     {
-        interfaceSource.PlayOneShot(openinv, 2f);
+        interfaceSource.PlayOneShot(openinv);
     }
     public void PlayClickSound()
     {
-        interfaceSource.PlayOneShot(click, 1f);
+        interfaceSource.PlayOneShot(click);
     }
 }

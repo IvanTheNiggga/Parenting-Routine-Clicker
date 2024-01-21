@@ -76,7 +76,7 @@ public class RewardManager : MonoBehaviour
     #region Get currency
     public void GiveCurrency(double count)
     {
-        double reward = count * (upgradesManager.doubleCurrencyLvl + 1);
+        double reward = count;
         if (Random.Range(0, 100f / upgradesManager.currencyChanceLvl) < 1f)
         {
             reward *= 2;
@@ -87,7 +87,7 @@ public class RewardManager : MonoBehaviour
     public double GetRewardInfo(double count)
     {
         clicker = GetComponent<Clicker>();
-        double reward = count * (upgradesManager.doubleCurrencyLvl + 1);
+        double reward = count;
         if (reward < double.MaxValue && !double.IsNaN(reward) && !double.IsInfinity(reward))
         {
             return reward;

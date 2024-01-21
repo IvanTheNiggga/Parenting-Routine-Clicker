@@ -26,18 +26,18 @@ public class Clicker : MonoBehaviour
     public int MaxMinerLvl;
     public int CritMultiplier;
 
-    private double currDealedDamage; public double CurrDealedDamage
+    private double lastDealedDamage; public double LastDealedDamage
     {
-        get { return currDealedDamage; }
+        get { return lastDealedDamage; }
         set
         {
             if (double.IsNaN(value) || double.IsInfinity(value))
             {
-                currDealedDamage = double.MaxValue / 100;
+                lastDealedDamage = double.MaxValue / 100;
             }
             else
             {
-                currDealedDamage = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
+                lastDealedDamage = (value > double.MaxValue / 100) ? double.MaxValue / 100 : value;
             }
         }
     }
@@ -121,7 +121,6 @@ public class Clicker : MonoBehaviour
         AfterSaveSeconds += Time.deltaTime;
     }
     #endregion
-
 
     #region Data manipalations
     public void Load()

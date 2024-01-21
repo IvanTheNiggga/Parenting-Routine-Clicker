@@ -14,6 +14,7 @@ public class Settings : MonoBehaviour
 
     [SerializeField] private Panel panel;
     [SerializeField] private Clicker clicker;
+    [SerializeField] private SoundManager soundManager;
     #endregion
 
     #region Variables

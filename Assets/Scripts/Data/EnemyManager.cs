@@ -32,6 +32,7 @@ public class EnemyManager : MonoBehaviour
     private GameObject EnemyParent;
     public GameObject DropParent;
     private StagesManager stagesManager;
+    private UpgradesManager upgradesManager;
     private RewardManager giveReward;
     private Inventory inventory;
     private InterfaceManager interfaceManager;
@@ -53,6 +54,7 @@ public class EnemyManager : MonoBehaviour
 
     private void InitializeComponents()
     {
+        upgradesManager = GetComponent<UpgradesManager>();
         giveReward = GetComponent<RewardManager>();
         inventory = GetComponent<Inventory>();
         interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
@@ -84,18 +86,18 @@ public class EnemyManager : MonoBehaviour
             Enemy enemyObj = Instantiate(EnemyList[rnd], EnemyParent.transform).GetComponent<Enemy>();
 
             ObjectMovement enemy_OM = enemyObj.GetComponent<ObjectMovement>();
-            enemyObj.GetComponent<OnHurt>().startPos = new Vector2(0, 35);
 
             int xStart = Random.Range(0, 2) == 1 ? 200 : -200;
             enemyObj.transform.localPosition = new Vector2(xStart, 35);
-            enemy_OM.MoveTo(new Vector2(0, 35), 0.2f, 1, false);
+            enemy_OM.xMoveTo(0, 0.2f, 1, false);
         }
     }
 
     public void EnemyDown()
     {
         Destroy(FindObjectOfType<Enemy>().gameObject);
-        Instantiate(MoneyItem, DropParent.transform);
+        MoneyItem money = Instantiate(MoneyItem, DropParent.transform).GetComponent<MoneyItem>();
+        money.count = 1 + upgradesManager.doubleCurrencyLvl;
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
         giveReward.GetEnemyLoot();
     }
@@ -111,7 +113,7 @@ public class EnemyManager : MonoBehaviour
     public void BossSpawnInv()
     {
         if (interfaceManager.minerOpened) interfaceManager.SwitchMiner(0);
-        if (FindObjectOfType<Enemy>() == null)
+        if (FindObjectOfType<Enemy>() != null)
         {
             CancelInvoke();
             Destroy(FindObjectOfType<Enemy>().gameObject);
@@ -130,11 +132,10 @@ public class EnemyManager : MonoBehaviour
         enemyObj.transform.localPosition = Boss.transform.localPosition;
 
         ObjectMovement enemy_OM = enemyObj.GetComponent<ObjectMovement>();
-        enemyObj.GetComponent<OnHurt>().startPos = new Vector2(0, 35);
 
         int xStart = Random.Range(0, 2) == 1 ? 250 : -250;
         enemyObj.transform.localPosition = new Vector2(xStart, 35);
-        enemy_OM.MoveTo(new Vector2(0, 35), 0.2f, 1, false);
+        enemy_OM.xMoveTo(0, 0.2f, 1, false);
         enemyObj.isBoss = true;
     }
 
@@ -156,7 +157,6 @@ public class EnemyManager : MonoBehaviour
     public void HideEnemyInf()
     {
         hpSlider.value = 1;
-        hpSlider.maxValue = 1;
         text.text = ("");
     }
     public void DestroyLoot()

@@ -111,13 +111,7 @@ public class Unit : MonoBehaviour
     {
         if (able == true && id >= 0 && enemyManager.clickable == true)
         {
-            float x = enemy.transform.localPosition.x - 20;
-            if (name == "Unit2(obj)")
-            {
-                x += 40;
-            }
-
-            objectMovement.MoveTo(new Vector2(x, enemy.transform.localPosition.y - 30), 0.2f, 1, true);
+            objectMovement.yMoveTo(enemy.transform.localPosition.y - 30, 0.2f, 1, true);
             Invoke(nameof(MoveBack), 0.5f);
         }
         Invoke(nameof(MoveToEnemy), 5);
@@ -126,7 +120,7 @@ public class Unit : MonoBehaviour
     private void MoveBack()
     {
         thisSprite.sprite = idleSprite;
-        objectMovement.MoveTo(objectMovement.StartPos, 0.2f, 1, false);
+        objectMovement.yMoveTo(-70, 0.2f, 1, false);
     }
 
     public void Attack()
@@ -140,7 +134,7 @@ public class Unit : MonoBehaviour
             }
             else
             {
-                enemy.UnitKick(clicker.Damage * DamageCoef);
+                enemy.DealDamage(clicker.Damage * DamageCoef);
             }
         }
     }

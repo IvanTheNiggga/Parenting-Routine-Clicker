@@ -64,7 +64,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -96,9 +96,8 @@ MonoBehaviour:
   countTextObj: {fileID: 8404833673231808445}
   countText: {fileID: 4259977070905243898}
   timeStart: 0
-  objectName: 
   reward: 0
-  count: 1
+  count: 0
 --- !u!50 &-136530057284404044
 Rigidbody2D:
   serializedVersion: 4
@@ -187,6 +186,7 @@ GameObject:
   - component: {fileID: 8451595345971268859}
   - component: {fileID: 4259977070905243898}
   - component: {fileID: 8879877459732177800}
+  - component: {fileID: 328672879610297157}
   m_Layer: 5
   m_Name: CountTEXT
   m_TagString: Untagged
@@ -271,3 +271,30 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 2, y: 2}
   m_UseGraphicAlpha: 1
+--- !u!50 &328672879610297157
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8404833673231808445}
+  m_BodyType: 1
+  m_Simulated: 0
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 2
+  m_CollisionDetection: 0
+  m_Constraints: 4

@@ -9,24 +9,27 @@ public class ObjectMovement : MonoBehaviour
     private float FinalRemainder;
 
     private bool move;
+    private bool move_x;
     public bool DoEvent;
 
-    Vector2 Target;
+    float Target;
+
     public Vector2 StartPos;
 
     void Start()
     {
-        if (StartPos == new Vector2(1, 1))
+        if (StartPos.x == 1)
         {
-            StartPos = transform.localPosition;
+            StartPos.x = transform.localPosition.x;
         }
-        else
+        if (StartPos.y == 1)
         {
-            transform.localPosition = StartPos;
+            StartPos.y = transform.localPosition.y;
         }
+        transform.localPosition = StartPos;
     }
 
-    public void MoveTo(Vector2 target, float speed, float finalRemainder, bool doEvent)
+    public void yMoveTo(float target, float speed, float finalRemainder, bool doEvent)
     {
         Target = target;
         Speed = speed;
@@ -35,22 +38,51 @@ public class ObjectMovement : MonoBehaviour
         FinalRemainder = finalRemainder;
 
         move = true;
+        move_x = false;
+    }
+    public void xMoveTo(float target, float speed, float finalRemainder, bool doEvent)
+    {
+        Target = target;
+        Speed = speed;
+        DoEvent = doEvent;
+
+        FinalRemainder = finalRemainder;
+
+        move = true;
+        move_x = true;
     }
     private void FixedUpdate()
     {
         if (move)
         {
-            transform.localPosition = Vector2.Lerp(transform.localPosition, Target, Speed);
-            
-            if (Vector2.Distance(transform.localPosition, Target) <= FinalRemainder)
+            Vector2 pos = transform.localPosition;
+            if (move_x)
             {
-                move = false;
-
-                if (DoEvent == true)
+                transform.localPosition = new Vector2(Mathf.Lerp(pos.x, Target, Speed), pos.y);
+                if (Mathf.Abs(pos.x - Target) <= FinalRemainder)
                 {
-                    onTargetReached.Invoke();
+                    move = false;
+
+                    if (DoEvent == true)
+                    {
+                        onTargetReached.Invoke();
+                    }
+                    transform.localPosition = new Vector2(Target, pos.y);
                 }
-                transform.localPosition = Target;
+            }
+            else
+            {
+                transform.localPosition = new Vector2(pos.x, Mathf.Lerp(pos.y, Target, Speed));
+                if (Mathf.Abs(pos.y - Target) <= FinalRemainder)
+                {
+                    move = false;
+
+                    if (DoEvent == true)
+                    {
+                        onTargetReached.Invoke();
+                    }
+                    transform.localPosition = new Vector2(pos.x, Target);
+                }
             }
         }
     }

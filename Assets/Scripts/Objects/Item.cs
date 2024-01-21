@@ -22,10 +22,13 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public GameObject SaleGrid;
     public GameObject InventoryGrid;
 
+    private Items itemData;
+
     public int stage;
     public int index;
     public string nameObject;
     public string itemName;
+    public string description;
     public string investItemName;
     public string slotItemName;
     public ItemTypes type;
@@ -145,21 +148,24 @@ public class Item : MonoBehaviour, IPointerClickHandler
     {
         if (!Loaded)
         {
+            stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
+
+            itemData = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index];
             itemName = $"Item_S{stage}ID{index}";
             investItemName = $"InvestItem_S{stage}ID{index}";
+            description = itemData.description;
             SaleGrid = GameObject.Find("SaleGrid");
             InventoryGrid = GameObject.Find("InventoryGrid");
             inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
             clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
-            stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
             giveReward = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
 
-            ico.sprite = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].ico;
-            nameObject = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].nameObject;
-            type = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].type;
+            ico.sprite = itemData.ico;
+            nameObject = itemData.nameObject;
+            type = itemData.type;
             UpdatePrice();
-            xpPrice = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].xpPrice;
-            useMethodName = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].useMethodName;
+            xpPrice = itemData.xpPrice;
+            useMethodName = itemData.useMethodName;
 
             CheckName();
             Loaded = true;
@@ -176,7 +182,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public void UpdatePrice()
     {
-        currencyPrice = giveReward.KillReward * stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].currencyPrice;
+        currencyPrice = giveReward.KillReward * itemData.currencyPrice;
     }
 
     public void MultiSellAddgraphics()

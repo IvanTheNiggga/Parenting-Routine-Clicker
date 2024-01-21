@@ -19,7 +19,7 @@ public class Message : MonoBehaviour
 
         //Определяем текст уведомления и выводим окно в видимую область
         text.text = message;
-        objectMovement.MoveTo(new Vector2(0, 0), 0.1f, 0.1f, false);
+        objectMovement.xMoveTo(0, 0.1f, 0.1f, false);
         soundManager.PlayBruhSound();
 
         Invoke(nameof(GoBack), secondsToRead);
@@ -27,6 +27,6 @@ public class Message : MonoBehaviour
 
     private void GoBack()
     {
-        objectMovement.MoveTo(new Vector2(900, 0), 0.1f, 0.1f, false);
+        objectMovement.xMoveTo(900, 0.1f, 0.1f, false);
     }
 }

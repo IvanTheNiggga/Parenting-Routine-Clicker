@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class DroppedItem : MonoBehaviour
 {
-    public AudioClip pickupPC;
+    public AudioClip pickupSound;
 
     public int count;
     public int stage;
@@ -20,7 +20,7 @@ public class DroppedItem : MonoBehaviour
     private void Start()
     {
         countText.text = "";
-        transform.position = new Vector2(Random.Range(-115f, 115f), 300f);
+        transform.localPosition = new Vector2(Random.Range(-115f, 115f), 300f);
 
         Clicker clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
         inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
@@ -36,13 +36,18 @@ public class DroppedItem : MonoBehaviour
     }
 
     private void Update()
-    { countTextObj.transform.rotation = Quaternion.Euler(0, 0, 0); }
+    {
+        if (count > 1)
+        { countTextObj.transform.rotation = Quaternion.Euler(0, 0, 0); }
+    }
 
     public void UpdateText()
-    { if(count > 1) { countText.text = count.ToString(); } }
+    { 
+        if (count > 1) 
+        { countText.text = count.ToString(); } 
+    }
 
-    public void OnMouseEnter()
-    { Collect(); }
+    public void OnMouseEnter() { Collect(); }
 
     public void Collect()
     {
@@ -53,6 +58,6 @@ public class DroppedItem : MonoBehaviour
     void PlaySound()
     {
         CurrencyAudiosource.pitch = Random.Range(0.9f, 1.15f);
-        CurrencyAudiosource.PlayOneShot(pickupPC, 2f);
+        CurrencyAudiosource.PlayOneShot(pickupSound, 4f);
     }
 }

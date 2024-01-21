@@ -3,7 +3,6 @@
 public class OnHurt : MonoBehaviour
 {
     #region Settings
-    public float hitVolume = 1f;
     private const float MinPitch = 0.95f;
     private const float MaxPitch = 1.15f;
 
@@ -14,13 +13,12 @@ public class OnHurt : MonoBehaviour
     [Header("Hit Sound")]
     public AudioClip hit;
     private AudioSource hitSource;
+    private SoundManager soundManager;
     private Enemy enemy;
     private ObjectMovement objectMovement;
 
     private float enemyScaleX;
     private float enemyScaleY;
-
-    public Vector2 startPos;
 
     private bool isBoss;
     #endregion
@@ -43,18 +41,31 @@ public class OnHurt : MonoBehaviour
     public void Kicked(bool onlySound)
     {
         hitSource.pitch = Random.Range(MinPitch, MaxPitch);
-        hitSource.PlayOneShot(hit, hitVolume);
+        hitSource.PlayOneShot(hit);
         if (onlySound) return;
-        objectMovement.MoveTo(
-            new Vector2(transform.localPosition.x + Random.Range(-KnockbackAmount, KnockbackAmount), transform.localPosition.y + Random.Range(-KnockbackAmount, KnockbackAmount)), 
+        objectMovement.xMoveTo(
+            transform.localPosition.x + Random.Range(-KnockbackAmount, KnockbackAmount), 
             1, 
             0.1f, 
             false);
 
         Invoke(nameof(SetBack), 0.05f);
     }
+    public void Sabotaged()
+    {
+        soundManager.PlayBruhSound();
+
+        objectMovement.xMoveTo(
+            transform.localPosition.x + Random.Range(-KnockbackAmount, KnockbackAmount), 
+            1, 
+            0.1f, 
+            false);
+
+        Invoke(nameof(SetBack), 0.05f);
+    }
+
     void SetBack()
     {
-        objectMovement.MoveTo(startPos, 1, 0.1f, false);
+        objectMovement.xMoveTo(0, 1, 0.1f, false);
     }
 }

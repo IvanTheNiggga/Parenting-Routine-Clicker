@@ -364,6 +364,7 @@ public class Items
     public Sprite ico;
 
     public string nameObject;
+    public string description;
 
     public ItemTypes type;
 

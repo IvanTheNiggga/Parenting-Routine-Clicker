@@ -23,6 +23,7 @@ public class InterfaceManager : MonoBehaviour
     private UpgradesManager upgradesManager;
     private Miner miner;
 
+    private GameObject CurrencyPanel;
     private GameObject InventoryGrid;
     private GameObject UpgradesShopGrid;
     private GameObject SellItemForCurrency;
@@ -95,6 +96,7 @@ public class InterfaceManager : MonoBehaviour
         ItemInfoImage = GameObject.Find("ItemInfo(img)").GetComponent<Image>();
         SetCount_Image = GameObject.Find("SetCount(img)").GetComponent<Image>();
 
+        CurrencyPanel = GameObject.Find("Currencies panel");
         InventoryGrid = GameObject.Find("InventoryGrid");
         UpgradesShopGrid = GameObject.Find("UpgradesGrid");
         SellItemForCurrency = GameObject.Find("SetCountCurrency(btn)");
@@ -129,11 +131,12 @@ public class InterfaceManager : MonoBehaviour
         Unit2LockedText = GameObject.Find("Unit2Locked(lbl)").GetComponent<Text>();
     }
     #endregion
+
     public void CloseAll()
     {
         if (agreeWindowOpened) { SwitchConfirmation(0); }
         if (settingsOpened) { SwitchSettings(0); }
-        if (minerOpened) { MinerInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false); }
+        if (minerOpened) { MinerInterface_OM.xMoveTo(720, 0.3f, 1, false); }
         if (upgradesOpened) { SwitchUpgradesMenu(0); }
         if (unitsListOpened) { CloseUnitsSelect(); }
         if (unitsInterfaceOpened) { SwitchUnitsInterface(0); }
@@ -153,7 +156,7 @@ public class InterfaceManager : MonoBehaviour
             case 1:
                 if (minerOpened)
                 {
-                    MinerInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+                    MinerInterface_OM.xMoveTo(0, 0.3f, 1, false);
                 }
                 else
                 {
@@ -162,14 +165,14 @@ public class InterfaceManager : MonoBehaviour
                     enemyManager.able = true;
                     ClickablePanel.GetComponent<Image>().raycastTarget = true;
 
-                    MainInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
-                    EnemyParent_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
-                                    }
+                    MainInterface_OM.xMoveTo(0, 0.3f, 1, false);
+                    EnemyParent_OM.xMoveTo(0, 0.3f, 1, false);
+                }
                 break;
             case 0:
                 if (minerOpened)
                 {
-                    MinerInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+                    MinerInterface_OM.xMoveTo(720, 0.3f, 1, false);
                 }
                 else
                 {
@@ -178,8 +181,8 @@ public class InterfaceManager : MonoBehaviour
                     enemyManager.able = false;
                     ClickablePanel.GetComponent<Image>().raycastTarget = false;
 
-                    MainInterface_OM.MoveTo(new Vector2(-720, 0), 0.3f, 1, false);
-                    EnemyParent_OM.MoveTo(new Vector2(-360, 0), 0.3f, 1, false);
+                    MainInterface_OM.xMoveTo(-720, 0.3f, 1, false);
+                    EnemyParent_OM.xMoveTo(-360, 0.3f, 1, false);
 
                 }
                 break;
@@ -247,12 +250,12 @@ public class InterfaceManager : MonoBehaviour
                 }
                 CloseAll();
                 agreeWindowOpened = true;
-                ConfrimationWindow_OM.MoveTo(new Vector2(0, 90), 0.3f, 1, false);
+                ConfrimationWindow_OM.xMoveTo(0, 0.3f, 1, false);
                 SwitchBattleInterface(0);
                 break;
             case 0:
                 agreeWindowOpened = false;
-                ConfrimationWindow_OM.MoveTo(new Vector2(-720, 90), 0.3f, 1, false);
+                ConfrimationWindow_OM.xMoveTo(-720, 0.3f, 1, false);
                 SwitchBattleInterface(1);
                 break;
             default:
@@ -306,13 +309,13 @@ public class InterfaceManager : MonoBehaviour
             case 1:
                 CloseAll();
                 settingsOpened = true;
-                SettingsWindow_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+                SettingsWindow_OM.xMoveTo(0, 0.3f, 1, false);
                 SwitchBattleInterface(0);
                 break;
             case 0:
                 SwitchBattleInterface(1);
                 settingsOpened = false;
-                SettingsWindow_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+                SettingsWindow_OM.xMoveTo(-720, 0.3f, 1, false);
                 break;
             default:
                 SwitchSettings(!settingsOpened ? 1 : 0);
@@ -332,7 +335,7 @@ public class InterfaceManager : MonoBehaviour
                 SwitchBattleInterface(0);
                 minerOpened = true;
 
-                MinerInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+                MinerInterface_OM.xMoveTo(0, 0.3f, 1, false);
 
                 stagesManager.ChangeAmbience(false);
                 Location_Image.sprite = MainGameSprite;
@@ -342,7 +345,7 @@ public class InterfaceManager : MonoBehaviour
                 minerOpened = false;
                 SwitchBattleInterface(1);
 
-                MinerInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+                MinerInterface_OM.xMoveTo(720, 0.3f, 1, false);
 
                 stagesManager.ChangeAmbience(true);
                 Location_Image.sprite = MinerSprite;
@@ -363,12 +366,12 @@ public class InterfaceManager : MonoBehaviour
             case 1:
                 CloseAll();
                 upgradesOpened = true;
-                UpgradesShopInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+                UpgradesShopInterface_OM.xMoveTo(0, 0.3f, 1, false);
                 SwitchBattleInterface(0);
                 break;
             case 0:
                 upgradesOpened = false;
-                UpgradesShopInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+                UpgradesShopInterface_OM.xMoveTo(720, 0.3f, 1, false);
                 SwitchBattleInterface(1);
                 break;
             default:
@@ -423,13 +426,13 @@ public class InterfaceManager : MonoBehaviour
                         Unit2LockedText.text = "";
                         break;
                 }
-                UnitInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+                UnitInterface_OM.xMoveTo(0, 0.3f, 1, false);
 
                 SwitchBattleInterface(0);
                 break;
             case 0:
                 unitsInterfaceOpened = false;
-                UnitInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+                UnitInterface_OM.xMoveTo(720, 0.3f, 1, false);
                 SwitchBattleInterface(1);
                 break;
             default:
@@ -454,12 +457,12 @@ public class InterfaceManager : MonoBehaviour
         unitsListOpened = true;
         unitManager.slotid = slot;
 
-        UnitSelectInterface_OM.MoveTo(new Vector2(0, 0), 0.3f, 1, false);
+        UnitSelectInterface_OM.xMoveTo(0, 0.3f, 1, false);
     }
     public void CloseUnitsSelect()
     {
         unitsListOpened = false;
-        UnitSelectInterface_OM.MoveTo(new Vector2(720, 0), 0.3f, 1, false);
+        UnitSelectInterface_OM.xMoveTo(720, 0.3f, 1, false);
         SwitchUnitsInterface(1);
     }
     #endregion
@@ -476,7 +479,7 @@ public class InterfaceManager : MonoBehaviour
                 inventoryOpened = true;
 
                 inventory.SortInventory();
-                InventoryWindow_OM.MoveTo(new Vector2(0, 270), 0.3f, 1, false);
+                InventoryWindow_OM.xMoveTo(0, 0.3f, 1, false);
                 break;
             case 0:
                 if (saleOpened) { SwitchSale(0); }
@@ -487,7 +490,7 @@ public class InterfaceManager : MonoBehaviour
                 InventoryContent.SetBack();
                 inventory.SetItemsBack();
 
-                InventoryWindow_OM.MoveTo(new Vector2(0, 1480), 0.3f, 1, false);
+                InventoryWindow_OM.xMoveTo(-720, 0.3f, 1, false);
 
                 SwitchBattleInterface(1);
                 break;
@@ -517,7 +520,7 @@ public class InterfaceManager : MonoBehaviour
                     SaleForCurrencyPrice_Text.text = "0";
                     SaleForXpPrice_Text.text = "0";
 
-                    MultiSellWindow_OM.MoveTo(new Vector2(0, -300f), 0.3f, 1, false);
+                    MultiSellWindow_OM.xMoveTo(0f, 0.3f, 1, false);
                 }
                 break;
             case 0:
@@ -526,7 +529,7 @@ public class InterfaceManager : MonoBehaviour
 
                 inventory.SetItemsBack();
 
-                MultiSellWindow_OM.MoveTo(new Vector2(0, -1200), 0.3f, 1, false);
+                MultiSellWindow_OM.xMoveTo(-720, 0.3f, 1, false);
                 break;
             default:
                 SwitchSale(!saleOpened ? 1 : 0);
@@ -555,14 +558,14 @@ public class InterfaceManager : MonoBehaviour
                 }
 
                 ItemInfoImage.sprite = item.ico.sprite;
-                ItemInfoDescription_Text.text = "Type : " + item.type + " \n Name: " + item.nameObject;
+                ItemInfoDescription_Text.text = $"Name: {item.nameObject}\nType : {item.type}\n{item.description}";
                 ItemInfoCount_Text.text = NumFormat.FormatNumF0F1(item.count);
 
-                ItemInfoWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
+                ItemInfoWindow_OM.xMoveTo(0, 0.3f, 1, false);
                 break;
             case 0:
                 itemInfoOpened = false;
-                ItemInfoWindow_OM.MoveTo(new Vector2(720, -200), 0.3f, 1, false);
+                ItemInfoWindow_OM.xMoveTo(720, 0.3f, 1, false);
                 break;
             default:
                 SwitchItemInfo(!itemInfoOpened ? 1 : 0);
@@ -627,7 +630,7 @@ public class InterfaceManager : MonoBehaviour
                 SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
                 SetCountUpdate();
 
-                SetCountWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
+                SetCountWindow_OM.xMoveTo(0, 0.3f, 1, false);
                 break;
         }
     }
@@ -649,13 +652,13 @@ public class InterfaceManager : MonoBehaviour
         SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
         SetCountUpdate();
 
-        SetCountWindow_OM.MoveTo(new Vector2(0, -200), 0.3f, 1, false);
+        SetCountWindow_OM.xMoveTo(0, 0.3f, 1, false);
     }
     public void CloseSetCount()
     {
         setCountOpened = false;
         CurrentItemEventName = "";
-        SetCountWindow_OM.MoveTo(new Vector2(-720, -200), 0.3f, 1, false);
+        SetCountWindow_OM.xMoveTo(720, 0.3f, 1, false);
     }
     public void ResetSelectedItem()
     { inventory.SelectedItem = null; }
@@ -665,17 +668,14 @@ public class InterfaceManager : MonoBehaviour
     private void AdjustTopInsideSafeArea()
     {
         Rect safeArea = Screen.safeArea;
-
-        // Проверяем, находится ли объект вне безопасной зоны
-        if (!safeArea.Contains(currencyText.transform.position))
+        
+        if (!safeArea.Contains(CurrencyPanel.transform.position))
         {
-            Vector3 panelOldPos = currencyText.transform.parent.position;
-            Vector3 oldPos = currencyText.transform.position;
-            float newY = Mathf.Clamp(oldPos.y, safeArea.yMin, safeArea.yMax);
-            float difference = Mathf.Abs(oldPos.y - newY) * 1.7f;
+            Vector3 newPosition = CurrencyPanel.transform.position;
 
-            // Применяем новую позицию
-            currencyText.transform.parent.position = panelOldPos - (Vector3.up * difference);
+            newPosition.y = Mathf.Clamp(newPosition.y, safeArea.yMin, safeArea.yMax);
+
+            CurrencyPanel.transform.position = newPosition;
         }
     }
     public void UpdateAllText()
@@ -706,4 +706,5 @@ public class InterfaceManager : MonoBehaviour
         UpdateUpgrades();
     }
     #endregion
+
 }

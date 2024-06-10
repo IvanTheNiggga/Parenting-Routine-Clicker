@@ -12,36 +12,31 @@ public class Item : MonoBehaviour, IPointerClickHandler
     private SoundManager soundManager;
     private InterfaceManager interfaceManager;
 
-    public Text text;
-    public Image ico;
-
     private Text SaleForCurrencyPrice_Text;
     private Text SaleForXpPrice_Text;
+    private GameObject SaleGrid;
+    private GameObject InventoryGrid;
 
-    public GameObject item;
-    public GameObject SaleGrid;
-    public GameObject InventoryGrid;
+    public Text CountText;
+    public Image Ico;
 
-    private Items itemData;
+    public ItemPattern itemPattern;
 
-    public int stage;
-    public int index;
-    public string nameObject;
-    public string itemName;
-    public string description;
-    public string investItemName;
-    public string slotItemName;
-    public ItemTypes type;
-    public double currencyPrice;
-    public float xpPrice;
-    public string useMethodName;
+    public string ItemName;
+    public string ObjectName;
+    public string InvestIObjectName;
+    public string Description;
+    public ItemTypes Type;
+
+    public double CurrencyPrice;
+    public float XpPrice;
     #endregion
 
     #region Variables
-    public int count;
+    public int Count;
+    public bool Clickable;
     private int taps;
-    public bool clickable;
-    bool Loaded;
+    bool loaded;
     #endregion
 
     #region Base
@@ -51,12 +46,12 @@ public class Item : MonoBehaviour, IPointerClickHandler
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         transform.localScale = new Vector3(1, 1, 1);
         taps = 0;
-        clickable = true;
+        Clickable = true;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (clickable == true)
+        if (Clickable == true)
         {
 
             if (interfaceManager.saleOpened)
@@ -80,7 +75,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
                     }
                     if (interfaceManager.CurrentItemEventName == "Use")
                     {
-                        if(useMethodName != "")
+                        if(itemPattern.UseMethodName != "")
                         {
                             inventory.SelectedItem = gameObject;
                             interfaceManager.OpenItemUsePanel();
@@ -100,15 +95,15 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     private void DestroyOnEmpty()
     {
-        if (count <= 0 && Loaded)
+        if (Count <= 0 && loaded)
         {
-            if (name == investItemName)
+            if (name == InvestIObjectName)
             {
                 inventory.investItems.Remove(this);
             }
             else
             {
-                string keyName = $"{itemName}Count";
+                string keyName = $"{ObjectName}Count";
                 PlayerPrefs.DeleteKey(keyName);
                 inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
                 inventory.SelectedItem = null;
@@ -120,22 +115,22 @@ public class Item : MonoBehaviour, IPointerClickHandler
     }
     private void OnBecameInvisible()
     {
-        clickable = false;
+        Clickable = false;
         GetComponent<Image>().raycastTarget = false;
     }
     private void OnBecameVisible()
     {
-        clickable = true;
+        Clickable = true;
         GetComponent<Image>().raycastTarget = true;
     }
     void CheckName()
     {
-        if (name == itemName)
+        if (name == ObjectName)
         {
             inventory.items.Add(this);
             gameObject.transform.SetParent(InventoryGrid.transform);
         }
-        else if (name == investItemName)
+        else if (name == InvestIObjectName)
         {
             inventory.investItems.Add(this);
             gameObject.transform.SetParent(SaleGrid.transform);
@@ -146,43 +141,41 @@ public class Item : MonoBehaviour, IPointerClickHandler
     #region UI/Data
     public void AddGraphics()
     {
-        if (!Loaded)
+        if (!loaded)
         {
             stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
 
-            itemData = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index];
-            itemName = $"Item_S{stage}ID{index}";
-            investItemName = $"InvestItem_S{stage}ID{index}";
-            description = itemData.description;
+            ObjectName = $"Item_{itemPattern.ID}";
+            InvestIObjectName = $"InvestItem_{itemPattern.ID}";
+            Description = itemPattern.Description;
             SaleGrid = GameObject.Find("SaleGrid");
             InventoryGrid = GameObject.Find("InventoryGrid");
             inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
             clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
             giveReward = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
 
-            ico.sprite = itemData.ico;
-            nameObject = itemData.nameObject;
-            type = itemData.type;
+            Ico.sprite = itemPattern.ico;
+            ItemName = itemPattern.ItemName;
+            Type = itemPattern.Type;
             UpdatePrice();
-            xpPrice = itemData.xpPrice;
-            useMethodName = itemData.useMethodName;
+            XpPrice = itemPattern.XpPrice;
 
             CheckName();
-            Loaded = true;
+            loaded = true;
         }
 
         DestroyOnEmpty();
-        if (name == itemName && count > 0)
+        if (name == ObjectName && Count > 0)
         {
-            string keyName = $"{itemName}Count";
-            PlayerPrefs.SetInt(keyName, count);
+            string keyName = $"{ObjectName}Count";
+            PlayerPrefs.SetInt(keyName, Count);
         }
-        text.text = NumFormat.FormatNumF0F1(count);
+        CountText.text = NumFormat.FormatNumF0F1(Count);
     }
 
     public void UpdatePrice()
     {
-        currencyPrice = giveReward.KillReward * itemData.currencyPrice;
+        CurrencyPrice = giveReward.KillReward * itemPattern.CurrencyPrice;
     }
 
     public void MultiSellAddgraphics()
@@ -191,14 +184,14 @@ public class Item : MonoBehaviour, IPointerClickHandler
         SaleForXpPrice_Text = GameObject.Find("SaleForXp(txt)").GetComponent<Text>();
 
         int itemsCount = 0;
-        float esPrice = 0;
-        double pcPrice = 0;
+        float xpPrice = 0;
+        double currencyPrice = 0;
         for (int i = 0; i < inventory.investItems.Count; i++)
         {
             Item item = SaleGrid.transform.GetChild(i).GetComponent<Item>();
-            itemsCount += item.count;
-            esPrice += item.count * item.xpPrice;
-            pcPrice += item.count * item.currencyPrice;
+            itemsCount += item.Count;
+            xpPrice += item.Count * item.XpPrice;
+            currencyPrice += item.Count * item.CurrencyPrice;
         }
         if (itemsCount == 0)
         {
@@ -207,8 +200,8 @@ public class Item : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            SaleForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(pcPrice);
-            SaleForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(esPrice);
+            SaleForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(currencyPrice);
+            SaleForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(xpPrice);
         }
     }
     #endregion
@@ -216,7 +209,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
     #region Item Manipulations
     public void Use()
     {
-        inventory.Invoke(useMethodName, 0f);
+        inventory.Invoke(itemPattern.UseMethodName, 0f);
     }
     public void AddToInvestGrid()
     {
@@ -224,9 +217,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
         Invoke(nameof(TapEquals0), 0.2f);
         if (taps >= 2)
         {
-            GameObject g = name == itemName ? GameObject.Find(itemName) : GameObject.Find(investItemName);
+            GameObject g = name == ObjectName ? GameObject.Find(ObjectName) : GameObject.Find(InvestIObjectName);
 
-            inventory.MoveItem(this, count);
+            inventory.MoveItem(this, Count);
 
             g.GetComponent<Item>().AddGraphics();
 

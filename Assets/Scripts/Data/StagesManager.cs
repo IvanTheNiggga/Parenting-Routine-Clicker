@@ -116,7 +116,7 @@ public class StagesManager : MonoBehaviour
     #endregion
 }
 
-[System.Serializable]
+[Serializable]
 public class Stage
 {
     [Header("BackGround")]
@@ -130,5 +130,5 @@ public class Stage
     public AudioClip Ambience;
 
     [Header("Item List")]
-    public List<Items> itemsDataBase = new();
+    public List<ItemPattern> ItemsDataBase = new();
 }

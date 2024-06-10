@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(AudioSource))]
@@ -75,7 +76,7 @@ public class Enemy : MonoBehaviour
 
         startHp = HP * enemyManager.EnemyHPMultiplier;
         HP = startHp;
-        addCrit = upgradesManager.critDamageLvl;
+        addCrit = upgradesManager.CritDamageLvl;
 
         hpSlider.maxValue = 1;
         hpSlider.value = (float)(HP / startHp);
@@ -148,7 +149,7 @@ public class Enemy : MonoBehaviour
 
         DealDamage(CalculateDamage());
 
-        clicker.Experience += 0.05f * (1 + upgradesManager.doubleXPLvl);
+        clicker.Experience += 0.05f * (1 + upgradesManager.DoubleXPLvl);
     }
 
     private double CalculateDamage()
@@ -177,11 +178,15 @@ public class Enemy : MonoBehaviour
         ClearUnits();
         if (isBoss)
         {
-            timer.PauseTimer();
-            timer.ClearTimer();
+            StopBossTimer();
             enemyManager.BossDown();
         }
         else enemyManager.EnemyDown();
+    }
+    public void StopBossTimer()
+    {
+        timer.PauseTimer();
+        timer.ClearTimer();
     }
     #endregion
 
@@ -189,5 +194,6 @@ public class Enemy : MonoBehaviour
     {
         enemyManager.HideEnemyInf();
         enemyManager.clickable = false;
+        enemyManager.CurrentEnemy = null;
     }
 }

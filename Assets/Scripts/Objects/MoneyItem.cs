@@ -23,7 +23,7 @@ public class MoneyItem : MonoBehaviour
         giveReward = GameObject.Find("ClickerManager").GetComponent<RewardManager>();
         reward = giveReward.KillReward;
 
-        transform.localPosition = new Vector2(Random.Range(-115f, 115f), 300f);
+        transform.localPosition = new Vector2(Random.Range(-115f, 115f), 400f);
         if (Random.Range(0, 2) <= 0)
         {
             transform.rotation = Quaternion.Euler(0, -180, 0);

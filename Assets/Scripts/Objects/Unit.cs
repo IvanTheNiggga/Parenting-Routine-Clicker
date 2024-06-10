@@ -9,8 +9,6 @@ public class Unit : MonoBehaviour
     [SerializeField] private Enemy enemy;
     [SerializeField] private EnemyManager enemyManager;
     [SerializeField] private UnitManager unitManager;
-    [SerializeField] private ObjectMovement objectMovement;
-    [SerializeField] private SpriteRenderer thisSprite;
     [SerializeField] private Image UnitInfoImage;
     public Text UnitInfoText;
     #endregion
@@ -18,12 +16,9 @@ public class Unit : MonoBehaviour
     #region Variables
     public int CurrentLevel;
     public int unfairLvl;
-    private Sprite idleSprite;
-    private Sprite attackSprite;
     public double DamageCoef;
     public string nameobj;
     private bool loaded;
-    private bool able;
     #endregion
 
     #region Unity Lifecycle and Initialization
@@ -35,25 +30,16 @@ public class Unit : MonoBehaviour
         switch (name)
         {
             case "Unit1(obj)":
-                Invoke(nameof(MoveToEnemy), 2.5f);
+                InvokeRepeating(nameof(Attack), 1.5f, 1);
                 break;
             case "Unit2(obj)":
-                Invoke(nameof(MoveToEnemy), 5f);
+                InvokeRepeating(nameof(Attack), 2, 1);
                 break;
         }
     }
     public void GetEnemyComponent(Enemy enemyObj)
     {
-        if (enemyObj != null)
-        {
-            enemy = enemyObj;
-            able = true;
-        }
-        else
-        {
-            enemy = null;
-            able = false;
-        }
+        enemy = enemyObj;
     }
     #endregion
 
@@ -66,10 +52,6 @@ public class Unit : MonoBehaviour
         {
             PlayerPrefs.SetInt($"has_{id}", id);
             PlayerPrefs.SetInt(name + "ID", id);
-
-            idleSprite = unitManager.unitsDataBase[id].Idle;
-            attackSprite = unitManager.unitsDataBase[id].Attack;
-            thisSprite.sprite = idleSprite;
 
             double d = CurrentLevel > 0 ? (unitManager.unitsDataBase[id].DamageCoef * (0.2 * CurrentLevel)) : 0;
             DamageCoef = unitManager.unitsDataBase[id].DamageCoef + d;
@@ -88,12 +70,9 @@ public class Unit : MonoBehaviour
         else
         {
             UnitInfoImage.sprite = unitManager.None;
-            UnitInfoText.text = "";
+            UnitInfoText.text = "No minion selected.";
 
             PlayerPrefs.SetInt(name + "ID", id);
-            idleSprite = null;
-            attackSprite = null;
-            thisSprite.sprite = null;
             DamageCoef = 0;
         }
     }
@@ -107,27 +86,11 @@ public class Unit : MonoBehaviour
     #endregion
 
     #region Combat
-    private void MoveToEnemy()
-    {
-        if (able == true && id >= 0 && enemyManager.clickable == true)
-        {
-            objectMovement.yMoveTo(enemy.transform.localPosition.y - 30, 0.2f, 1, true);
-            Invoke(nameof(MoveBack), 0.5f);
-        }
-        Invoke(nameof(MoveToEnemy), 5);
-    }
-
-    private void MoveBack()
-    {
-        thisSprite.sprite = idleSprite;
-        objectMovement.yMoveTo(-70, 0.2f, 1, false);
-    }
 
     public void Attack()
     {
-        if (enemyManager.clickable == true)
+        if (enemy && id >= 0 && enemyManager.clickable == true)
         {
-            thisSprite.sprite = attackSprite;
             if (unfairLvl > 0 && Random.Range(0, 100f / (unfairLvl * 5)) < 1f)
             {
                 enemy.UnitSabotage();

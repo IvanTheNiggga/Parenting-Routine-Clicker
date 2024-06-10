@@ -3,31 +3,27 @@ using UnityEngine.UI;
 
 public class DroppedItem : MonoBehaviour
 {
-    public AudioClip pickupSound;
+    private AudioSource CurrencyAudiosource;
+    [SerializeField] private AudioClip pickupSound;
+    private Inventory inventory;
 
-    public int count;
-    public int stage;
-    public int index;
+    public ItemPattern itemPattern;
+    public int Count;
 
-    AudioSource CurrencyAudiosource;
+    [SerializeField] private Image ico;
+    [SerializeField] private Text countText;
 
-    public Image ico;
-    public Text countText;
-    public Text countTextObj;
-
-    public Inventory inventory;
 
     private void Start()
     {
         countText.text = "";
-        transform.localPosition = new Vector2(Random.Range(-115f, 115f), 300f);
+        transform.localPosition = new Vector2(Random.Range(-115f, 115f), 500f);
 
         Clicker clicker = GameObject.Find("ClickerManager").GetComponent<Clicker>();
         inventory = GameObject.Find("ClickerManager").GetComponent<Inventory>();
         StagesManager stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
 
-        ico = GetComponent<Image>();
-        ico.sprite = stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase[index].ico;
+        ico.sprite = itemPattern.ico;
 
         CurrencyAudiosource = GameObject.Find("PickupCurrencySource").GetComponent<AudioSource>();
 
@@ -37,14 +33,14 @@ public class DroppedItem : MonoBehaviour
 
     private void Update()
     {
-        if (count > 1)
-        { countTextObj.transform.rotation = Quaternion.Euler(0, 0, 0); }
+        if (Count > 1)
+        { countText.transform.rotation = Quaternion.Euler(0, 0, 0); }
     }
 
     public void UpdateText()
-    { 
-        if (count > 1) 
-        { countText.text = count.ToString(); } 
+    {
+        if (Count > 1)
+        { countText.text = Count.ToString(); }
     }
 
     public void OnMouseEnter() { Collect(); }
@@ -52,7 +48,7 @@ public class DroppedItem : MonoBehaviour
     public void Collect()
     {
         PlaySound();
-        inventory.AddItem(stage, index, count);
+        inventory.AddItem(itemPattern, Count);
         Destroy(gameObject);
     }
     void PlaySound()

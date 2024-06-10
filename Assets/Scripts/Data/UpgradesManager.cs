@@ -37,30 +37,30 @@ public class UpgradesManager : MonoBehaviour
         clicker.CalculateCrit();
         interfaceManager.CurrencyTextUpdate();
     }
-    public int critDamageLvl; public void CritDamageUpgrade()
-    { critDamageLvl++; }
-    public int dropRateLvl; public void DropRateUpgrade()
-    { dropRateLvl++; }
-    public int packsCountLvl; public void PacksCountUpgrade()
-    { packsCountLvl++; }
-    public int currencyChanceLvl; public void CurrencyChanceUpgrade()
-    { currencyChanceLvl++; }
-    public int doubleCurrencyLvl; public void DoubleCurrencyUpgrade()
-    { doubleCurrencyLvl++; }
-    public int betterPacksLvl; public void BetterPacksUpgrade()
-    { betterPacksLvl++; }
-    public int doubleDamageLvl; public void DoubleDamageUpgrade()
-    { doubleDamageLvl++; }
-    public int betterStartLvl; public void BetterStartUpgrade()
-    { betterStartLvl++; }
-    public int moreBirthChanceLvl; public void MoreBirthChanceUpgrade()
-    { moreBirthChanceLvl++; }
-    public int betterMineAfterRebirthLvl; public void BetterMineAfterRebirthUpgrade()
-    { betterMineAfterRebirthLvl++; }
-    public int doubleXPLvl; public void DoubleXPUpgrade()
-    { doubleXPLvl++; }
-    public int mineLootLvl; public void MineLootUpgrade()
-    { mineLootLvl++; }
+    public int CritDamageLvl; public void CritDamageUpgrade()
+    { CritDamageLvl++; }
+    public int DropRateLvl; public void DropRateUpgrade()
+    { DropRateLvl++; }
+    public int PacksCountLvl; public void PacksCountUpgrade()
+    { PacksCountLvl++; }
+    public int CurrencyChanceLvl; public void CurrencyChanceUpgrade()
+    { CurrencyChanceLvl++; }
+    public int DoubleCurrencyLvl; public void DoubleCurrencyUpgrade()
+    { DoubleCurrencyLvl++; }
+    public int BetterPacksLvl; public void BetterPacksUpgrade()
+    { BetterPacksLvl++; }
+    public int DoubleDamageLvl; public void DoubleDamageUpgrade()
+    { DoubleDamageLvl++; }
+    public int BetterStartLvl; public void BetterStartUpgrade()
+    { BetterStartLvl++; }
+    public int MoreRebirthPointsChanceLvl; public void MoreRebirthPointsChanceUpgrade()
+    { MoreRebirthPointsChanceLvl++; }
+    public int BetterMineAfterRebirthLvl; public void BetterMineAfterRebirthUpgrade()
+    { BetterMineAfterRebirthLvl++; }
+    public int DoubleXPLvl; public void DoubleXPUpgrade()
+    { DoubleXPLvl++; }
+    public int MineLootLvl; public void MineLootUpgrade()
+    { MineLootLvl++; }
     #endregion
 }
 
@@ -79,5 +79,5 @@ public class Upgrade
 }
 public enum UpgradeTypes
 {
-    Money, Xp, Birth
+    Money, Xp, RebirthPoints
 }

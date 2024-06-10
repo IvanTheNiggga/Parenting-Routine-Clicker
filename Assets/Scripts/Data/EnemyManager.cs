@@ -10,7 +10,6 @@ public class EnemyManager : MonoBehaviour
     #region Local
     public GameObject[] BossList;
     public GameObject[] EnemyList;
-    public GameObject Panel;
     public GameObject MoneyItem;
     private double _enemyHPMultiplier;
     public double EnemyHPMultiplier
@@ -38,6 +37,7 @@ public class EnemyManager : MonoBehaviour
     private InterfaceManager interfaceManager;
     private Slider hpSlider;
     private Clicker clicker;
+    private Message message;
     private Text text;
 
     public bool clickable;
@@ -57,9 +57,10 @@ public class EnemyManager : MonoBehaviour
         upgradesManager = GetComponent<UpgradesManager>();
         giveReward = GetComponent<RewardManager>();
         inventory = GetComponent<Inventory>();
-        interfaceManager = GameObject.Find("INTERFACE").GetComponent<InterfaceManager>();
+        interfaceManager = FindAnyObjectByType<InterfaceManager>();
         clicker = GetComponent<Clicker>();
-        stagesManager = GetComponent <StagesManager>();
+        stagesManager = GetComponent<StagesManager>();
+        message = FindAnyObjectByType<Message>();
 
         EnemyParent = GameObject.Find("Enemy Parent");
         DropParent = GameObject.Find("Drop Parent");
@@ -74,6 +75,8 @@ public class EnemyManager : MonoBehaviour
     #endregion
 
     #region Enemy Management
+
+    public Enemy CurrentEnemy;
     public void EnemySpawn()
     {
         if (!able) Invoke(nameof(EnemySpawn), enemySpawnInvoke);
@@ -83,28 +86,28 @@ public class EnemyManager : MonoBehaviour
         {
 
             int rnd = Random.Range(0, EnemyList.Length);
-            Enemy enemyObj = Instantiate(EnemyList[rnd], EnemyParent.transform).GetComponent<Enemy>();
+            CurrentEnemy = Instantiate(EnemyList[rnd], EnemyParent.transform).GetComponent<Enemy>();
 
-            ObjectMovement enemy_OM = enemyObj.GetComponent<ObjectMovement>();
+            ObjectMovement enemy_OM = CurrentEnemy.GetComponent<ObjectMovement>();
 
             int xStart = Random.Range(0, 2) == 1 ? 200 : -200;
-            enemyObj.transform.localPosition = new Vector2(xStart, 35);
+            CurrentEnemy.transform.localPosition = new Vector2(xStart, 35);
             enemy_OM.xMoveTo(0, 0.2f, 1, false);
         }
     }
 
     public void EnemyDown()
     {
-        Destroy(FindObjectOfType<Enemy>().gameObject);
+        Destroy(CurrentEnemy.gameObject);
         MoneyItem money = Instantiate(MoneyItem, DropParent.transform).GetComponent<MoneyItem>();
-        money.count = 1 + upgradesManager.doubleCurrencyLvl;
+        money.count = 1 + upgradesManager.DoubleCurrencyLvl;
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
         giveReward.GetEnemyLoot();
     }
 
     public void RespawnEnemy()
     {
-        Destroy(FindObjectOfType<Enemy>().gameObject);
+        Destroy(CurrentEnemy.gameObject);
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
     }
     #endregion
@@ -112,13 +115,19 @@ public class EnemyManager : MonoBehaviour
     #region Boss Management
     public void BossSpawnInv()
     {
-        if (interfaceManager.minerOpened) interfaceManager.SwitchMiner(0);
-        if (FindObjectOfType<Enemy>() != null)
+        if (!CurrentEnemy) return;
+        if (!CurrentEnemy.isBoss)
         {
+            if (interfaceManager.minerOpened) interfaceManager.SwitchMiner(0);
             CancelInvoke();
-            Destroy(FindObjectOfType<Enemy>().gameObject);
+            Destroy(CurrentEnemy.gameObject);
             interfaceManager.SwitchUpgradesMenu(0);
             Invoke(nameof(BossSpawn), 1f);
+        }
+        else
+        {
+            CurrentEnemy.StopBossTimer();
+            BossFailed();
         }
     }
 
@@ -128,20 +137,20 @@ public class EnemyManager : MonoBehaviour
 
         int rnd = Random.Range(0, BossList.Length);
         GameObject Boss = BossList[rnd];
-        Enemy enemyObj = Instantiate(Boss, EnemyParent.transform).GetComponent<Enemy>();
-        enemyObj.transform.localPosition = Boss.transform.localPosition;
+        CurrentEnemy = Instantiate(Boss, EnemyParent.transform).GetComponent<Enemy>();
+        CurrentEnemy.transform.localPosition = Boss.transform.localPosition;
 
-        ObjectMovement enemy_OM = enemyObj.GetComponent<ObjectMovement>();
+        ObjectMovement enemy_OM = CurrentEnemy.GetComponent<ObjectMovement>();
 
         int xStart = Random.Range(0, 2) == 1 ? 250 : -250;
-        enemyObj.transform.localPosition = new Vector2(xStart, 35);
+        CurrentEnemy.transform.localPosition = new Vector2(xStart, 35);
         enemy_OM.xMoveTo(0, 0.2f, 1, false);
-        enemyObj.isBoss = true;
+        CurrentEnemy.isBoss = true;
     }
 
     public void BossDown()
     {
-        Destroy(FindObjectOfType<Enemy>().gameObject);
+        Destroy(CurrentEnemy.gameObject);
         stagesManager.NextStage();
         clicker.Save();
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
@@ -150,8 +159,9 @@ public class EnemyManager : MonoBehaviour
 
     public void BossFailed()
     {
-        Destroy(FindObjectOfType<Enemy>().gameObject);
+        Destroy(CurrentEnemy.gameObject);
         Invoke(nameof(EnemySpawn), enemySpawnInvoke);
+        message.SendMessage("Boss failed", 1);
     }
     #endregion
     public void HideEnemyInf()

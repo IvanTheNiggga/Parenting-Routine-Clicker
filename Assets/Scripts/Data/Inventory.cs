@@ -2,10 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Inventory : MonoBehaviour
 {
     #region Appointed through the inspector
+    public List<ItemPattern> GlobalItemsDataBase = new();
+    public List<ItemPattern> ItemsDataBase()
+    {
+        if (!stagesManager) stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
+        List<ItemPattern> combinedList = new List<ItemPattern>(GlobalItemsDataBase);
+        foreach (Stage stage in stagesManager.StagesDataBase)
+        {
+            combinedList.AddRange(stage.ItemsDataBase);
+        }
+        return combinedList;
+    }
     [SerializeField] private GameObject DroppedItem_Prefab;
     [SerializeField] private GameObject Item_Prefab;
     #endregion
@@ -79,7 +91,7 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].type == itemtype)
+            if (items[i].Type == itemtype)
             {
                 return items[i];
             }
@@ -89,12 +101,12 @@ public class Inventory : MonoBehaviour
     }
     public bool ConsumeItem(string itemname)
     {
-        for (int i = 0; i < items.Count; i++)
+        foreach (Item item in items)
         {
-            if (items[i].nameObject == itemname)
+            if (item.ItemName == itemname)
             {
-                items[i].count--;
-                items[i].AddGraphics();
+                item.Count--;
+                item.AddGraphics();
                 return true;
             }
         }
@@ -102,12 +114,12 @@ public class Inventory : MonoBehaviour
     }
     public bool ConsumeAnyItemOfType(ItemTypes itemtype)
     {
-        for (int i = 0; i < items.Count; i++)
+        foreach (Item item in items)
         {
-            if (items[i].type == itemtype)
+            if (item.Type == itemtype)
             {
-                items[i].count--;
-                items[i].AddGraphics();
+                item.Count--;
+                item.AddGraphics();
                 return true;
             }
         }
@@ -115,50 +127,45 @@ public class Inventory : MonoBehaviour
     }
     public void DeleteItems()
     {
-        for (int i = 0; i < items.Count; i++)
-        {
-            items[i].count = 0;
-        }
+        foreach (Item item in items) item.Count = 0;
     }
     public void SetItemsBack()
     {
         if (investItems.Count > 0)
         {
-            for (int i = 0; i < investItems.Count; i++)
-            {
-                MoveItem(investItems[i], investItems[i].count);
-            }
+            foreach (Item item in investItems) MoveItem(item, item.Count);
         }
     }
     public void MoveItem(Item itemScript, int count)
     {
-        if (itemScript.name == itemScript.itemName)
+        if (itemScript.name == itemScript.ObjectName)
         {
-            if (GameObject.Find(itemScript.investItemName) == null)
+            if (GameObject.Find(itemScript.InvestIObjectName) == null)
             {
                 GameObject i = Instantiate(Item_Prefab);
                 Item g = i.GetComponent<Item>();
-                g.name = itemScript.investItemName;
-                g.count = count;
-                g.index = itemScript.index;
-                g.stage = itemScript.stage;
+
+                g.name = itemScript.InvestIObjectName;
+                g.itemPattern = itemScript.itemPattern;
+                g.Count = count;
+
                 g.AddGraphics();
-                itemScript.count -= count;
+                itemScript.Count -= count;
                 SortInventory();
             }
             else
             {
-                GameObject i = GameObject.Find(itemScript.investItemName);
+                GameObject i = GameObject.Find(itemScript.InvestIObjectName);
                 Item g = i.GetComponent<Item>();
-                g.count += count;
-                itemScript.count -= count;
+                g.Count += count;
+                itemScript.Count -= count;
                 g.AddGraphics();
             }
         }
         else
         {
-            AddItem(itemScript.stage, itemScript.index, count);
-            itemScript.count -= count;
+            AddItem(itemScript.itemPattern, count);
+            itemScript.Count -= count;
             itemScript.AddGraphics();
         }
     }
@@ -173,7 +180,7 @@ public class Inventory : MonoBehaviour
 
         Invoke(nameof(CheckFloors), 0.01f);
     }
-    
+
     public void UpdateItemPrices()
     {
         for (int i = 0; i < items.Count; i++)
@@ -189,9 +196,9 @@ public class Inventory : MonoBehaviour
         for (int i = investItems.Count - 1; i >= 0; i--)
         {
             Item item = investItems[i];
-            clicker.Experience += item.count * item.xpPrice;
+            clicker.Experience += item.Count * item.XpPrice;
             Experience_Text.text = NumFormat.FormatNumF1(clicker.Experience);
-            investItems[i].count = 0;
+            investItems[i].Count = 0;
             investItems[i].AddGraphics();
 
             SaleForCurrency_Text.text = "0";
@@ -205,9 +212,9 @@ public class Inventory : MonoBehaviour
         for (int i = investItems.Count - 1; i >= 0; i--)
         {
             Item item = investItems[i];
-            clicker.Currency += item.count * item.currencyPrice;
+            clicker.Currency += item.Count * item.CurrencyPrice;
             Currency_Text.text = NumFormat.FormatNumF1(clicker.Currency);
-            investItems[i].count = 0;
+            investItems[i].Count = 0;
             investItems[i].AddGraphics();
 
             SaleForCurrency_Text.text = "0";
@@ -225,7 +232,7 @@ public class Inventory : MonoBehaviour
             if (Count_Input.text.Length > 0)
             {
                 input = int.Parse(Count_Input.text);
-                input = input > item.count ? item.count : input;
+                input = input > item.Count ? item.Count : input;
             }
 
             if (SelectedItem == null)
@@ -234,9 +241,9 @@ public class Inventory : MonoBehaviour
             }
             else
             {
-                clicker.Experience += input * item.xpPrice;
+                clicker.Experience += input * item.XpPrice;
                 Experience_Text.text = NumFormat.FormatNumF1(clicker.Experience);
-                item.count -= input;
+                item.Count -= input;
                 item.AddGraphics();
             }
             soundManager.PlayBuySound();
@@ -255,12 +262,12 @@ public class Inventory : MonoBehaviour
             if (Count_Input.text.Length > 0)
             {
                 input = int.Parse(Count_Input.text);
-                input = input > item.count ? item.count : input;
+                input = input > item.Count ? item.Count : input;
             }
 
-            clicker.Currency += input * item.currencyPrice;
+            clicker.Currency += input * item.CurrencyPrice;
             Currency_Text.text = NumFormat.FormatNumF1(clicker.Currency);
-            item.count -= input;
+            item.Count -= input;
             item.AddGraphics();
             soundManager.PlayBuySound();
         }
@@ -278,7 +285,7 @@ public class Inventory : MonoBehaviour
             if (Count_Input.text.Length > 0)
             {
                 input = int.Parse(Count_Input.text);
-                input = input > item.count ? item.count : input;
+                input = input > item.Count ? item.Count : input;
             }
 
             for (int i = 0; i < input; i++)
@@ -286,7 +293,7 @@ public class Inventory : MonoBehaviour
                 item.Use();
             }
 
-            item.count -= input;
+            item.Count -= input;
             item.AddGraphics();
         }
         if (SelectedItem == null)
@@ -301,57 +308,124 @@ public class Inventory : MonoBehaviour
     #endregion
 
     #region Item spawning
-    public void AddItem(int stage, int id, int count)
+    public void AddItem(ItemPattern item, int count)
     {
-        string gameObjectName = $"Item_S{stage}ID{id}";
+        string gameObjectName = $"Item_{item.ID}";
 
         if (GameObject.Find(gameObjectName) != null)
         {
             GameObject g = GameObject.Find(gameObjectName);
             Item it = g.GetComponent<Item>();
-            it.count += count;
+            it.Count += count;
             it.AddGraphics();
         }
-        else if (GameObject.Find(gameObjectName) == null)
+        else
         {
             GameObject g = Instantiate(Item_Prefab);
             Item it = g.GetComponent<Item>();
-            it.name = gameObjectName;
-            it.count = count;
 
-            it.stage = stage;
-            it.index = id;
+            it.itemPattern = item;
+            it.name = gameObjectName;
+            it.Count = count;
 
             it.AddGraphics();
         }
         SortInventory();
     }
-    public void SpawnItem(int stage, int index, int count)
+    public void SpawnItem(ItemPattern item, int count)
     {
         DroppedItem it = Instantiate(DroppedItem_Prefab, CurrencyParent.transform).GetComponent<DroppedItem>();
-        it.stage = stage;
-        it.index = index;
-        it.count = count;
+        it.itemPattern = item;
+        it.Count = count;
+    }
+
+    public void AddRandomItemByType(ItemTypes itemType, int count, bool localItem)
+    {
+        List<ItemPattern> filteredItems = new();
+        List<ItemPattern> items = new();
+        if (localItem) items = stagesManager.currentStage.ItemsDataBase;
+        else items = GlobalItemsDataBase;
+
+        foreach (ItemPattern item in items)
+        {
+            if (item.Type == itemType)
+            {
+                filteredItems.Add(item);
+            }
+        }
+
+        if (filteredItems.Count == 0)
+        {
+            if (localItem)
+            {
+                AddRandomItemByType(itemType, count, false);
+            }
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, filteredItems.Count);
+            AddItem(filteredItems[randomIndex], count);
+        }
+    }
+    public void SpawnRandomItemByType(ItemTypes itemType, int count, bool localItem)
+    {
+        List<ItemPattern> filteredItems = new();
+        List<ItemPattern> items = new();
+        if (localItem) items = stagesManager.currentStage.ItemsDataBase;
+        else items = GlobalItemsDataBase;
+
+        foreach (ItemPattern item in items)
+        {
+            if (item.Type == itemType)
+            {
+                filteredItems.Add(item);
+            }
+        }
+
+        if (filteredItems.Count == 0)
+        {
+            if (localItem)
+            {
+                SpawnRandomItemByType(itemType, count, false);
+            }
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, filteredItems.Count);
+            SpawnItem(filteredItems[randomIndex], count);
+        }
     }
     #endregion
 
     #region Load Items
     public void ItemGetData()
     {
-        stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
+        if (!stagesManager) stagesManager = GameObject.Find("ClickerManager").GetComponent<StagesManager>();
 
-        for (int i = 0; i < stagesManager.StagesDataBase.Count; i++)
+        int id = 0;
+        foreach (ItemPattern itemPattern in GlobalItemsDataBase)
         {
-            for (int ii = 0; ii < stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase.Count; ii++)
+            itemPattern.ID = id;
+            id++;
+        }
+        foreach (Stage stage in stagesManager.StagesDataBase)
+        {
+            foreach (ItemPattern itemPattern in stage.ItemsDataBase)
             {
-                string keyName = $"Item_S{i}ID{ii}Count";
+                itemPattern.ID = id;
+                id++;
+            }
+        }
 
-                if (PlayerPrefs.HasKey(keyName))
-                {
-                    int count = PlayerPrefs.GetInt(keyName);
+        List<ItemPattern> items = new(ItemsDataBase());
+        foreach (ItemPattern item in items)
+        {
+            string keyName = $"Item_{item.ID}Count";
+            if (PlayerPrefs.HasKey(keyName))
+            {
+                int count = PlayerPrefs.GetInt(keyName);
 
-                    AddItem(i, ii, count);
-                }
+                AddItem(item, count);
             }
         }
     }
@@ -359,21 +433,19 @@ public class Inventory : MonoBehaviour
 }
 
 [Serializable]
-public class Items
+public class ItemPattern
 {
     public Sprite ico;
 
-    public string nameObject;
-    public string description;
+    public int ID;
+    public string ItemName;
+    public string Description;
+    public ItemTypes Type;
 
-    public ItemTypes type;
+    public float CurrencyPrice;
+    public float XpPrice;
 
-    public string stage;
-    public float currencyPrice;
-
-    public float xpPrice;
-
-    public string useMethodName;
+    public string UseMethodName;
 }
 public enum ItemTypes
 {

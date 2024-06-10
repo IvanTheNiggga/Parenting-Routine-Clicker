@@ -203,8 +203,8 @@ public class InterfaceManager : MonoBehaviour
             case 1:
                 switch (CurrentEventName)
                 {
-                    case "birth":
-                        AgreeDescription_Text.text = $"Make another one child for {NumFormat.FormatNumF1(unitManager.BirthCost())}$ ?";
+                    case "rebirth":
+                        AgreeDescription_Text.text = $"Rebirth for ${NumFormat.FormatNumF1(unitManager.BirthCost())} ?";
                         break;
                     case "minerupgrade":
                         if (inventory.ItemTypeFind(ItemTypes.Cloth) == null)
@@ -225,9 +225,9 @@ public class InterfaceManager : MonoBehaviour
                             message.SendMessage($"You need at least one toy in inventory", 2);
                             return;
                         }
-                        else if (clicker.Births < 1)
+                        else if (clicker.Rebirths < 1)
                         {
-                            message.SendMessage($"You need at least one birth", 2);
+                            message.SendMessage($"You need at least one rebirth", 2);
                             return;
                         }
                         AgreeDescription_Text.text = $"Upgrade fisrt child for one Toy item ?";
@@ -239,9 +239,9 @@ public class InterfaceManager : MonoBehaviour
                             message.SendMessage($"You need at least one toy in inventory", 2);
                             return;
                         }
-                        else if (clicker.Births < 2)
+                        else if (clicker.Rebirths < 2)
                         {
-                            message.SendMessage($"You need at least two births", 2);
+                            message.SendMessage($"You need at least two rebirths", 2);
                             return;
                         }
                         AgreeDescription_Text.text = $"Upgrade second child for one Toy item ?";
@@ -267,10 +267,10 @@ public class InterfaceManager : MonoBehaviour
     {
         switch (CurrentEventName)
         {
-            case "birth":
+            case "rebirth":
                 if (unitManager.isAbleToBuy())
                 {
-                    clicker.Birth();
+                    clicker.Rebirth();
                 }
                 else
                 {
@@ -411,15 +411,15 @@ public class InterfaceManager : MonoBehaviour
                 CloseAll();
 
                 unitsInterfaceOpened = true;
-                switch (clicker.Births)
+                switch (clicker.Rebirths)
                 {
                     case 0:
-                        Unit1LockedText.text = "1 Birth required.";
-                        Unit2LockedText.text = "2 Birth required.";
+                        Unit1LockedText.text = "1 Rebirth required.";
+                        Unit2LockedText.text = "2 Rebirths required.";
                         break;
                     case 1:
                         Unit1LockedText.text = "";
-                        Unit2LockedText.text = "2 Birth required.";
+                        Unit2LockedText.text = "2 Rebirths required.";
                         break;
                     default:
                         Unit1LockedText.text = "";
@@ -446,9 +446,9 @@ public class InterfaceManager : MonoBehaviour
     public bool unitsListOpened;
     public void OpenUnitsSelect(int slot)
     {
-        if (slot > clicker.Births)
+        if (slot > clicker.Rebirths)
         {
-            message.SendMessage($"You need {slot - clicker.Births} more births", 2);
+            message.SendMessage($"You need {slot - clicker.Rebirths} more rebirths", 2);
             return;
         }
         CloseAll();
@@ -552,14 +552,14 @@ public class InterfaceManager : MonoBehaviour
                 SellItemForCurrency.SetActive(true);
                 SellItemForXp.SetActive(true);
                 ItemInfoUse.SetActive(true);
-                if (item.useMethodName == "")
+                if (item.itemPattern.UseMethodName == "")
                 {
                     ItemInfoUse.SetActive(false);
                 }
 
-                ItemInfoImage.sprite = item.ico.sprite;
-                ItemInfoDescription_Text.text = $"Name: {item.nameObject}\nType : {item.type}\n{item.description}";
-                ItemInfoCount_Text.text = NumFormat.FormatNumF0F1(item.count);
+                ItemInfoImage.sprite = item.Ico.sprite;
+                ItemInfoDescription_Text.text = $"Name: {item.ItemName}\nType : {item.Type}\n{item.Description}";
+                ItemInfoCount_Text.text = NumFormat.FormatNumF0F1(item.Count);
 
                 ItemInfoWindow_OM.xMoveTo(0, 0.3f, 1, false);
                 break;
@@ -585,13 +585,13 @@ public class InterfaceManager : MonoBehaviour
             if (ItemActionInputField.text.Length > 0)
             {
                 input = int.Parse(ItemActionInputField.text);
-                input = input > item.count ? item.count : input;
+                input = input > item.Count ? item.Count : input;
             }
 
             if (CurrentItemEventName == "Sell")
             {
-                SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(input * item.currencyPrice);
-                SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(input * item.xpPrice);
+                SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(input * item.CurrencyPrice);
+                SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(input * item.XpPrice);
                 return;
             }
         }
@@ -601,7 +601,7 @@ public class InterfaceManager : MonoBehaviour
         if (inventory.SelectedItem != null)
         {
             Item item = inventory.SelectedItem.GetComponent<Item>();
-            ItemActionInputField.text = item.count.ToString();
+            ItemActionInputField.text = item.Count.ToString();
             return;
         }
     }
@@ -610,13 +610,14 @@ public class InterfaceManager : MonoBehaviour
         Item item = inventory.SelectedItem.GetComponent<Item>();
 
 
-        switch (item.type)
+        switch (item.Type)
         {
             case ItemTypes.Toy:
                 SwitchUnitsInterface(1);
                 break;
             case ItemTypes.Cloth:
                 SwitchMiner(1);
+                Action("minerupgrade");
                 break;
             default:
                 setCountOpened = true;
@@ -627,7 +628,7 @@ public class InterfaceManager : MonoBehaviour
 
                 SwitchItemInfo(0);
                 ItemActionInputField.text = "1";
-                SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
+                SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().Ico.sprite;
                 SetCountUpdate();
 
                 SetCountWindow_OM.xMoveTo(0, 0.3f, 1, false);
@@ -647,9 +648,9 @@ public class InterfaceManager : MonoBehaviour
         SellItemForXp.SetActive(true);
 
         ItemActionInputField.text = "1";
-        SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(item.currencyPrice);
-        SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(item.xpPrice);
-        SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().ico.sprite;
+        SellForCurrencyPrice_Text.text = "+" + NumFormat.FormatNumF1(item.CurrencyPrice);
+        SellForXpPrice_Text.text = "+" + NumFormat.FormatNumF1(item.XpPrice);
+        SetCount_Image.sprite = inventory.SelectedItem.GetComponent<Item>().Ico.sprite;
         SetCountUpdate();
 
         SetCountWindow_OM.xMoveTo(0, 0.3f, 1, false);
@@ -668,7 +669,7 @@ public class InterfaceManager : MonoBehaviour
     private void AdjustTopInsideSafeArea()
     {
         Rect safeArea = Screen.safeArea;
-        
+
         if (!safeArea.Contains(CurrencyPanel.transform.position))
         {
             Vector3 newPosition = CurrencyPanel.transform.position;
@@ -683,7 +684,7 @@ public class InterfaceManager : MonoBehaviour
         StageTextUpdate();
         CurrencyTextUpdate();
         ExperienceTextUpdate();
-        BirthTextUpdate();
+        UpdateUpgrades();
     }
 
     public void StageTextUpdate()
@@ -700,11 +701,5 @@ public class InterfaceManager : MonoBehaviour
     {
         experienceText.text = NumFormat.FormatNumF1(clicker.Experience);
     }
-
-    public void BirthTextUpdate()
-    {
-        UpdateUpgrades();
-    }
     #endregion
-
 }

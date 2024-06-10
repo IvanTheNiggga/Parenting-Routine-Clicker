@@ -22,7 +22,8 @@ public class Timer : MonoBehaviour
             if (enemyManager.clickable)
             { time -= Time.deltaTime; text.text = time.ToString("F1") + "s."; }
             if (time <= 0)
-            { enemyManager.BossFailed();
+            { 
+                enemyManager.BossFailed();
                 PauseTimer();
                 ClearTimer(); 
     }   }   }

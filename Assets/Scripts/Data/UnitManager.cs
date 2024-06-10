@@ -42,7 +42,7 @@ public class UnitManager : MonoBehaviour
     public double BirthCost()
     {
         double cost = 1;
-        for (int i = 1; (clicker.Births + 1) * 4 > i; i++)
+        for (int i = 1; (clicker.RebirthsPoints + 1) * 4 > i; i++)
         {
             cost *= 5;
         }
@@ -181,14 +181,8 @@ public class UnitManager : MonoBehaviour
 [System.Serializable]
 public class UnitElement
 {
-    [Header("Name")]
     public string name;
-
-    [Header("Sprites")]
-    public Sprite Idle;
-    public Sprite Attack;
     public Sprite Preview;
 
-    [Header("Damage Stats")]
     public double DamageCoef;
 }

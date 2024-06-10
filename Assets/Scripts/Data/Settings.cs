@@ -35,7 +35,7 @@ public class Settings : MonoBehaviour
         if (confirmInt == 1)
         {
             Invoke(nameof(DisagreeToDelete), 3f);
-            resetDataText.text = "Delete data??";
+            resetDataText.text = "Delete all data?";
         }
         else if (confirmInt == 2)
         {
@@ -44,6 +44,18 @@ public class Settings : MonoBehaviour
             resetDataText.text = "Really?";
         }
         else if (confirmInt == 3)
+        {
+            CancelInvoke(nameof(DisagreeToDelete));
+            Invoke(nameof(DisagreeToDelete), 3f);
+            resetDataText.text = "It will erase all data permanently";
+        }
+        else if (confirmInt == 4)
+        {
+            CancelInvoke(nameof(DisagreeToDelete));
+            Invoke(nameof(DisagreeToDelete), 3f);
+            resetDataText.text = "Last warning.";
+        }
+        else if (confirmInt == 5)
         {
             CancelInvoke(nameof(DisagreeToDelete));
             DisagreeToDelete();
@@ -124,5 +136,6 @@ public class Settings : MonoBehaviour
         volume = PlayerPrefs.GetFloat("volumeSlider");
         volumeSlider.value = volume;
         mixer.audioMixer.SetFloat("Master", volume);
+        ChangeVolume();
     }
 }

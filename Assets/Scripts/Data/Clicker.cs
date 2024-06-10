@@ -20,11 +20,12 @@ public class Clicker : MonoBehaviour
     #endregion
 
     #region Variables
-    public int Births;
-    public float Experience;
+    public int Rebirths;
+    public int RebirthsPoints;
     public int MinerLvl;
     public int MaxMinerLvl;
     public int CritMultiplier;
+    public float Experience;
 
     private double lastDealedDamage; public double LastDealedDamage
     {
@@ -125,33 +126,34 @@ public class Clicker : MonoBehaviour
     #region Data manipalations
     public void Load()
     {
-        CritMultiplier = PlayerPrefs.GetInt("CritMultiplier");
+        CritMultiplier = PlayerPrefs.GetInt(nameof(CritMultiplier));
 
-        stagesManager.CurrentStage = PlayerPrefs.GetInt("CurrentStage");
-        stagesManager.StageIndex = PlayerPrefs.GetInt("StageIndex");
-        stagesManager.BGIndex = PlayerPrefs.GetInt("BGIndex");
-        stagesManager.maxStage = PlayerPrefs.GetInt("maxStage");
-        Currency = LoadBig("Currency");
-        Experience = PlayerPrefs.GetFloat("Experience");
-        Births = PlayerPrefs.GetInt("Births");
+        stagesManager.CurrentStage = PlayerPrefs.GetInt(nameof(stagesManager.CurrentStage));
+        stagesManager.StageIndex = PlayerPrefs.GetInt(nameof(stagesManager.StageIndex));
+        stagesManager.BGIndex = PlayerPrefs.GetInt(nameof(stagesManager.BGIndex));
+        stagesManager.maxStage = PlayerPrefs.GetInt(nameof(stagesManager.maxStage));
+        Currency = LoadBig(nameof(Currency));
+        Experience = PlayerPrefs.GetFloat(nameof(Experience));
+        RebirthsPoints = PlayerPrefs.GetInt(nameof(RebirthsPoints));
+        Rebirths = PlayerPrefs.GetInt(nameof(Rebirths));
 
-        MinerLvl = PlayerPrefs.GetInt("MinerLvl");
-        MaxMinerLvl = PlayerPrefs.GetInt("MaxMinerLvl");
+        MinerLvl = PlayerPrefs.GetInt(nameof(MinerLvl));
+        MaxMinerLvl = PlayerPrefs.GetInt(nameof(MaxMinerLvl));
 
-        upgradesManager.DamageLvl = PlayerPrefs.GetInt("DamageUpgrade");
-        upgradesManager.CritLvl = PlayerPrefs.GetInt("CritUpgrade");
+        upgradesManager.DamageLvl = PlayerPrefs.GetInt(nameof(upgradesManager.DamageLvl));
+        upgradesManager.CritLvl = PlayerPrefs.GetInt(nameof(upgradesManager.CritLvl));
 
-        upgradesManager.doubleXPLvl = PlayerPrefs.GetInt("DoubleXPUpgrade");
-        upgradesManager.betterMineAfterRebirthLvl = PlayerPrefs.GetInt("BetterMineAfterRebirthUpgrade");
-        upgradesManager.moreBirthChanceLvl = PlayerPrefs.GetInt("MoreBirthChanceUpgrade");
-        upgradesManager.betterStartLvl = PlayerPrefs.GetInt("BetterStartUpgrade");
-        upgradesManager.doubleDamageLvl = PlayerPrefs.GetInt("DoubleDamageUpgrade");
-        upgradesManager.critDamageLvl = PlayerPrefs.GetInt("CritDamageUpgrade");
-        upgradesManager.dropRateLvl = PlayerPrefs.GetInt("DropRateUpgrade");
-        upgradesManager.packsCountLvl = PlayerPrefs.GetInt("PacksCountUpgrade");
-        upgradesManager.currencyChanceLvl = PlayerPrefs.GetInt("CurrencyChanceUpgrade");
-        upgradesManager.doubleCurrencyLvl = PlayerPrefs.GetInt("BoubleCurrencyUpgrade");
-        upgradesManager.betterPacksLvl = PlayerPrefs.GetInt("BetterPacksUpgrade");
+        upgradesManager.DoubleXPLvl = PlayerPrefs.GetInt(nameof(upgradesManager.DoubleXPLvl));
+        upgradesManager.BetterMineAfterRebirthLvl = PlayerPrefs.GetInt(nameof(upgradesManager.BetterMineAfterRebirthLvl));
+        upgradesManager.MoreRebirthPointsChanceLvl = PlayerPrefs.GetInt(nameof(upgradesManager.MoreRebirthPointsChanceLvl));
+        upgradesManager.BetterStartLvl = PlayerPrefs.GetInt(nameof(upgradesManager.BetterStartLvl));
+        upgradesManager.DoubleDamageLvl = PlayerPrefs.GetInt(nameof(upgradesManager.DoubleDamageLvl));
+        upgradesManager.CritDamageLvl = PlayerPrefs.GetInt(nameof(upgradesManager.CritDamageLvl));
+        upgradesManager.DropRateLvl = PlayerPrefs.GetInt(nameof(upgradesManager.DropRateLvl));
+        upgradesManager.PacksCountLvl = PlayerPrefs.GetInt(nameof(upgradesManager.PacksCountLvl));
+        upgradesManager.CurrencyChanceLvl = PlayerPrefs.GetInt(nameof(upgradesManager.CurrencyChanceLvl));
+        upgradesManager.DoubleCurrencyLvl = PlayerPrefs.GetInt(nameof(upgradesManager.DoubleCurrencyLvl));
+        upgradesManager.BetterPacksLvl = PlayerPrefs.GetInt(nameof(upgradesManager.BetterPacksLvl));
 
         CalculateDamages();
 
@@ -170,32 +172,32 @@ public class Clicker : MonoBehaviour
 
     public void Save()
     {
-        PlayerPrefs.SetInt("CritMultiplier", CritMultiplier);
-        PlayerPrefs.SetInt("CurrentStage", stagesManager.CurrentStage);
-        PlayerPrefs.SetInt("StageIndex", stagesManager.StageIndex);
-        PlayerPrefs.SetInt("BGIndex", stagesManager.BGIndex);
-        PlayerPrefs.SetInt("maxStage", stagesManager.maxStage);
-        SaveBig("Currency", Currency);
-        PlayerPrefs.SetFloat("Experience", Experience);
-        PlayerPrefs.SetInt("Births", Births);
+        PlayerPrefs.SetInt(nameof(CritMultiplier), CritMultiplier);
+        PlayerPrefs.SetInt(nameof(stagesManager.CurrentStage), stagesManager.CurrentStage);
+        PlayerPrefs.SetInt(nameof(stagesManager.StageIndex), stagesManager.StageIndex);
+        PlayerPrefs.SetInt(nameof(stagesManager.BGIndex), stagesManager.BGIndex);
+        PlayerPrefs.SetInt(nameof(stagesManager.maxStage), stagesManager.maxStage);
+        SaveBig(nameof(Currency), Currency);
+        PlayerPrefs.SetFloat(nameof(Experience), Experience);
+        PlayerPrefs.SetInt(nameof(RebirthsPoints), RebirthsPoints);
+        PlayerPrefs.SetInt(nameof(Rebirths), Rebirths);
 
-        PlayerPrefs.SetInt("BetterMineAfterRebirthUpgrade", upgradesManager.betterMineAfterRebirthLvl);
-        PlayerPrefs.SetInt("MaxMinerLvl", MaxMinerLvl);
-        PlayerPrefs.SetInt("MinerLvl", MinerLvl);
-        PlayerPrefs.SetInt("DamageUpgrade", upgradesManager.DamageLvl);
-        PlayerPrefs.SetInt("CritUpgrade", upgradesManager.CritLvl);
+        PlayerPrefs.SetInt(nameof(MaxMinerLvl), MaxMinerLvl);
+        PlayerPrefs.SetInt(nameof(MinerLvl), MinerLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.DamageLvl), upgradesManager.DamageLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.CritLvl), upgradesManager.CritLvl);
 
-
-        PlayerPrefs.SetInt("DoubleXPUpgrade", upgradesManager.doubleXPLvl);
-        PlayerPrefs.SetInt("MoreBirthChanceUpgrade", upgradesManager.moreBirthChanceLvl);
-        PlayerPrefs.SetInt("BetterStartUpgrade", upgradesManager.betterStartLvl);
-        PlayerPrefs.SetInt("DoubleDamageUpgrade", upgradesManager.doubleDamageLvl);
-        PlayerPrefs.SetInt("CritDamageUpgrade", upgradesManager.critDamageLvl);
-        PlayerPrefs.SetInt("DropRateUpgrade", upgradesManager.dropRateLvl);
-        PlayerPrefs.SetInt("PacksCountUpgrade", upgradesManager.packsCountLvl);
-        PlayerPrefs.SetInt("CurrencyChanceUpgrade", upgradesManager.currencyChanceLvl);
-        PlayerPrefs.SetInt("DoubleCurrencyUpgrade", upgradesManager.doubleCurrencyLvl);
-        PlayerPrefs.SetInt("BetterPacksUpgrade", upgradesManager.betterPacksLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.BetterMineAfterRebirthLvl), upgradesManager.BetterMineAfterRebirthLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.DoubleXPLvl), upgradesManager.DoubleXPLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.MoreRebirthPointsChanceLvl), upgradesManager.MoreRebirthPointsChanceLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.BetterStartLvl), upgradesManager.BetterStartLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.DoubleDamageLvl), upgradesManager.DoubleDamageLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.CritDamageLvl), upgradesManager.CritDamageLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.DropRateLvl), upgradesManager.DropRateLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.PacksCountLvl), upgradesManager.PacksCountLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.CurrencyChanceLvl), upgradesManager.CurrencyChanceLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.DoubleCurrencyLvl), upgradesManager.DoubleCurrencyLvl);
+        PlayerPrefs.SetInt(nameof(upgradesManager.BetterPacksLvl), upgradesManager.BetterPacksLvl);
 
         optionsMenu.SaveOptions();
     }
@@ -234,35 +236,32 @@ public class Clicker : MonoBehaviour
 
         CritMultiplier = 3;
 
-        stagesManager.CurrentStage = 1 + upgradesManager.betterStartLvl;
+        stagesManager.CurrentStage = 1 + upgradesManager.BetterStartLvl;
         Currency = 0;
 
         miner.RebirthMiner();
 
         enemyManager.DestroyLoot();
-        enemyManager.EnemyHPMultiplier = 1;
 
         upgradesManager.DamageLvl = 0;
         upgradesManager.CritLvl = 0;
-        PlayerPrefs.SetInt("DamageUpgrade", upgradesManager.DamageLvl);
-        PlayerPrefs.SetInt("CritUpgrade", upgradesManager.CritLvl);
 
         stagesManager.LoadStageData(true);
-        interfaceManager.UpdateUpgrades();
         interfaceManager.UpdateAllText();
     }
 
-    public void Birth()
+    public void Rebirth()
     {
-        Births += 1;
+        RebirthsPoints += 1;
+        Rebirths += 1;
 
         RebirthData();
 
-        if (Random.Range(0, 100f / (upgradesManager.moreBirthChanceLvl * 2.5f)) < 1f)
+        if (Random.Range(0, 100f / (upgradesManager.MoreRebirthPointsChanceLvl * 2.5f)) < 1f)
         {
             unitManager.AddRandomUnit();
         }
-        if (Random.Range(0, 100f / (upgradesManager.moreBirthChanceLvl * 1.25f)) < 1f)
+        if (Random.Range(0, 100f / (upgradesManager.MoreRebirthPointsChanceLvl * 1.25f)) < 1f)
         {
             unitManager.AddRandomUnit();
         }
@@ -281,7 +280,7 @@ public class Clicker : MonoBehaviour
     public void CalculateDmg()
     {
         Damage = Utils.Progression(1, 1.6f, upgradesManager.DamageLvl);
-        Damage = Utils.Progression(Damage, 2, upgradesManager.doubleDamageLvl);
+        Damage = Utils.Progression(Damage, 2, upgradesManager.DoubleDamageLvl);
     }
     public void CalculateCrit()
     {
@@ -292,6 +291,6 @@ public class Clicker : MonoBehaviour
     public void OnApplicationQuit()
     {
         inventory.SetItemsBack();
-        if (Currency > 0 || Births >= 0) { Save(); }
+        if (Currency > 0 || Rebirths >= 0) { Save(); }
     }
 }

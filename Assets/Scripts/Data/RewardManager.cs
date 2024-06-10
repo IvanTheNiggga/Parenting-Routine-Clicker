@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class RewardManager : MonoBehaviour
 {
@@ -11,10 +12,6 @@ public class RewardManager : MonoBehaviour
     #endregion
 
     #region Variables
-    private int toyscount;
-    private int clothscount;
-    private int randomitemcount;
-    private int garbagecount;
 
     private double killReward;
     public double KillReward
@@ -43,33 +40,6 @@ public class RewardManager : MonoBehaviour
         inventory = GetComponent<Inventory>();
         interfaceManager = FindObjectOfType<InterfaceManager>().GetComponent<InterfaceManager>();
 
-        GetItemsInfo();
-    }
-
-    public void GetItemsInfo()
-    {
-        toyscount = clothscount = randomitemcount = garbagecount = 0;
-
-        foreach (var itemData in stagesManager.StagesDataBase[stagesManager.StageIndex].itemsDataBase)
-        {
-            ItemTypes itemType = itemData.type;
-
-            switch (itemType)
-            {
-                case ItemTypes.Toy:
-                    toyscount++;
-                    break;
-                case ItemTypes.Cloth:
-                    clothscount++;
-                    break;
-                case ItemTypes.ItemPack:
-                    randomitemcount++;
-                    break;
-                case ItemTypes.Garbage:
-                    garbagecount++;
-                    break;
-            }
-        }
     }
     #endregion
 
@@ -77,7 +47,7 @@ public class RewardManager : MonoBehaviour
     public void GiveCurrency(double count)
     {
         double reward = count;
-        if (Random.Range(0, 100f / upgradesManager.currencyChanceLvl) < 1f)
+        if (Random.Range(0, 100f / upgradesManager.CurrencyChanceLvl) < 1f)
         {
             reward *= 2;
         }
@@ -113,19 +83,19 @@ public class RewardManager : MonoBehaviour
         int countToSpawn = 1;
         for (int i = 0; i < count; i++)
         {
-            if (Random.Range(0, 100f / (upgradesManager.dropRateLvl + 5)) < 1f)
+            if (Random.Range(0, 100f / (upgradesManager.DropRateLvl + 5)) < 1f)
             {
                 countToSpawn++;
             }
         }
-        SpawnItemRandom(countToSpawn + upgradesManager.packsCountLvl);
+        inventory.SpawnRandomItemByType(ItemTypes.ItemPack, countToSpawn + upgradesManager.PacksCountLvl, true);
     }
 
     public void GetEnemyLoot()
     {
-        if (Random.Range(0, 100f / (upgradesManager.dropRateLvl + 1)) < 1f)
+        if (Random.Range(0, 100f / (upgradesManager.DropRateLvl + 1)) < 1f)
         {
-            SpawnItemRandom(1 + upgradesManager.packsCountLvl);
+            inventory.SpawnRandomItemByType(ItemTypes.ItemPack, 1 + upgradesManager.PacksCountLvl, true);
         }
     }
     #endregion
@@ -133,43 +103,18 @@ public class RewardManager : MonoBehaviour
     #region Get items
     public void GetRandomItem(int count)
     {
-        if (Random.Range(0, 100f / (upgradesManager.betterPacksLvl + 5f)) < 1f)
+        if (Random.Range(0, 100f / (upgradesManager.BetterPacksLvl + 5f)) < 1f)
         {
-            GetRandomCloth(count);
+            inventory.AddRandomItemByType(ItemTypes.Cloth, count, true);
         }
-        else if (Random.Range(0, 100f / (upgradesManager.betterPacksLvl + 5f)) < 1f)
+        else if (Random.Range(0, 100f / (upgradesManager.BetterPacksLvl + 5f)) < 1f)
         {
-            GetRandomToy(count);
+            inventory.AddRandomItemByType(ItemTypes.Toy, count, true);
         }
         else
         {
-            GetRandomGarbage(count);
+            inventory.AddRandomItemByType(ItemTypes.Garbage, count, true);
         }
-    }
-
-    public void SpawnItemRandom(int count)
-    {
-        inventory.SpawnItem(stagesManager.StageIndex, Random.Range(toyscount + clothscount + garbagecount, toyscount + clothscount + garbagecount + randomitemcount), count);
-    }
-
-    public void GetItemRandom(int count)
-    {
-        inventory.AddItem(stagesManager.StageIndex, Random.Range(toyscount + clothscount + garbagecount, toyscount + clothscount + garbagecount + randomitemcount), count);
-    }
-
-    public void GetRandomGarbage(int count)
-    {
-        inventory.AddItem(stagesManager.StageIndex, Random.Range(toyscount + clothscount, toyscount + clothscount + garbagecount), count);
-    }
-
-    public void GetRandomCloth(int count)
-    {
-        inventory.AddItem(stagesManager.StageIndex, Random.Range(toyscount, toyscount + clothscount), count);
-    }
-
-    public void GetRandomToy(int count)
-    {
-        inventory.AddItem(stagesManager.StageIndex, Random.Range(0, toyscount), count);
     }
     #endregion
 }

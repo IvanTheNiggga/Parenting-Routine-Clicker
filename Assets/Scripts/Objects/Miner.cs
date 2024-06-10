@@ -95,7 +95,6 @@ public class Miner : MonoBehaviour
         else
         {
             message.SendMessage("You need $5000", 2);
-            soundManager.PlayBruhSound();
         }
     }
 
@@ -116,7 +115,7 @@ public class Miner : MonoBehaviour
         Utils.SetDataTime("LastEntranceTime", DateTime.UtcNow);
         ResetMinerLoot();
 
-        clicker.MinerLvl = 1 + upgradesManager.betterMineAfterRebirthLvl;
+        clicker.MinerLvl = 1 + upgradesManager.BetterMineAfterRebirthLvl;
         UpdateLevel();
 
         startButton.SetActive(true);
@@ -140,7 +139,6 @@ public class Miner : MonoBehaviour
         if (clicker.MinerLvl == 0)
         {
             message.SendMessage("Your washing machine is not working yet", 2);
-            soundManager.PlayBruhSound();
             return;
         }
 
@@ -168,7 +166,7 @@ public class Miner : MonoBehaviour
         }
 
         minerLevelText.text = $"Level {clicker.MinerLvl}";
-        if (clicker.MinerLvl > 0) IncomeMultiplier = Math.Pow(50, clicker.MinerLvl - 1) * (upgradesManager.mineLootLvl + 1);
+        if (clicker.MinerLvl > 0) IncomeMultiplier = Math.Pow(50, clicker.MinerLvl - 1) * (upgradesManager.MineLootLvl + 1);
     }
     #endregion
 }

@@ -32,7 +32,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1155369570405136948}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -126,7 +125,6 @@ RectTransform:
   - {fileID: 1155369570067097615}
   - {fileID: 1155369570423435893}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -153,23 +151,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2037c409df501494d8498bd20e829784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 1155369570423435891}
-  ico: {fileID: 1155369570067097613}
-  item: {fileID: 1155369570405136949}
-  SaleGrid: {fileID: 0}
-  InventoryGrid: {fileID: 0}
-  stage: 0
-  index: 0
-  nameObject: 
-  itemName: 
-  investItemName: 
-  slotItemName: 
-  type: 0
-  currencyPrice: 0
-  xpPrice: 0
-  useMethodName: 
-  count: 0
-  clickable: 0
+  CountText: {fileID: 1155369570423435891}
+  Ico: {fileID: 1155369570067097613}
+  itemPattern:
+    ico: {fileID: 0}
+    ID: 0
+    ItemName: 
+    Description: 
+    Type: 0
+    CurrencyPrice: 0
+    XpPrice: 0
+    UseMethodName: 
+  ItemName: 
+  ObjectName: 
+  InvestIObjectName: 
+  Description: 
+  Type: 0
+  CurrencyPrice: 0
+  XpPrice: 0
+  Count: 0
+  Clickable: 0
 --- !u!114 &5010042126510228855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,7 +233,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1155369570405136948}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.1533077, y: 0.046307694}
   m_AnchorMax: {x: 0.83869237, y: 0.3773077}
